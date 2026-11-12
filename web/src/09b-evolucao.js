@@ -46,10 +46,10 @@ function viewStats(sub) {
   const hist = [...ss.map(s => ({ col: 'sessoes', s })), ...cs.map(c => ({ col: 'cardio', s: c }))].sort((a, b) => b.s.inicio - a.s.inicio).slice(0, 25);
   const linhaHist = ({ col, s }) => {
     const apagar = `<button class="btn quiet small" data-a="apagarSessao" data-col="${col}" data-id="${esc(s._id)}" style="align-self:flex-start;padding:0">${t('delete')}</button>`;
-    if (col === 'cardio') return `<div class="sess"><div class="row between"><span class="row" style="gap:8px"><span class="pill acc">${t('cardio')}</span><b>${esc(exInfo(s.modo, s.nome).nome)}</b></span><span class="small muted">${esc(fmtDate(s.inicio))}</span></div>
+    if (col === 'cardio') return `<div class="sess"><div class="row between"><span class="row" style="gap:8px"><span class="pill acc">${t('cardio')}</span><b>${esc(exInfo(s.modo, s.nome).nome)}</b></span><span class="small muted num">${esc(fmtPeriodo(s.inicio, s.fim))}</span></div>
       <span class="small muted num">${s.minutos} min${s.protocolo && PROTO[s.protocolo] ? ' · ' + esc(L3(PROTO[s.protocolo].nome)) : ''}${s.km ? ' · ' + fmtKg(s.km) + ' km' : ''}${s.esforco ? ' · ' + t('effort_x', { n: s.esforco }) : ''}${s.fc ? ' · ' + s.fc + ' bpm' : ''}</span>${s.nota ? `<span class="small">${esc(s.nota)}</span>` : ''}${apagar}</div>`;
     const n = (s.exs || []).reduce((k, x) => k + (x.sets || []).length, 0);
-    return `<div class="sess"><div class="row between"><span class="row" style="gap:8px"><span class="pill">${t('strength')}</span><b>${esc(s.diaNome)}</b></span><span class="small muted">${esc(fmtDate(s.inicio))}</span></div>
+    return `<div class="sess"><div class="row between"><span class="row" style="gap:8px"><span class="pill">${t('strength')}</span><b>${esc(s.diaNome)}</b></span><span class="small muted num">${esc(fmtPeriodo(s.inicio, s.fim))}</span></div>
       <span class="small muted num">${tn(n, 'n_set', 'n_sets')}${s.fim ? ' · ' + fmtDur(s.fim - s.inicio) : ''}${s.sensacao ? ' · ' + esc(nomeSens(s.sensacao)) : ''}${s.deload ? ' · ' + t('light_week') : ''}</span>${s.nota ? `<span class="small">${esc(s.nota)}</span>` : ''}${apagar}</div>`;
   };
   return `<section class="screen">

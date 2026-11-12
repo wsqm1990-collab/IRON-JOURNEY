@@ -33,6 +33,7 @@ Object.assign(STR, {
   enter_minutes: ['Enter how many minutes you did.', 'Coloque quantos minutos você fez.', 'Pon cuántos minutos hiciste.'], cardio_saved: ['Cardio saved', 'Cardio salvo', 'Cardio guardado'], cardio_done: ['Cardio done', 'Cardio concluído', 'Cardio hecho'],
   n_minute: ['{n} minute', '{n} minuto', '{n} minuto'], n_minutes: ['{n} minutes', '{n} minutos', '{n} minutos'], cardio_week_goal: ['Weekly cardio goal', 'Meta de cardio da semana', 'Meta de cardio de la semana'], xp_10min: ['Sessions of 10 minutes or more earn XP.', 'Sessões a partir de 10 minutos valem XP.', 'Las sesiones de 10 minutos o más dan XP.'],
   protocol_x: ['Workout: {x}', 'Treino: {x}', 'Entrenamiento: {x}'],
+  started_at: ['started {h}', 'início {h}', 'inicio {h}'],
 });
 
 /* ---------- live workout ---------- */
@@ -44,7 +45,7 @@ function contagem(L) {
 }
 function headHTML() {
   const L = S.live, c = contagem(L);
-  return `<div class="t"><b>${esc(L.diaNome)}</b><span class="small muted num"><span id="wkClock">${fmtDur(Date.now() - L.inicio)}</span> · ${t('series_of', { a: c.ok, b: c.tot })}</span></div><button class="btn ok small" data-a="finalizar">${t('finish')}</button>`;
+  return `<div class="t"><b>${esc(L.diaNome)}</b><span class="small muted num">${esc(t('started_at', { h: fmtQuando(L.inicio) }))} · <span id="wkClock">${fmtDur(Date.now() - L.inicio)}</span> · ${t('series_of', { a: c.ok, b: c.tot })}</span></div><button class="btn ok small" data-a="finalizar">${t('finish')}</button>`;
 }
 function exCard(x, i) {
   const ex = exInfo(x.id, x.nome), un = unidade(ex), carga = usaCarga(ex), a = x.alvo;
@@ -314,7 +315,7 @@ function abrirCardio(opts) {
   const o = opts && typeof opts === 'object' ? opts : {};
   const ci = cardioSemanaInfo(S.me);
   const idx = o.sessao ? ci.sessoes.findIndex(c => c.nome === o.sessao) : opts != null && typeof opts !== 'object' && opts !== '' ? Number(opts) : (ci.sessoes.length && !o.modo ? 0 : -1);
-  S.cform = { sess: idx, modo: '', minutos: '', km: '', esforco: 0, fc: '', nota: '', protocolo: o.protocolo || '' };
+  S.cform = { sess: idx, modo: '', minutos: '', km: '', esforco: 0, fc: '', nota: '', protocolo: o.protocolo || '', ini: o.ini || 0, fim: o.fim || 0 };
   prefillCardio(ci);
   if (o.modo) S.cform.modo = o.modo;
   if (o.minutos) S.cform.minutos = String(o.minutos);
@@ -355,8 +356,11 @@ async function salvarCardio() {
   const doc = {
     pid, modo: f.modo, nome: exInfo(f.modo).nome, minutos: Math.round(clamp(min, 1, 600)), km: clamp(parseNum(f.km) || 0, 0, 300),
     esforco: f.esforco || 0, fc: clamp(Math.round(parseNum(f.fc) || 0), 0, 230), nota: String(f.nota || '').trim().slice(0, 300),
-    sessao: c ? c.nome : '', protocolo: f.protocolo || '', planoId: ci.pr ? ci.pr.pl.id : '', meta: ci.meta, inicio: Date.now(),
+    sessao: c ? c.nome : '', protocolo: f.protocolo || '', planoId: ci.pr ? ci.pr.pl.id : '', meta: ci.meta,
   };
+  /* when it happened: the guided player knows; a manual log ended now and lasted the minutes typed */
+  doc.fim = f.fim || Date.now();
+  doc.inicio = f.ini && f.ini < doc.fim ? f.ini : doc.fim - doc.minutos * 60000;
   const antes = jornadaDados(pid), depois = jornadaDados(pid, null, doc);
   const id = pid + '-c' + doc.inicio.toString(36);
   try { await save('cardio/' + id, doc); } catch { return; }

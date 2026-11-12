@@ -11,6 +11,10 @@ const pad2 = n => String(n).padStart(2, '0');
 const dayKey = ts => { const d = new Date(ts); return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate()); };
 const weekKey = ts => { const d = new Date(ts); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() - ((d.getDay() + 6) % 7)); return dayKey(d.getTime()); };
 const fmtDate = ts => { try { return new Intl.DateTimeFormat(LOC(), { weekday: 'short', day: 'numeric', month: 'short' }).format(new Date(ts)); } catch { return dayKey(ts); } };
+const fmtHora = ts => { try { return new Intl.DateTimeFormat(LOC(), { hour: '2-digit', minute: '2-digit' }).format(new Date(ts)); } catch { const d = new Date(ts); return pad2(d.getHours()) + ':' + pad2(d.getMinutes()); } };
+const fmtQuando = ts => { try { return new Intl.DateTimeFormat(LOC(), { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }).format(new Date(ts)); } catch { return dayKey(ts) + ' ' + fmtHora(ts); } };
+/* "Thu, Nov 12, 10:46–11:52": the day, and from what time to what time */
+const fmtPeriodo = (ini, fim) => fmtQuando(ini) + (fim && fim - ini > 60000 && dayKey(fim) === dayKey(ini) ? '–' + fmtHora(fim) : '');
 const fmtDia = d => { try { return new Intl.DateTimeFormat(LOC(), { day: 'numeric', month: 'numeric' }).format(d); } catch { return pad2(d.getDate()) + '/' + pad2(d.getMonth() + 1); } };
 const fmtDur = ms => { const m = Math.max(1, Math.round(ms / 60000)); return m < 60 ? m + ' min' : Math.floor(m / 60) + 'h' + pad2(m % 60); };
 const e1rm = (kg, reps) => (kg > 0 && reps > 0 ? kg * (1 + Math.min(reps, 20) / 30) : 0);

@@ -423,7 +423,8 @@ function terminarPlayer(completo) {
   } else if (completo) { tom(784, 0.2); tom(988, 0.2, 0.22); tom(1318, 0.5, 0.44); vibrar([200, 80, 200, 80, 400]); setTimeout(() => VOZ.falar(t('v_done')), 700); }
   const minutos = Math.max(1, Math.round(e / 60));
   if (e < 30) return;
-  abrirCardio({ minutos, modo: cfg.maq, protocolo: cfg.id, esforco: ESFORCO_PADRAO[PROTO[cfg.id].nivel], sessao: cfg.sessao || '', titulo: completo ? t('done_title') : '' });
+  const ini = P.ini || Date.now() - e * 1000;
+  abrirCardio({ minutos, modo: cfg.maq, protocolo: cfg.id, esforco: ESFORCO_PADRAO[PROTO[cfg.id].nivel], sessao: cfg.sessao || '', titulo: completo ? t('done_title') : '', ini, fim: Math.min(Date.now(), ini + e * 1000 + (P.pausa || 0)) });
 }
 function iniciarDeConfig(id, param, maq, sessao) {
   const p = PROTO[id];

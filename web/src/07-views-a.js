@@ -306,7 +306,7 @@ function viewHoje() {
     ${cardioCard(pid)}
     ${xpMini(pid)}
     ${aliadosHoje()}
-    ${ultima ? `<p class="small muted">${t('last_workout', { d: esc(fmtDate(ultima.inicio)), n: esc(ultima.diaNome) })}</p>` : ''}
+    ${ultima ? `<p class="small muted">${t('last_workout', { d: esc(fmtPeriodo(ultima.inicio, ultima.fim)), n: esc(ultima.diaNome) })}</p>` : ''}
   </section>`;
 }
 function escolherDia() {

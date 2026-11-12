@@ -68,4 +68,26 @@ details.expl>summary{font-size:var(--t-md)}
 details.expl p{margin:0;line-height:1.5}
 a.svc.yt{border-color:var(--danger);color:var(--ink)}
 a.svc.yt span{color:var(--danger)}
+.fig{display:block;width:100%;border:0;background:var(--surface-2);border-radius:14px;padding:8px 8px 6px;color:inherit;font:inherit;cursor:pointer;text-align:center}
+.fig svg{display:block;width:100%;height:auto;max-height:300px}
+.fig line{stroke-linecap:round}
+.fig .bn{stroke:var(--fig-n)}.fig circle.bn{fill:var(--fig-n);stroke:none}
+.fig .bf{stroke:var(--fig-f)}.fig circle.bf{fill:var(--fig-f);stroke:none}
+.fig .eq,.fig .cb{stroke:var(--fig-eq)}.fig .eqf{stroke:var(--fig-eqf)}.fig circle.eqf{fill:var(--fig-eqf);stroke:none}
+.fig polygon.pl{fill:var(--fig-pl);fill-opacity:.22;stroke:var(--fig-pl);stroke-width:3.2;stroke-linejoin:round}.fig polygon.pd{fill:var(--fig-pd)}.fig polygon.pd2{fill:var(--fig-pd2)}.fig polygon.eqf,.fig polygon.eqf2{fill:var(--fig-eqf)}.fig polygon.sh{fill:var(--fig-sh)}
+.fig .bd{stroke:var(--fig-bd)}
+.fig-fase{display:flex;flex-direction:column;gap:6px;padding:6px 4px 2px}
+.fig-fase>span{font-weight:700;font-size:var(--t-sm);min-height:1.3em}
+.fig-fase i{display:block;height:4px;border-radius:2px;background:var(--line);overflow:hidden}
+.fig-fase b{display:block;height:100%;width:0;background:var(--muted)}
+.fig-fase b.exc{background:var(--accent)}.fig-fase b.con{background:var(--ok)}
+.mapa{display:flex;flex-direction:column;gap:4px}
+.mapa svg{display:block;width:100%;max-height:250px}
+.mapa .sil circle,.mapa .sil rect,.mapa .sil path,.mapa .sil ellipse{fill:var(--fig-pd)}
+.mapa .sil line{stroke:var(--fig-pd);stroke-linecap:round}
+.mapa .m0{fill:var(--fig-pd2)}.mapa .m1{fill:var(--danger)}.mapa .m2{fill:var(--danger);fill-opacity:.36}
+.mapa text{font:600 9px var(--f-body);fill:var(--muted)}
+.mapa p{margin:0;line-height:1.5}
+.mapa .dot1,.mapa .dot2{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px;background:var(--danger)}
+.mapa .dot2{opacity:.36}
 </style>

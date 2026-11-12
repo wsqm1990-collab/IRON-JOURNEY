@@ -17,14 +17,17 @@ function abrirGuia(id, nomeFallback) {
   const ex = exInfo(id, nomeFallback);
   if (Guia.ctl) Guia.ctl.abort();
   Guia.ctl = new AbortController(); Guia.id = id; Guia.nome = nomeFallback || '';
+  const fig = figuraHTML(id, ex.nome), mapa = musculosHTML(id);
   const corpo = `<div class="stack guia">
-    <p class="small muted">${esc(t('main_muscle', { x: nomeGrupo(ex.grupo) }))}</p>
+    ${fig}
+    ${mapa || `<p class="small muted">${esc(t('main_muscle', { x: nomeGrupo(ex.grupo) }))}</p>`}
     <div class="svc-row"><a class="svc yt" href="${esc(ytURL(ex))}" data-pkg="com.google.android.youtube" data-url="1" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">▶</span> ${esc(t('yt_videos'))}</a></div>
     <h3 class="h3">${t('guide_ai_title')}</h3>
     <div id="guiaIA">${AI.on ? `<p class="msg think">${t('guide_writing')}</p>` : `<p class="note">${esc(t('guide_need_key'))}</p>`}</div>
   </div>`;
   const ctl = Guia.ctl;
-  openSheet(t('guide_title', { x: ex.nome }), corpo, () => ctl.abort());
+  openSheet(t('guide_title', { x: ex.nome }), corpo, () => { ctl.abort(); cancelAnimationFrame(Fig.raf); });
+  if (fig) iniciarFigura(id);
   if (AI.on) carregarAula();
 }
 function carregarAula() {

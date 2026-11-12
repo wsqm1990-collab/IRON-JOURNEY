@@ -144,6 +144,7 @@ const ACT = {
   despular: el => { live(el).pulado = false; saveLiveSoon(); refreshEx(+el.dataset.i); },
   tecnica: el => abrirTecnica(+el.dataset.i),
   guia: el => abrirGuia(el.dataset.id, el.dataset.nome || ''),
+  figPausa: () => pausarFigura(),
   guiaDeNovo: () => { const el = $('#guiaIA'); if (el) el.innerHTML = `<p class="msg think">${t('guide_writing')}</p>`; carregarAula(); },
   explicarPlano: () => pedirExplicacao(),
   trocarLive: el => abrirTroca({ scope: 'live', i: +el.dataset.i }),
