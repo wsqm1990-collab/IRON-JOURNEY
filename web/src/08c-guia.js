@@ -20,7 +20,7 @@ function abrirGuia(id, nomeFallback) {
   const fig = figuraHTML(id, ex.nome), mapa = musculosHTML(id);
   pararRitmo();
   const corpo = `<div class="stack guia">
-    ${fig}${fig ? ritmoHTML(id) : ''}
+    ${fig}${pegadaHTML(id)}${fig ? ritmoHTML(id) : ''}
     ${mapa || `<p class="small muted">${esc(t('main_muscle', { x: nomeGrupo(ex.grupo) }))}</p>`}
     <div class="svc-row"><a class="svc yt" href="${esc(ytURL(ex))}" data-pkg="com.google.android.youtube" data-url="1" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">▶</span> ${esc(t('yt_videos'))}</a></div>
     ${formaHTML()}

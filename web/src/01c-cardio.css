@@ -95,4 +95,6 @@ a.svc.yt span{color:var(--danger)}
 #ritmoBtn svg{width:18px;height:18px}
 .fig.mini{width:64px;height:52px;padding:3px;flex:none;border-radius:10px}
 .fig.mini svg{width:100%;height:100%;max-height:none}
+.pos{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:4px}
+.pos p{margin:0}.pos .small{line-height:1.45}
 </style>
