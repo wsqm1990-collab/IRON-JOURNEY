@@ -192,8 +192,8 @@ async function main() {
     const zip = 'upd.zip';
     if (fs.existsSync(zip)) {
       adb('push', zip, '/data/local/tmp/upd.zip');
-      adb('shell', `cat /data/local/tmp/upd.zip | run-as ${PKG} sh -c 'mkdir -p files/bundles && cat > files/upd.zip && rm -rf files/bundles/e2e && mkdir files/bundles/e2e && cd files/bundles/e2e && unzip -q -o ../../upd.zip && ls'`);
-      const dir = `/data/user/0/${PKG}/files/bundles/e2e`;
+      adb('shell', `cat /data/local/tmp/upd.zip | run-as ${PKG} sh -c 'mkdir -p files/bundles && cat > files/upd.zip && rm -rf files/bundles/${UP} && mkdir files/bundles/${UP} && cd files/bundles/${UP} && unzip -q -o ../../upd.zip && ls'`);
+      const dir = `/data/user/0/${PKG}/files/bundles/${UP}`;
       await ev(`(() => { LS.set('ij_staged', { build: ${UP}, path: ${q(dir)} }); return aplicarAtualizacao(); })()`);
       await sleep(6000);
       await connect();

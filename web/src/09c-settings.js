@@ -152,7 +152,7 @@ function confirmarVersao() {
   LS.del('ij_trying'); LS.del('ij_trying_path');
   if (Number(tr) === buildAtual()) {
     Nat.safe('keepBundle', { path: caminho || '' });
-    Nat.safe('cleanBundles', { keep: [String(tr)] });
+    Nat.safe('cleanBundles', { keep: [String(tr), String(caminho || '').split('/').pop()] });
     toast(t('updated_to', { v: versaoTexto() }));
   } else {
     const ruins = LS.get('ij_bad') || [];
