@@ -27,7 +27,9 @@ Object.assign(STR, {
   restore_q: ['Replace everything on this phone with the copy from {d}? Workouts saved after that date will be lost.', 'Trocar tudo deste celular pela cópia de {d}? Treinos salvos depois dessa data serão perdidos.', '¿Reemplazar todo en este móvil por la copia del {d}? Se perderán los entrenamientos guardados después de esa fecha.'],
   restore_yes: ['Restore', 'Restaurar', 'Restaurar'],
   version_x: ['Iron Journey {v} · updates install by themselves', 'Iron Journey {v} · as atualizações chegam sozinhas', 'Iron Journey {v} · las actualizaciones se instalan solas'],
-  updating: ['Updating Iron Journey...', 'Atualizando o Iron Journey...', 'Actualizando Iron Journey...'], updated_to: ['Updated to version {v}.', 'Atualizado para a versão {v}.', 'Actualizado a la versión {v}.'],
+  updating: ['Updating Iron Journey...', 'Atualizando o Iron Journey...', 'Actualizando Iron Journey...'],
+  check_updates: ['Check for updates', 'Procurar atualização', 'Buscar actualización'], checking: ['Looking for a new version...', 'Procurando versão nova...', 'Buscando una versión nueva...'],
+  up_to_date: ['You have the latest version ({v}).', 'Você já está na versão mais nova ({v}).', 'Ya tienes la versión más reciente ({v}).'], update_failed: ['Couldn\'t check for updates. Check your internet.', 'Não deu para procurar atualização. Confira a internet.', 'No se pudo buscar actualizaciones. Revisa tu internet.'], updated_to: ['Updated to version {v}.', 'Atualizado para a versão {v}.', 'Actualizado a la versión {v}.'],
   need_apk: ['A new version needs a quick reinstall.', 'Uma versão nova precisa de uma reinstalação rápida.', 'Una versión nueva necesita una reinstalación rápida.'], get_apk: ['Download', 'Baixar', 'Descargar'],
   coach_need_key: ['The chat coach uses AI. Add your Anthropic key in Settings to talk to it. Your plan, workouts and journey work without it.', 'O treinador do chat usa IA. Coloque sua chave da Anthropic nas Configurações para conversar com ele. O plano, os treinos e a jornada funcionam sem ela.', 'El entrenador del chat usa IA. Añade tu clave de Anthropic en Ajustes para hablar con él. Tu plan, tus entrenamientos y la jornada funcionan sin ella.'],
   plan_local_note: ['Built-in coach: a solid evidence-based plan right away. Add your AI key in Settings for a plan tailored by AI.', 'Treinador embutido: um plano sólido, baseado em evidências, na hora. Coloque sua chave de IA nas Configurações para um plano feito sob medida pela IA.', 'Entrenador integrado: un plan sólido y basado en evidencia al instante. Añade tu clave de IA en Ajustes para un plan a medida hecho por IA.'],
@@ -55,7 +57,7 @@ function ajustesHTML() {
       <button class="btn ghost block" data-a="backupSalvar">${t('backup_save')}</button>
       <label class="btn ghost block" for="backupIn">${t('backup_restore')}</label><input type="file" id="backupIn" accept="application/json,.json" hidden>
     </div>
-    <p class="xs muted num">${t('version_x', { v: versaoTexto() })}</p>
+    <div class="row between" style="gap:12px"><p class="xs muted num" style="margin:0">${t('version_x', { v: versaoTexto() })}</p>${Nat.on ? `<button class="btn quiet small" data-a="checarAgora">${t('check_updates')}</button>` : ''}</div>
   </div>`;
 }
 async function statusSegundoPlano() {
@@ -117,25 +119,35 @@ const buildAtual = () => Number(window.IJ_BUILD) || 0;
 function ocioso() {
   return !S.live && !(typeof P !== 'undefined' && P.on) && $('#sheet').hidden && !S.wizard && !S.chatBusy && !S.gen && document.visibilityState === 'visible';
 }
-async function checarAtualizacao(forcar) {
-  if (!Nat.on || !buildAtual() || UPD.busy) return;
+async function checarAtualizacao(forcar, manual) {
+  if (!Nat.on || !buildAtual() || UPD.busy) return 'busy';
   const ult = LS.get('ij_upd_em') || 0;
-  if (!forcar && Date.now() - ult < 3 * 3600000) return;
+  if (!forcar && Date.now() - ult < 3600000) return 'later';
   UPD.busy = true;
+  let res = 'none';
   try {
     const r = await Nat.call('fetchText', { url: UPD.url });
     LS.set('ij_upd_em', Date.now());
     const v = JSON.parse((r && r.text) || '{}');
     const ruins = LS.get('ij_bad') || [];
-    if (!(Number(v.build) > buildAtual()) || ruins.includes(Number(v.build))) return;
+    if (!(Number(v.build) > buildAtual()) || ruins.includes(Number(v.build))) return res;
     const info = await Nat.safe('info');
-    if (v.minShell && (!info || (info.shell || 1) < v.minShell)) { S.precisaApk = true; render(); return; }
-    const res = await Nat.call('fetchBundle', { url: v.zip, build: String(v.build), sha256: v.sha256 || '' });
-    LS.set('ij_staged', { build: Number(v.build), path: res.path });
-    if (ocioso()) aplicarAtualizacao();
+    if (v.minShell && (!info || (info.shell || 1) < v.minShell)) { S.precisaApk = true; render(); return (res = 'apk'); }
+    const b = await Nat.call('fetchBundle', { url: v.zip, build: String(v.build), sha256: v.sha256 || '' });
+    LS.set('ij_staged', { build: Number(v.build), path: b.path });
+    res = 'staged';
+    if (manual || ocioso()) { if (manual) closeSheet(); aplicarAtualizacao(); res = 'applied'; }
   } catch (e) {
+    res = 'error';
     try { console.warn('update check', (e && (e.message || e.code)) || e); } catch { /* none */ }
   } finally { UPD.busy = false; }
+  return res;
+}
+async function checarAgora() {
+  toast(t('checking'));
+  const r = await checarAtualizacao(true, true);
+  if (r === 'none') toast(t('up_to_date', { v: versaoTexto() }));
+  else if (r === 'error') toast(t('update_failed'));
 }
 function aplicarAtualizacao(seFalhar) {
   const st = LS.get('ij_staged');

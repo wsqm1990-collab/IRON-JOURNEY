@@ -46,7 +46,7 @@ function aoFicarPronto() {
   const p = perfil();
   if (!LS.get('td_lang') && p && p.lang) setLang(p.lang);
   retomarPlayerSalvo();
-  setTimeout(() => { window.__ijOk = true; confirmarVersao(); setTimeout(() => checarAtualizacao(), 4000); }, 2500);
+  setTimeout(() => { window.__ijOk = true; confirmarVersao(); setTimeout(() => checarAtualizacao(true), 4000); }, 2500);
 }
 
 /* ---------- workout actions ---------- */
@@ -95,6 +95,7 @@ const ACT = {
   pedirNotif: async () => { const r = await Nat.safe('askNotif'); if (!r || !r.granted) Nat.safe('openNotifSettings'); setTimeout(statusSegundoPlano, 600); },
   abrirBateria: () => Nat.safe('openBattery'),
   backupSalvar: () => salvarBackup(),
+  checarAgora: () => checarAgora(),
   backupAplicar: () => aplicarBackup(),
   svcSel: el => { LS.set('ij_svc', el.dataset.v || null); render(); },
   apkNovo: () => { if (Nat.on) Nat.safe('openApp', { url: APK_URL }); else window.open(APK_URL, '_blank'); },
