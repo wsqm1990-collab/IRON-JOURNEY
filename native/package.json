@@ -1,0 +1,12 @@
+{
+  "name": "iron-journey-android",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Android shell for Iron Journey (the Android project is generated in CI, see .github/workflows/android.yml)",
+  "dependencies": {
+    "@capacitor/android": "8.6.0",
+    "@capacitor/app": "8.1.2",
+    "@capacitor/cli": "8.6.0",
+    "@capacitor/core": "8.6.0"
+  }
+}

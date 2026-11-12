@@ -1,0 +1,208 @@
+name: Android app
+
+# Every push to main builds the app, tests it on an Android emulator and, if it works,
+# publishes a release: IronJourney.apk (install once) and web.zip (the automatic update).
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['README.md']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: android
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    outputs:
+      signed: ${{ steps.key.outputs.signed }}
+    env:
+      BUILD_NUMBER: ${{ github.run_number }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      # The app's signing key keeps new versions installing over the old one. It is derived from the
+      # IJ_KEY_PASS repository secret on every build (same secret, same key), so no key is stored.
+      - name: Signing key
+        id: key
+        env:
+          IJ_KEY_PASS: ${{ secrets.IJ_KEY_PASS }}
+        run: |
+          if [ -z "$IJ_KEY_PASS" ]; then
+            echo "signed=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::No IJ_KEY_PASS secret yet, so only the test build is made (no release)."
+            exit 0
+          fi
+          python3 -m pip install --quiet --disable-pip-version-check cryptography
+          python3 native/ci/signing-key.py native/keystore/ironjourney.p12
+          echo "signed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Build the app page
+        run: |
+          mkdir -p ci-out
+          node tools/build.mjs | tee ci-out/web.log
+          node tools/fonts.mjs | tee -a ci-out/web.log
+
+      - name: Create the Android project
+        working-directory: native
+        run: |
+          set -o pipefail
+          npm install --no-audit --no-fund 2>&1 | tail -n 20 | tee ../ci-out/npm.log
+          rm -rf www && cp -r ../web/www www
+          cp node_modules/@capacitor/core/dist/capacitor.js www/capacitor.js
+          npx cap add android 2>&1 | tee ../ci-out/cap-add.log
+          node configure-android.mjs > ../ci-out/configure.log 2>&1 || { cat ../ci-out/configure.log; exit 1; }
+          npx cap sync android 2>&1 | tee ../ci-out/cap-sync.log
+
+      - name: Build the APK
+        working-directory: native/android
+        run: |
+          chmod +x gradlew
+          ./gradlew --no-daemon --stacktrace assembleRelease assembleDebug > ../../ci-out/gradle.log 2>&1 || { tail -n 200 ../../ci-out/gradle.log; exit 1; }
+          tail -n 30 ../../ci-out/gradle.log
+
+      - name: Sign the release APK
+        if: steps.key.outputs.signed == 'true'
+        env:
+          IJ_KEY_PASS: ${{ secrets.IJ_KEY_PASS }}
+        run: |
+          BT=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -n 1)
+          IN=native/android/app/build/outputs/apk/release/app-release-unsigned.apk
+          "$BT/zipalign" -p -f 4 "$IN" ci-out/aligned.apk
+          "$BT/apksigner" sign --ks native/keystore/ironjourney.p12 --ks-type PKCS12 --ks-key-alias ironjourney \
+            --ks-pass env:IJ_KEY_PASS --key-pass env:IJ_KEY_PASS --out ci-out/IronJourney.apk ci-out/aligned.apk
+          "$BT/apksigner" verify --print-certs ci-out/IronJourney.apk | grep -i "SHA-256" | head -n 1
+          rm -f ci-out/aligned.apk native/keystore/ironjourney.p12
+
+      - name: Package the release files
+        run: |
+          N=${{ github.run_number }}
+          R="https://github.com/${{ github.repository }}/releases/download/v1.0.$N"
+          mkdir -p apk && cp native/android/app/build/outputs/apk/debug/app-debug.apk apk/IronJourney-debug.apk
+          (cd native/www && zip -qr -X ../../ci-out/web.zip .)
+          SHA=$(sha256sum ci-out/web.zip | cut -d' ' -f1)
+          printf '{"build":%s,"zip":"%s/web.zip","sha256":"%s","minShell":1,"apk":"%s/IronJourney.apk"}\n' "$N" "$R" "$SHA" "$R" > ci-out/version.json
+          cat ci-out/version.json
+          ls -la ci-out apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-files
+          if-no-files-found: ignore
+          path: |
+            ci-out/IronJourney.apk
+            ci-out/web.zip
+            ci-out/version.json
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: debug-apk
+          path: apk
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: build-logs
+          path: ci-out/*.log
+
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: debug-apk
+          path: apk
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-files
+          path: rel
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Run the app on an Android emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          arch: x86_64
+          target: google_apis
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none
+          script: bash native/ci/emulator-test.sh test-out
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-out
+          path: test-out
+
+  release:
+    needs: [build, test]
+    if: needs.build.outputs.signed == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-files
+          path: rel
+
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          N=${{ github.run_number }}
+          gh release create "v1.0.$N" rel/IronJourney.apk rel/web.zip rel/version.json \
+            --repo "${{ github.repository }}" --title "Iron Journey 1.0.$N" --latest \
+            --notes "To install: open this page on your Android phone, tap IronJourney.apk and open the download. Installed apps update by themselves."
+
+  report:
+    needs: [build, test, release]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          path: all
+
+      - uses: actions/checkout@v4
+        with:
+          path: site
+
+      - name: Publish logs and screenshots to the ci-results branch
+        run: |
+          cd site
+          git checkout -q --orphan ci-results
+          git rm -rfq .
+          [ -d ../all/build-logs ] && cp -r ../all/build-logs build
+          [ -d ../all/test-out ] && cp -r ../all/test-out test
+          echo "run ${{ github.run_number }} (${{ github.sha }}): build=${{ needs.build.result }} test=${{ needs.test.result }} release=${{ needs.release.result }}" > SUMMARY.txt
+          git add -A
+          git -c user.name="Iron Journey build" -c user.email="build@users.noreply.github.com" commit -qm "Build ${{ github.run_number }}"
+          git push -qf origin ci-results

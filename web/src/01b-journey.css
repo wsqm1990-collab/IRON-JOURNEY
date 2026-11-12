@@ -1,0 +1,57 @@
+<style>
+/* journey: XP, path, relics */
+:root{--bronze:#A8693A;--silver:#8E99A6}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bronze:#C98551;--silver:#AEB8C3}}
+:root[data-theme="dark"]{--bronze:#C98551;--silver:#AEB8C3}
+.tabs .wrap{grid-template-columns:repeat(5,1fr)}
+.tab{font-size:11px}
+.xp{display:flex;flex-direction:column;gap:6px}
+.xp-top{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.xp-top .lv{font-family:var(--f-display);font-weight:800;font-size:22px;line-height:1;text-transform:uppercase}
+.xp-track{height:10px;border-radius:5px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
+.xp-fill{height:100%;background:linear-gradient(90deg,var(--plate-blue),var(--plate-green));border-radius:5px}
+.heroes{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.hcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.hcard.me{border-color:var(--accent)}
+.hcard .who-n{display:flex;align-items:center;gap:8px;font-weight:700;min-width:0}
+.hcard .who-n span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.medal{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:#fff;font-family:var(--f-cond);font-weight:700;flex:none;border:3px solid rgba(255,255,255,.35)}
+.path{display:flex;flex-direction:column;position:relative;padding-left:4px}
+.step{display:grid;grid-template-columns:40px 1fr;gap:12px;position:relative;padding-bottom:18px}
+.step:last-child{padding-bottom:0}
+.step::before{content:"";position:absolute;left:19px;top:40px;bottom:0;width:2px;background:var(--line)}
+.step:last-child::before{display:none}
+.step.done::before{background:var(--ok)}
+.node{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;border:3px solid var(--line);background:var(--surface);color:var(--muted);font-family:var(--f-cond);font-weight:700;font-size:17px;z-index:1}
+.node svg{width:20px;height:20px}
+.step.done .node{background:var(--ok);border-color:var(--ok);color:#fff}
+.step.now .node{border-color:var(--accent);color:var(--accent);box-shadow:0 0 0 5px var(--accent-soft)}
+.step.side .node{border-style:dashed}
+.step.side.done .node{background:var(--plate-yellow);border-color:var(--plate-yellow);border-style:solid;color:#1A1400}
+.step .st{display:flex;flex-direction:column;gap:2px;padding-top:2px;min-width:0}
+.step .st b{font-family:var(--f-cond);font-size:20px;line-height:1.1}
+.step.locked .st{opacity:.62}
+.relics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.relic{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;padding:12px 6px;border-radius:12px;background:var(--surface);border:1px solid var(--line);min-width:0}
+.relic .disc{width:46px;height:46px;border-radius:50%;position:relative;border:3px solid rgba(255,255,255,.4);box-shadow:inset 0 0 0 6px rgba(0,0,0,.08)}
+.relic .disc::after{content:"";position:absolute;inset:16px;border-radius:50%;background:var(--surface)}
+.relic b{font-size:12.5px;line-height:1.2}
+.relic span{font-size:11px;color:var(--muted);line-height:1.25}
+.relic.off .disc{background:var(--surface-2)!important;border:2px dashed var(--plate-edge);box-shadow:none}
+.relic.off b{color:var(--muted)}
+.reward{display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;padding:8px 0}
+.reward .big{font-family:var(--f-display);font-weight:800;font-size:56px;line-height:1;color:var(--ok)}
+.reward .lvup{font-family:var(--f-display);font-weight:800;font-size:26px;text-transform:uppercase;color:var(--accent)}
+.xp-lines{width:100%;display:flex;flex-direction:column;gap:6px;text-align:left}
+.xp-lines div{display:flex;justify-content:space-between;gap:10px;font-size:var(--t-sm);border-bottom:1px dashed var(--line);padding-bottom:6px}
+.pop{animation:pop .5s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+@media (prefers-reduced-motion: reduce){.pop{animation:none}}
+.ex{scroll-margin-top:132px}
+.stats.four{grid-template-columns:repeat(2,1fr)}
+@media (min-width:520px){.stats.four{grid-template-columns:repeat(4,1fr)}}
+.btn svg{width:18px;height:18px;flex:none}
+.set .ck svg{width:26px;height:26px}
+.x svg{width:20px;height:20px}
+@media (max-width:380px){.relics{grid-template-columns:repeat(2,1fr)}.heroes{grid-template-columns:1fr}}
+</style>

@@ -1,0 +1,48 @@
+<style>
+/* cardio studio + full-screen player */
+:root{--on-plate:#FFFFFF;--on-yellow:#1A1400}
+.proto{display:grid;grid-template-columns:1fr auto;gap:6px 12px;align-items:center;text-align:left;width:100%;padding:14px 16px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+.proto b{font-family:var(--f-cond);font-size:21px;line-height:1.1}
+.proto .tm{font-family:var(--f-display);font-weight:800;font-size:24px;text-align:right;white-space:nowrap}
+.proto .ds{grid-column:1/-1;font-size:var(--t-sm);color:var(--muted)}
+.proto .row{grid-column:1/-1}
+.pill.lvl-easy{background:var(--ok-soft);color:var(--ok);border-color:transparent}
+.pill.lvl-moderate{background:var(--accent-soft);color:var(--accent);border-color:transparent}
+.pill.lvl-hard{background:var(--danger-soft);color:var(--danger);border-color:transparent}
+.pill.lvl-max{background:var(--plate-yellow);color:var(--on-yellow);border-color:transparent}
+.svc-row{display:flex;flex-wrap:wrap;gap:8px}
+a.svc{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 14px;font-weight:700;font-size:var(--t-sm);color:var(--ink);text-decoration:none;min-height:44px}
+a.svc:focus-visible{outline:3px solid var(--accent)}
+.stepper{display:grid;grid-template-columns:56px 1fr 56px;align-items:center;gap:8px}
+.stepper button{min-height:52px;border-radius:12px;border:1px solid var(--line);background:var(--surface);font-size:26px;font-weight:700;line-height:1}
+.stepper .v{text-align:center;font-family:var(--f-display);font-weight:800;font-size:34px}
+.bpm{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.bpm b{font-family:var(--f-display);font-size:44px;font-weight:800;line-height:1}
+.player{position:fixed;inset:0;z-index:70;display:flex;flex-direction:column;gap:10px;background:var(--seg-bg,var(--plate-blue));color:var(--seg-fg,var(--on-plate));padding:calc(env(safe-area-inset-top,0px) + 16px) max(16px,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 16px) max(16px,env(safe-area-inset-left,0px));transition:background-color .35s ease}
+.pl-top{display:flex;justify-content:space-between;gap:12px;font-weight:600;font-size:14px;opacity:.92}
+.pl-top span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pl-mid{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:8px;min-height:0}
+.pl-kind{font-family:var(--f-display);font-weight:800;font-size:clamp(44px,13vw,96px);text-transform:uppercase;line-height:.92;letter-spacing:.01em;text-wrap:balance}
+.pl-clock{font-family:var(--f-display);font-weight:800;font-size:clamp(96px,32vw,230px);line-height:.85;font-variant-numeric:tabular-nums}
+.pl-hint{font-size:17px;font-weight:600;max-width:32ch}
+.pl-clock.pausado{opacity:.5;animation:blink 1.6s ease-in-out infinite}
+@keyframes blink{50%{opacity:.25}}
+.pl-round{font-family:var(--f-cond);font-weight:700;font-size:22px}
+.pl-next{font-size:15px;opacity:.88}
+.pl-bar{height:8px;border-radius:4px;background:rgba(127,127,127,.35);overflow:hidden}
+.pl-bar i{display:block;height:100%;width:0;background:currentColor}
+.pl-ctrl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.pl-ctrl button{min-height:58px;border-radius:14px;border:2px solid currentColor;background:transparent;color:inherit;font-weight:700;font-size:14px;padding:0 4px}
+.pl-ctrl button.main{background:rgba(127,127,127,.25)}
+.player.baixo .pl-mid{justify-content:flex-end;padding-bottom:6px}
+.player.baixo .pl-kind{font-size:clamp(40px,11vw,80px)}
+.player.baixo .pl-clock{font-size:clamp(84px,27vw,190px)}
+.player.flash{animation:flash .7s ease-out}
+@keyframes flash{0%{filter:brightness(1.7) saturate(1.2)}100%{filter:none}}
+@media (prefers-reduced-motion: reduce){.player{transition:none}.player.flash,.pl-clock.pausado{animation:none}}
+.subtabs{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+.subtabs button{border:0;background:transparent;min-height:44px;font-weight:700}
+.subtabs button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.lang{display:flex;align-items:center;gap:4px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:4px 10px;font-weight:700;font-size:var(--t-sm);min-height:36px;flex:none}
+.lang svg{width:16px;height:16px}
+</style>

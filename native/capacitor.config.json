@@ -1,0 +1,15 @@
+{
+  "appId": "com.wsqm1990.ironjourney",
+  "appName": "Iron Journey",
+  "webDir": "www",
+  "backgroundColor": "#0E1217",
+  "android": {
+    "allowMixedContent": false
+  },
+  "plugins": {
+    "SystemBars": {
+      "insetsHandling": "native",
+      "style": "DEFAULT"
+    }
+  }
+}
