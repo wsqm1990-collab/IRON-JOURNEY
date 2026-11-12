@@ -63,7 +63,8 @@ function renderPeople() {
   $('#langBtn').innerHTML = I.gear + '<span>' + LANG().toUpperCase() + '</span>';
   $('#langBtn').setAttribute('aria-label', t('settings'));
   if (!S.ready || !S.ordem.length) { el.innerHTML = ''; return; }
-  el.innerHTML = S.ordem.map(pid => `<button class="who" data-a="me" data-pid="${esc(pid)}" aria-pressed="${pid === S.me}">${avatar(pid)}${esc(S.perfis[pid].nome)}</button>`).join('');
+  const so = S.ordem.length > 1;
+  el.innerHTML = S.ordem.map(pid => { const n = esc(S.perfis[pid].nome); return `<button class="who${so ? ' so' : ''}" data-a="me" data-pid="${esc(pid)}" aria-pressed="${pid === S.me}"${so ? ` aria-label="${n}" title="${n}"` : ''}>${avatar(pid)}${so ? '' : n}</button>`; }).join('');
 }
 const TABS = [['hoje', 'tab_today'], ['plano', 'tab_plan'], ['cardio', 'cardio'], ['coach', 'tab_coach'], ['jornada', 'tab_journey']];
 const TAB_ICON = { hoje: I.hoje, plano: I.plano, cardio: SV('<path d="M3 12h4l2.5-6 4 12 2.5-6H21"/>'), coach: I.coach, jornada: I.jornada };

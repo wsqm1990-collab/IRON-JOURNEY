@@ -122,11 +122,14 @@ img.px.ico{width:22px;height:auto;vertical-align:-5px;margin-right:4px}
 .inv-it{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 6px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:2px}
 .inv-it img{width:40px;height:40px}.inv-it b{font-size:12px;line-height:1.25}.inv-it span{font-size:11px;color:var(--muted);line-height:1.3}
 .inv-it.off{opacity:.62}.inv-it.off img{filter:grayscale(1)}
+.reward .inv{width:100%}.reward .inv-it img{width:48px;height:48px}
+.who.so{padding:4px}
 .premio img.big{width:56px;height:56px;flex:none}
 .aliados{display:flex;flex-direction:column;gap:8px}
 .aliado{display:flex;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 10px}
-.criador .cr-prev{display:flex;justify-content:center;background:var(--surface-2);border-radius:14px;padding:12px;position:sticky;top:var(--sheet-h,72px);z-index:1;box-shadow:0 6px 12px -8px rgba(0,0,0,.35)}
-.criador .cr-prev .pxa{width:120px}
+.criador .cr-prev{position:sticky;top:var(--sheet-h,72px);z-index:1;background:var(--bg);padding-bottom:6px;margin-bottom:-6px}
+.criador .cr-box{display:flex;justify-content:center;background:var(--surface-2);border-radius:14px;padding:12px;box-shadow:0 6px 12px -8px rgba(0,0,0,.35)}
+.criador .cr-box .pxa{width:120px}
 .sw{display:flex;flex-wrap:wrap;gap:10px}
 .sw button{width:34px;height:34px;border-radius:50%;border:2px solid var(--line);cursor:pointer}
 .sw button[aria-pressed="true"]{outline:3px solid var(--accent);outline-offset:2px}

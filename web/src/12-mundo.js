@@ -214,10 +214,15 @@ function falaMentor(pid) {
   return pr.sem.nota ? t('m_week', { n: pr.semana, x: pr.sem.nota }) : t('m_week', { n: pr.semana, x: L3(NOTA_FASE[pr.fase] || NOTA_FASE.accum) });
 }
 const ITEM_RELIQUIA = { chamado: 'mapa', mentor: 'pergaminho', bota: 'bota', bronze: 'anilha', prata: 'anilha', ouro: 'anilha', lendaria: 'anilha', cinturao: 'cinto', campeao: 'cinto', amuleto: 'amuleto', coroa: 'coroa', calice: 'calice', elixir: 'elixir', folego: 'pulmao', coracao: 'coracao', maratona: 'medalha', selo: 'selo', laco: 'laco' };
+/* one relic as a little pixel object (inventory and the reward after a workout) */
+function itemRelHTML(d, r) {
+  const on = r.ok(d), meta = !on && r.meta ? r.meta(d) : null;
+  return `<div class="inv-it${on ? '' : ' off'}" title="${esc(L3(r.nome))}">${imgPx(itemSprite(ITEM_RELIQUIA[r.id] || 'gema', on ? COR_ITEM(r.cor) : '#8D96A3'))}<b>${esc(L3(r.nome))}</b><span>${esc(L3(r.desc))}${meta ? ` · ${Math.min(meta[0], meta[1])}/${meta[1]}` : ''}</span></div>`;
+}
 const COR_ITEM = c => ({ 'var(--plate-green)': '#3DAA5F', 'var(--plate-blue)': '#3B6FD9', 'var(--plate-red)': '#D9473B', 'var(--plate-yellow)': '#E2B33C', 'var(--plate-white)': '#E8ECF0', 'var(--bronze)': '#B87333', 'var(--silver)': '#C0C6CE' }[c] || '#E2B33C');
 function inventarioHTML(d) {
   const rels = reliquiasAtivas();
-  return `<div class="inv">${rels.map(r => { const on = r.ok(d), meta = !on && r.meta ? r.meta(d) : null; return `<div class="inv-it${on ? '' : ' off'}" title="${esc(L3(r.nome))}">${imgPx(itemSprite(ITEM_RELIQUIA[r.id] || 'gema', on ? COR_ITEM(r.cor) : '#8D96A3'))}<b>${esc(L3(r.nome))}</b><span>${esc(L3(r.desc))}${meta ? ` · ${Math.min(meta[0], meta[1])}/${meta[1]}` : ''}</span></div>`; }).join('')}</div>`;
+  return `<div class="inv">${rels.map(r => itemRelHTML(d, r)).join('')}</div>`;
 }
 function premioHTML(pid, H) {
   const pr = progresso(pid), P = PREMIOS[H.classe.id], p = perfil(pid) || {};
@@ -282,7 +287,7 @@ function criadorHTML() {
   const sw = (k, cores) => `<div class="sw">${cores.map((c, i) => `<button data-a="heroiSet" data-k="${k}" data-v="${i}" aria-pressed="${h[k] === i}" style="background:${c}" aria-label="${k} ${i + 1}"></button>`).join('')}</div>`;
   const chips = (k, rot) => `<div class="chips">${rot.map((r, i) => `<button class="chip" data-a="heroiSet" data-k="${k}" data-v="${i}" aria-pressed="${h[k] === i}">${esc(r)}</button>`).join('')}</div>`;
   return `<div class="stack criador">
-    <div class="cr-prev">${heroiAnimHTML(H, 'anda', 'grande')}</div>
+    <div class="cr-prev"><div class="cr-box">${heroiAnimHTML(H, 'anda', 'grande')}</div></div>
     <p class="small" style="text-align:center"><b>${esc(t('hero_class', { c: L3(cl.nome) }))}</b><br><span class="muted">${esc(t('hero_class_why', { g: nomeObj(p.objetivo) }))}</span></p>
     <label class="f" for="hr-nome">${t('hero_name')}<input class="inp" id="hr-nome" data-in="heroiNome" maxlength="18" value="${esc(h.nome)}"></label>
     <p class="eyebrow">${t('hero_body')}</p>${chips('corpo', [L3(STR.body_a), L3(STR.body_b)])}
@@ -296,7 +301,7 @@ function criadorHTML() {
   </div>`;
 }
 function atualizarCriador() {
-  const prev = $('.cr-prev');
+  const prev = $('.cr-box');
   if (!prev || !S.heroiDraft) return;
   const h = S.heroiDraft, pid = S.me, p = perfil(pid) || {}, d = jornadaDados(pid), cl = classeDe(p.objetivo);
   prev.innerHTML = heroiAnimHTML({ h, classe: cl, nome: h.nome, tier: tierDe(d.nivel.n), arma: cl.arma, material: null }, 'anda', 'grande');
