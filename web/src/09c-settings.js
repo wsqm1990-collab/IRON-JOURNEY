@@ -137,12 +137,12 @@ async function checarAtualizacao(forcar) {
     try { console.warn('update check', (e && (e.message || e.code)) || e); } catch { /* none */ }
   } finally { UPD.busy = false; }
 }
-function aplicarAtualizacao() {
+function aplicarAtualizacao(seFalhar) {
   const st = LS.get('ij_staged');
   if (!Nat.on || !st || !(st.build > buildAtual())) { if (st && !(st.build > buildAtual())) LS.del('ij_staged'); return false; }
   LS.set('ij_trying', st.build); LS.del('ij_staged');
   toast(t('updating'));
-  Nat.call('setServerBasePath', { path: st.path }, 'WebView').catch(() => LS.del('ij_trying'));
+  Nat.call('setServerBasePath', { path: st.path }, 'WebView').catch(() => { LS.del('ij_trying'); if (seFalhar) seFalhar(); });
   return true;
 }
 /* a new version that started fine becomes the saved one; one that fell back is never tried again */
@@ -161,13 +161,13 @@ function confirmarVersao() {
   }
 }
 /* at start: a downloaded update is applied right away when nothing is in progress */
-function atualizacaoNoInicio() {
+function atualizacaoNoInicio(seFalhar) {
   if (!Nat.on) return false;
   const st = LS.get('ij_staged');
   if (!st || !(st.build > buildAtual())) return false;
   const me = LS.get('td_me'), aoVivo = me && LS.get('td:aovivo/' + me);
   if (LS.get('td_player') || (aoVivo && aoVivo.exs)) return false;
-  return aplicarAtualizacao();
+  return aplicarAtualizacao(seFalhar);
 }
 
 /* ---------- Android back button, coming back to the app ---------- */

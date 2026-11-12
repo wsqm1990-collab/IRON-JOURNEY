@@ -210,7 +210,7 @@ function use(name) {
   catch { return Promise.resolve(null); }
 }
 async function boot() {
-  if (atualizacaoNoInicio()) return;
+  if (atualizacaoNoInicio(boot)) return;
   setLang(LS.get('td_lang') || 'en');
   aplicarTema();
   if (!TABS_OK.includes(S.tab)) S.tab = S.tab === 'evolucao' ? 'jornada' : 'hoje';

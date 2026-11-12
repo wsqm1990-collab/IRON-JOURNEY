@@ -166,9 +166,18 @@ async function main() {
   // keyboard: a focused input must stay visible above the keyboard
   await click('.tab[data-tab="coach"]');
   await click('#langBtn', 600);
-  await ev(`(() => { const i = document.querySelector('#key-in'); i.scrollIntoView({ block: 'center' }); i.focus(); return true; })()`);
-  adb('shell', 'input', 'tap', '540', '1200');
-  await sleep(1500);
+  await ev(`(() => { const i = document.querySelector('#key-in'); i.scrollIntoView({ block: 'center' }); return true; })()`);
+  await sleep(600);
+  // tap the field like a finger would (its position on screen comes from the accessibility tree)
+  adb('shell', 'uiautomator', 'dump', '/sdcard/ui.xml');
+  const ui = adb('shell', 'cat', '/sdcard/ui.xml');
+  const field = ui.match(/class="android\.widget\.EditText"[^>]*bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"/);
+  if (field) adb('shell', 'input', 'tap', String((+field[1] + +field[3]) >> 1), String((+field[2] + +field[4]) >> 1));
+  else {
+    const r = await ev(`(() => { const b = document.querySelector('#key-in').getBoundingClientRect(); return { x: (b.left + b.right) / 2 * devicePixelRatio, y: (b.top + b.bottom) / 2 * devicePixelRatio }; })()`);
+    adb('shell', 'input', 'tap', String(Math.round(r.x)), String(Math.round(r.y + 60)));
+  }
+  await sleep(1800);
   screen('15-keyboard');
   const vis = await ev(`(() => { const r = document.querySelector('#key-in').getBoundingClientRect(); const vv = window.visualViewport; return { top: r.top, bottom: r.bottom, vh: vv ? vv.height : innerHeight, ih: innerHeight }; })()`);
   check('focused field is not hidden by the keyboard', vis.bottom <= vis.vh + 2, vis, false);
