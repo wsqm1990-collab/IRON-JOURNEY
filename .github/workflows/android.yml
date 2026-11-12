@@ -48,7 +48,8 @@ jobs:
             exit 0
           fi
           python3 -m pip install --quiet --disable-pip-version-check cryptography
-          python3 native/ci/signing-key.py native/keystore/ironjourney.p12
+          mkdir -p ci-out
+          python3 native/ci/signing-key.py native/keystore/ironjourney.p12 | tee ci-out/signing.log
           echo "signed=true" >> "$GITHUB_OUTPUT"
 
       - name: Build the app page
@@ -202,7 +203,7 @@ jobs:
           git rm -rfq .
           [ -d ../all/build-logs ] && cp -r ../all/build-logs build
           [ -d ../all/test-out ] && cp -r ../all/test-out test
-          echo "run ${{ github.run_number }} (${{ github.sha }}): build=${{ needs.build.result }} test=${{ needs.test.result }} release=${{ needs.release.result }}" > SUMMARY.txt
+          echo "run ${{ github.run_number }} (${{ github.sha }}): build=${{ needs.build.result }} signed=${{ needs.build.outputs.signed }} test=${{ needs.test.result }} release=${{ needs.release.result }}" > SUMMARY.txt
           git add -A
           git -c user.name="Iron Journey build" -c user.email="build@users.noreply.github.com" commit -qm "Build ${{ github.run_number }}"
           git push -qf origin ci-results

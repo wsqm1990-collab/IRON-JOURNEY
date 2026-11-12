@@ -15,5 +15,6 @@ public class MainActivity extends BridgeActivity {
         try {
             EdgeToEdge.enable(this);
         } catch (Exception ignored) { }
+        IronTimerPlugin.applySavedBundle(this, getBridge());
     }
 }

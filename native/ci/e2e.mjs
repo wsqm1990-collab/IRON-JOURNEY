@@ -206,6 +206,9 @@ async function main() {
       adb('shell', 'am', 'start', '-n', `${PKG}/.MainActivity`); await sleep(5000);
       await connect();
       check('update: app starts again after a restart', await pronto(), null, false);
+      // the kept version is opened right after start (the APK's own page may show for a moment)
+      await waitFor(`window.IJ_BUILD === ${UP}`, 20000);
+      await sleep(1500); await connect(); await pronto();
       const b2 = await ev('window.IJ_BUILD');
       check('update: still on the new version after restarting', b2 === UP, b2, false);
       check('update: data kept after the update', await ev(`!!perfil() && !!plano(S.me)`), null, false);
@@ -221,8 +224,10 @@ async function main() {
     check('update: downloads the latest published version', !!(r && r.path), r, false);
   } catch (e) { check('update: downloads the latest published version', false, String(e.message || e), false); }
 
-  const errs = jsErrors().filter(e => !/capacitor\.js|favicon/i.test(e));
-  check('no JavaScript errors', errs.length === 0, errs.slice(0, 10));
+  const excecoes = cdp.events.filter(m => m.method === 'Runtime.exceptionThrown').map(m => (m.params.exceptionDetails.exception && m.params.exceptionDetails.exception.description) || m.params.exceptionDetails.text);
+  check('no uncaught JavaScript errors', excecoes.length === 0, excecoes.slice(0, 10));
+  const avisos = jsErrors().filter(e => !/capacitor\.js|favicon/i.test(e) && !excecoes.includes(e));
+  check('no console errors (plugin refusals are logged here)', avisos.length === 0, avisos.slice(0, 10), false);
 }
 
 try { await main(); } catch (e) { check('test ran to the end', false, String((e && e.stack) || e)); screen('99-crash'); }

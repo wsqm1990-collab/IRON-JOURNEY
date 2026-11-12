@@ -140,18 +140,18 @@ async function checarAtualizacao(forcar) {
 function aplicarAtualizacao(seFalhar) {
   const st = LS.get('ij_staged');
   if (!Nat.on || !st || !(st.build > buildAtual())) { if (st && !(st.build > buildAtual())) LS.del('ij_staged'); return false; }
-  LS.set('ij_trying', st.build); LS.del('ij_staged');
+  LS.set('ij_trying', st.build); LS.set('ij_trying_path', st.path); LS.del('ij_staged');
   toast(t('updating'));
   Nat.call('setServerBasePath', { path: st.path }, 'WebView').catch(() => { LS.del('ij_trying'); if (seFalhar) seFalhar(); });
   return true;
 }
 /* a new version that started fine becomes the saved one; one that fell back is never tried again */
 function confirmarVersao() {
-  const tr = LS.get('ij_trying');
+  const tr = LS.get('ij_trying'), caminho = LS.get('ij_trying_path');
   if (tr == null) return;
-  LS.del('ij_trying');
+  LS.del('ij_trying'); LS.del('ij_trying_path');
   if (Number(tr) === buildAtual()) {
-    Nat.safe('persistServerBasePath', {}, 'WebView');
+    Nat.safe('keepBundle', { path: caminho || '' });
     Nat.safe('cleanBundles', { keep: [String(tr)] });
     toast(t('updated_to', { v: versaoTexto() }));
   } else {

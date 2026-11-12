@@ -6,6 +6,7 @@ import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -19,6 +20,7 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
+import com.getcapacitor.Bridge;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.PermissionState;
 import com.getcapacitor.Plugin;
@@ -449,6 +451,55 @@ public class IronTimerPlugin extends Plugin {
             if (!k) deleteTree(f);
         }
         call.resolve();
+    }
+
+    /**
+     * Keeps a downloaded web bundle as the app's page from now on. It is dropped when a new APK is
+     * installed (the APK then brings newer files) or when its folder is gone.
+     */
+    @PluginMethod
+    public void keepBundle(PluginCall call) {
+        String path = call.getString("path", "");
+        if (path.length() == 0 || !new File(path, "index.html").exists()) { call.reject("no_bundle"); return; }
+        getContext().getSharedPreferences(BUNDLE_PREFS, Context.MODE_PRIVATE).edit()
+                .putString("path", path).putLong("versionCode", versionCode(getContext())).apply();
+        call.resolve();
+    }
+
+    @PluginMethod
+    public void forgetBundle(PluginCall call) {
+        getContext().getSharedPreferences(BUNDLE_PREFS, Context.MODE_PRIVATE).edit().clear().apply();
+        call.resolve();
+    }
+
+    static final String BUNDLE_PREFS = "iron_bundle";
+
+    @SuppressWarnings("deprecation")
+    static long versionCode(Context ctx) {
+        try {
+            PackageInfo pi = ctx.getPackageManager().getPackageInfo(ctx.getPackageName(), 0);
+            return Build.VERSION.SDK_INT >= 28 ? pi.getLongVersionCode() : (long) pi.versionCode;
+        } catch (Exception e) {
+            return -1;
+        }
+    }
+
+    /** Called by MainActivity at start: open the kept web bundle instead of the one inside the APK. */
+    static void applySavedBundle(Context ctx, Bridge bridge) {
+        try {
+            SharedPreferences p = ctx.getSharedPreferences(BUNDLE_PREFS, Context.MODE_PRIVATE);
+            String path = p.getString("path", null);
+            if (path == null || bridge == null) return;
+            if (p.getLong("versionCode", -2) != versionCode(ctx) || !new File(path, "index.html").exists()) {
+                p.edit().clear().apply();
+                return;
+            }
+            if (path.equals(bridge.getServerBasePath())) return;
+            bridge.setServerBasePath(path);
+            Log.i(IronTimerService.TAG, "using kept bundle " + path);
+        } catch (Exception e) {
+            Log.w(IronTimerService.TAG, "kept bundle failed", e);
+        }
     }
 
     /** Starts the page again from the saved web bundle (used when a new bundle fails to start). */
