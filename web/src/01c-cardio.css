@@ -143,6 +143,7 @@ img.px.ico{width:22px;height:auto;vertical-align:-5px;margin-right:4px}
 .batalha{width:100%}
 .batalha canvas{width:100%;height:auto;display:block;border-radius:12px;image-rendering:pixelated;cursor:pointer;background:#1B1D26}
 .batalha p{text-align:center;font-weight:700;min-height:1.4em;margin:8px 0 0}
+.done-ok{color:var(--ok);display:flex;align-items:center;gap:6px}.done-ok svg{width:16px;height:16px;flex:none}
 .xp.xp-heroi{display:flex;flex-direction:row;gap:12px;align-items:center}
 .xp-heroi .xp-track{display:block}
 </style>

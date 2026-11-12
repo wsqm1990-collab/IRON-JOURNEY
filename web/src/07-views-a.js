@@ -37,6 +37,12 @@ Object.assign(STR, {
   effort_half: [', with half the sets', ', com metade das séries', ', con la mitad de las series'],
   start_workout: ['Start workout', 'Começar treino', 'Empezar entrenamiento'], other_workout: ['Do another workout from the plan', 'Fazer outro treino do plano', 'Hacer otro entrenamiento del plan'],
   coming_up: ['Coming up today', 'O que vem hoje', 'Lo que viene hoy'], sugg_load: ['suggested load', 'carga sugerida', 'carga sugerida'],
+  done_today: ['Today\'s workout done', 'Treino de hoje concluído', 'Entrenamiento de hoy hecho'],
+  done_sets: ['{n} sets', '{n} séries', '{n} series'], done_set1: ['1 set', '1 série', '1 serie'], done_volume: ['{n} kg lifted', '{n} kg levantados', '{n} kg levantados'], done_records: ['{n} records', '{n} recordes', '{n} récords'], done_record1: ['1 record', '1 recorde', '1 récord'],
+  rest_tip: ['Now recovery does its part: good sleep and enough protein are what turn today\'s work into strength and muscle.', 'Agora é a recuperação que trabalha: dormir bem e comer proteína suficiente é o que transforma o treino de hoje em força e músculo.', 'Ahora trabaja la recuperación: dormir bien y comer suficiente proteína es lo que convierte el entrenamiento de hoy en fuerza y músculo.'],
+  next_workout: ['Next workout', 'Próximo treino', 'Próximo entrenamiento'],
+  when_tomorrow: ['tomorrow', 'amanhã', 'mañana'], when_rest: ['after a rest day', 'depois de um dia de descanso', 'después de un día de descanso'],
+  do_it_today: ['Do it today anyway', 'Adiantar para hoje', 'Adelantarlo a hoy'],
   last_workout: ['Last workout: {d}, {n}', 'Último treino: {d}, {n}', 'Último entrenamiento: {d}, {n}'],
   which_workout: ['Which workout are you doing?', 'Qual treino você vai fazer?', '¿Qué entrenamiento vas a hacer?'], next_in_line: ['next in line', 'o próximo da fila', 'el siguiente'],
   cardio_week: ['Cardio this week', 'Cardio da semana', 'Cardio de la semana'], min_done: ['{n} min done', '{n} min feitos', '{n} min hechos'], sessions_of: ['{a} of {b} sessions', '{a} de {b} sessões', '{a} de {b} sesiones'],
@@ -287,16 +293,47 @@ function viewHoje() {
   if (!pr) return `<section class="screen">${semPlanoCard()}${cardioCard(pid)}${aliadosHoje()}</section>`;
   if (pr.completo) return `<section class="screen"><div class="hero"><p class="eyebrow">${t('chapter_done', { n: pr.pl.ciclo })}</p><h1 class="h-display h1">${t('back_stronger')}</h1>${barbell(pr.pg.semanas, pr.nW, true)}<p class="muted">${t('chapter_done_text')}</p><button class="btn big block" data-a="gerar" data-modo="proximo">${t('next_chapter')}</button></div>${cardioCard(pid)}${xpMini(pid)}</section>`;
   const dia = pr.pg.dias[pr.proxDia], ultima = sessoesDe(pid)[0];
+  /* already trained today: say so, and show the next workout as the next one, not as today's */
+  const hoje = dayKey(Date.now()), feitoHoje = ultima && dayKey(ultima.inicio) === hoje && ultima.planoId === pr.pl.id ? ultima : null;
   const lista = dia.exercicios.map(item => {
     const alv = alvo(item, pr.sem), ex = exInfo(item.id, item.nome), sg = sugestao(pid, item, alv);
     return `<div class="exitem"><span class="nm">${esc(ex.nome)}</span><span class="sg num">${sg.kg != null ? fmtKg(sg.kg) + ' kg' : ''}</span><span class="mt num">${alv.series} × ${alv.rmin}${alv.rmax !== alv.rmin ? '–' + alv.rmax : ''} ${unidade(ex)}</span></div>`;
   }).join('');
-  return `<section class="screen">
-    <div class="hero">
-      <div class="row between"><p class="eyebrow">${t('week_of', { c: pr.pl.ciclo, a: pr.semana, b: pr.nW })}</p><span class="pill${pr.sem.deload ? '' : ' acc'}">${esc(nomeFase(pr.fase))}</span></div>
+  const topo = `<div class="row between"><p class="eyebrow">${t('week_of', { c: pr.pl.ciclo, a: pr.semana, b: pr.nW })}</p><span class="pill${pr.sem.deload ? '' : ' acc'}">${esc(nomeFase(pr.fase))}</span></div>
       ${barbell(pr.pg.semanas, pr.semanaIdx, false)}
       <div class="row between"><div class="dots">${Array.from({ length: pr.nD }, (_, i) => `<span class="dot${i < pr.naSemana ? ' on' : ''}"></span>`).join('')}</div><span class="small muted">${t('this_week_n', { a: pr.naSemana, b: pr.nD })}</span></div>
-      <hr class="sep">
+      <hr class="sep">`;
+  if (feitoHoje) {
+    const sets = (feitoHoje.exs || []).reduce((n, x) => n + (x.sets || []).filter(z => z.ok).length, 0);
+    const vol = Math.round((feitoHoje.exs || []).reduce((n, x) => n + (x.sets || []).filter(z => z.ok && z.kg > 0 && z.reps > 0).reduce((m, z) => m + z.kg * z.reps, 0), 0));
+    const prs = recordes(pid).prs.filter(r => r.sess === feitoHoje._id).length, diaFeito = pr.pg.dias[Number(feitoHoje.dia)] || {};
+    const resumo = [fmtHora(feitoHoje.inicio) + (feitoHoje.fim && feitoHoje.fim - feitoHoje.inicio > 60000 ? '–' + fmtHora(feitoHoje.fim) : ''), (sets === 1 ? t('done_set1') : t('done_sets', { n: sets })), vol ? t('done_volume', { n: fmtKg(vol) }) : '', prs ? (prs === 1 ? t('done_record1') : t('done_records', { n: prs })) : ''].filter(Boolean).join(' · ');
+    const quando = pr.nD >= 4 ? t('when_tomorrow') : t('when_rest');
+    return `<section class="screen">
+    <div class="hero">
+      ${topo}
+      <p class="eyebrow done-ok">${I.check || '✓'} ${t('done_today')}</p>
+      <h1 class="h-display h2">${esc(feitoHoje.diaNome || diaFeito.nome || '')}</h1>
+      ${diaFeito.foco ? `<p class="muted">${esc(diaFeito.foco)}</p>` : ''}
+      <p class="small num">${esc(resumo)}</p>
+      <p class="tip">${t('rest_tip')}</p>
+    </div>
+    <div class="card pad stack">
+      <div class="row between"><h2 class="h3">${t('next_workout')}</h2><span class="pill">${esc(quando)}</span></div>
+      <div><p class="eyebrow">${esc(dia.nome)}</p>${dia.foco ? `<p class="small muted" style="margin:2px 0 0">${esc(dia.foco)}</p>` : ''}</div>
+      <div class="row between"><span class="xs muted">${t('effort_week', { n: pr.sem.rir, d: pr.sem.deload ? t('effort_half') : '' }).replace(/<[^>]+>/g, '')}</span></div>
+      <div class="exlist">${lista}</div>
+      <button class="btn ghost block" data-a="iniciar" data-dia="${pr.proxDia}">${t('do_it_today')}</button>
+      <button class="btn quiet small" data-a="escolherDia">${t('other_workout')}</button>
+    </div>
+    ${cardioCard(pid)}
+    ${xpMini(pid)}
+    ${aliadosHoje()}
+  </section>`;
+  }
+  return `<section class="screen">
+    <div class="hero">
+      ${topo}
       <p class="eyebrow">${t('todays_workout')}</p>
       <h1 class="h-display h1">${esc(dia.nome)}</h1>
       ${dia.foco ? `<p class="muted">${esc(dia.foco)}</p>` : ''}
