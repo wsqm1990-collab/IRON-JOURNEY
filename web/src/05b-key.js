@@ -2,7 +2,21 @@
    The installed app has no Claude account behind it, so it calls the Claude API directly with a
    key the person pastes in Settings. The key stays on this phone. Same interface as before:
    aiText(input, {onText, signal, modelTier}) and aiJSON(prompt, opts). */
-const CHAVE = { get: () => LS.get('ij_key') || '', set: v => LS.set('ij_key', v), del: () => LS.del('ij_key') };
+const CHAVE = { get: () => LS.get('ij_key') || '', set: v => { LS.set('ij_key', v); LS.del('ij_ws'); }, del: () => { LS.del('ij_key'); LS.del('ij_ws'); } };
+/* keys that aren't tied to a workspace must name one on every request; the app finds the Default one */
+const WORKSPACE = { get: () => LS.get('ij_ws') || '', set: v => LS.set('ij_ws', v) };
+async function descobrirWorkspace(key) {
+  try {
+    const r = await fetch('https://api.anthropic.com/v1/organizations/workspaces?include_default=true&limit=20', {
+      credentials: 'omit', referrerPolicy: 'no-referrer',
+      headers: { 'x-api-key': key, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+    });
+    if (!r.ok) return '';
+    const lista = ((await r.json()) || {}).data || [];
+    const w = lista.find(x => /default/i.test(x.name || '') || /default/i.test(x.id || '')) || lista[0];
+    return (w && w.id) || '';
+  } catch { return ''; }
+}
 const MODELOS = { quick: 'claude-haiku-5-5', default: 'claude-sonnet-5-5', complex: 'claude-sonnet-5-5' };
 const MAX_TOKENS = { quick: 2000, default: 4000, complex: 16000 };
 const erroIA = (code, extra) => Object.assign({ code }, extra || {});
@@ -10,13 +24,14 @@ const erroIA = (code, extra) => Object.assign({ code }, extra || {});
 async function claudeStream({ system, messages, tier = 'default', signal, onText, maxTokens }) {
   const key = CHAVE.get();
   if (!key) throw erroIA('no_key');
-  let model = MODELOS[tier] || MODELOS.default;
-  for (let tentativa = 0; tentativa < 2; tentativa++) {
+  let model = MODELOS[tier] || MODELOS.default, buscouWs = false;
+  for (let tentativa = 0; tentativa < 3; tentativa++) {
     let resp;
+    const headers = { 'content-type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' };
+    if (WORKSPACE.get()) headers['anthropic-workspace-id'] = WORKSPACE.get();
     try {
       resp = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST', signal, credentials: 'omit', referrerPolicy: 'no-referrer',
-        headers: { 'content-type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+        method: 'POST', signal, credentials: 'omit', referrerPolicy: 'no-referrer', headers,
         body: JSON.stringify({ model, max_tokens: maxTokens || MAX_TOKENS[tier] || 4000, stream: true, ...(system ? { system } : {}), messages }),
       });
     } catch (e) {
@@ -26,7 +41,11 @@ async function claudeStream({ system, messages, tier = 'default', signal, onText
     if (!resp.ok) {
       let msg = '';
       try { const j = await resp.json(); msg = (j && j.error && j.error.message) || ''; } catch { /* no body */ }
-      if ((resp.status === 404 || (resp.status === 400 && /model/i.test(msg))) && tentativa === 0 && model !== MODELOS.default) { model = MODELOS.default; continue; }
+      if (resp.status === 400 && /workspace/i.test(msg)) {
+        if (!buscouWs) { buscouWs = true; const ws = await descobrirWorkspace(key); if (ws && ws !== WORKSPACE.get()) { WORKSPACE.set(ws); continue; } }
+        throw erroIA('no_workspace', { message: msg });
+      }
+      if ((resp.status === 404 || (resp.status === 400 && /model/i.test(msg))) && model !== MODELOS.default) { model = MODELOS.default; continue; }
       const code = resp.status === 401 || resp.status === 403 ? 'bad_key'
         : resp.status === 402 || /credit|billing|balance/i.test(msg) ? 'no_credit'
           : resp.status === 429 ? 'rate_limited'
@@ -114,7 +133,8 @@ async function testarChave(k) {
 Object.assign(STR, {
   ai_need_key: ['Add your AI key in Settings to use the coach.', 'Coloque sua chave de IA nas Configurações para usar o treinador.', 'Añade tu clave de IA en Ajustes para usar el entrenador.'],
   ai_bad_key: ['Your AI key was not accepted. Check it in Settings.', 'Sua chave de IA não foi aceita. Confira nas Configurações.', 'Tu clave de IA no fue aceptada. Revísala en Ajustes.'],
-  ai_credit: ['Your Anthropic account is out of credit. Add credit at console.anthropic.com and try again.', 'Sua conta da Anthropic está sem créditos. Adicione crédito em console.anthropic.com e tente de novo.', 'Tu cuenta de Anthropic no tiene crédito. Añade crédito en console.anthropic.com e inténtalo de nuevo.'],
+  ai_credit: ['Your Anthropic account is out of credit. Add credit at platform.claude.com/settings/billing and try again.', 'Sua conta da Anthropic está sem créditos. Adicione crédito em platform.claude.com/settings/billing e tente de novo.', 'Tu cuenta de Anthropic no tiene crédito. Añade crédito en platform.claude.com/settings/billing e inténtalo de nuevo.'],
+  ai_workspace: ['This key isn\'t tied to a workspace. At platform.claude.com/settings/keys, create a new key and choose the Default workspace.', 'Essa chave não está ligada a um workspace. Em platform.claude.com/settings/keys, crie uma chave nova e escolha o workspace Default.', 'Esta clave no está vinculada a un workspace. En platform.claude.com/settings/keys, crea una clave nueva y elige el workspace Default.'],
   ai_busy: ['The AI service is busy right now. Try again in a moment.', 'O serviço de IA está ocupado agora. Tente de novo daqui a pouco.', 'El servicio de IA está ocupado. Inténtalo de nuevo en un momento.'],
   ai_offline: ['No internet. The coach needs a connection; your workouts work offline.', 'Sem internet. O treinador precisa de conexão; os treinos funcionam sem internet.', 'Sin internet. El entrenador necesita conexión; tus entrenamientos funcionan sin internet.'],
   ai_rate: ['Too many questions in a row. Wait a few seconds and try again.', 'Muitas perguntas seguidas. Espere alguns segundos e tente de novo.', 'Demasiadas preguntas seguidas. Espera unos segundos e inténtalo de nuevo.'],

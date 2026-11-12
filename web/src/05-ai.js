@@ -11,6 +11,7 @@ function aiErrorText(e) {
     case 'prompt_too_large': return t('ai_big');
     case 'empty_completion': return t('ai_empty');
     case 'no_key': return t('ai_need_key');
+    case 'no_workspace': return t('ai_workspace');
     case 'bad_key': return t('ai_bad_key');
     case 'no_credit': return t('ai_credit');
     case 'busy': return t('ai_busy');
