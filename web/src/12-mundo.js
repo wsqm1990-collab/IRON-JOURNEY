@@ -55,6 +55,7 @@ function rnd(seed) { let s = 0; for (const ch of String(seed)) s = (s * 31 + ch.
 
 /* ---------- scenery ---------- */
 function decorGrade(tipo, r) {
+  if (tipo === 'covil') return covilGrade();
   const g = grade(12, 14), verde = '#2F7A35', verde2 = '#3F9444';
   switch (tipo) {
     case 'arvore': ret(g, 5, 9, 2, 4, '#6B4A2E'); elipse(g, 6, 6, 4.5, 4.2, verde); elipse(g, 5, 4, 2, 1.6, verde2); break;
@@ -71,12 +72,25 @@ function decorGrade(tipo, r) {
     case 'rochaLava': elipse(g, 6, 10, 4, 3, '#2C2222'); linha(g, 4, 9, 8, 11, '#F07A2A'); break;
     case 'casa': ret(g, 2, 7, 9, 6, '#C99A6B'); for (let y = 2; y < 7; y++) ret(g, 6 - (y - 2) - 1, y, (y - 2) * 2 + 3, 1, '#B5452A'); ret(g, 5, 9, 3, 4, '#6B4A2E'); pinta(g, 3, 9, '#FFE58A'); break;
     case 'bandeira': linha(g, 3, 13, 3, 1, '#5B4636'); ret(g, 4, 1, 6, 4, r || '#D94A3A'); ret(g, 4, 4, 4, 1, escurece(r || '#D94A3A', 0.8)); break;
-    case 'covil': for (let y = 1; y < 14; y++) ret(g, 6 - Math.min(5, Math.floor(y / 1.6)), y, Math.min(5, Math.floor(y / 1.6)) * 2 + 1, 1, '#5E5A63'); elipse(g, 6, 12, 2.4, 2.6, '#1B1D26', (x, y) => y >= 10); break;
+    case 'covil': break;
     default: break;
   }
   return contorno(g);
 }
 const decor = (tipo, extra = '') => sprite('d:' + tipo + extra, () => decorGrade(tipo, extra));
+/* the boss's cave: a rocky mound, lit from the left, with a dark mouth facing the road */
+function covilGrade() {
+  const g = grade(24, 20), luz = '#8A8592', base = '#6B6673', sombra = '#4E4A56', r = rnd('covil');
+  for (let y = 0; y < 20; y++) {
+    const w = Math.round(3 + (y / 19) * 9 + (y > 2 ? 1 : 0)), x0 = 12 - w;
+    for (let x = x0; x < 12 + w; x++) pinta(g, x, y, x < x0 + Math.max(2, w * 0.45) ? luz : x > 12 + w * 0.45 ? sombra : base);
+  }
+  for (let i = 0; i < 26; i++) { const y = 3 + Math.floor(r() * 15), x = 4 + Math.floor(r() * 16); if (gp(g, x, y)) pinta(g, x, y, r() < 0.5 ? sombra : luz); }
+  elipse(g, 12, 18, 5.2, 6, '#2A2730', (x, y) => y >= 12);
+  elipse(g, 12, 18.5, 4, 5, '#121018', (x, y) => y >= 14);
+  pinta(g, 8, 13, '#E8E2CF'); pinta(g, 16, 14, '#E8E2CF');
+  return contorno(g);
+}
 
 /* ---------- each person's hero (drawn by 11b-lpc.js) ---------- */
 function heroiDe(pid, dados) {
@@ -124,25 +138,31 @@ const MAPA_W = 96;
 function mapaDados(pid) {
   const pr = progresso(pid);
   if (!pr) return null;
-  const R = regiaoDe(pr.pl.ciclo), N = pr.total, passo = 12, H = 46 + N * passo + 22;
+  const R = regiaoDe(pr.pl.ciclo), N = pr.total, passo = 12;
   const r = rnd(pr.pl.id), fase = r() * 6;
-  const nos = Array.from({ length: N }, (_, i) => ({ x: Math.round(48 + 27 * Math.sin(i * 0.82 + fase)), y: H - 20 - i * passo, i, semana: Math.floor(i / pr.nD), deload: !!(pr.pg.semanas[Math.floor(i / pr.nD)] || {}).deload }));
-  const chefe = { x: 48, y: 30 };
+  /* the hero goes down the map: stage 1 at the top, the boss's cave at the bottom */
+  const nos = Array.from({ length: N }, (_, i) => ({ x: Math.round(48 + 27 * Math.sin(i * 0.82 + fase)), y: 20 + i * passo, i, semana: Math.floor(i / pr.nD), deload: !!(pr.pg.semanas[Math.floor(i / pr.nD)] || {}).deload }));
+  const ult = nos[N - 1], lado = ult.x < 48 ? -1 : 1;
+  /* the road passes beside the cave and turns to its entrance, where the boss stands guard */
+  const caverna = { x: 48, y: ult.y + 34 }, chefe = { x: 48, y: caverna.y + 9 }, arena = { x: 48 + lado * 19, y: chefe.y + 1 };
+  const curva = [{ x: 48 + lado * 28, y: caverna.y - 14 }, { x: 48 + lado * 28, y: arena.y }];
+  const H = chefe.y + 12;
   const cardios = cardioDe(pid).filter(c => c.planoId === pr.pl.id).length;
-  return { pr, R, N, H, nos, chefe, cardios, seed: pr.pl.id };
+  return { pr, R, N, H, nos, chefe, caverna, arena, curva, cardios, seed: pr.pl.id };
 }
 function mapaCanvas(M) {
   const chave = 'mapa:' + M.seed + ':' + M.N + ':' + M.R.id + ':' + M.cardios + ':' + Math.min(M.pr.feitos, M.N);
   return sprite(chave, () => {
-    const { R, H, nos, chefe } = M, g = grade(MAPA_W, H), r = rnd(M.seed + 'deco');
+    const { R, H, nos, chefe, caverna } = M, g = grade(MAPA_W, H), r = rnd(M.seed + 'deco');
     ret(g, 0, 0, MAPA_W, H, R.chao[0]);
     for (let i = 0; i < MAPA_W * H * 0.14; i++) pinta(g, Math.floor(r() * MAPA_W), Math.floor(r() * H), r() < 0.5 ? R.chao[1] : R.chao[2]);
-    /* the road: start at the bottom, boss lair at the top */
-    const trilha = grade(MAPA_W, H), pts = [{ x: nos[0].x, y: H - 4 }, ...nos, chefe];
+    /* the road: in from the top, down past every stage, around to the front of the cave */
+    const trilha = grade(MAPA_W, H), pts = [{ x: nos[0].x, y: 1 }, ...nos, ...M.curva, M.arena, chefe];
     for (let k = 1; k < pts.length; k++) linha(trilha, pts[k - 1].x, pts[k - 1].y, pts[k].x, pts[k].y, R.trilha, 3);
     contorno(trilha, escurece(R.trilha, 0.72));
-    /* ponds and scenery away from the road */
-    const perto = (x, y, d) => pts.some(p => Math.abs(p.x - x) < d && Math.abs(p.y - y) < d);
+    /* ponds and scenery away from the road and the cave */
+    const livre = [...pts, { x: caverna.x, y: caverna.y - 10 }, { x: caverna.x - 10, y: caverna.y - 6 }, { x: caverna.x + 10, y: caverna.y - 6 }];
+    const perto = (x, y, d) => livre.some(p => Math.abs(p.x - x) < d && Math.abs(p.y - y) < d);
     for (let i = 0; i < 2; i++) { const x = 10 + r() * 76, y = 40 + r() * (H - 80); if (!perto(x, y, 16)) elipse(g, x, y, 7 + r() * 4, 4 + r() * 2, R.agua); }
     cola(g, trilha, 0, 0);
     const n = Math.round((MAPA_W * H) / 150);
@@ -161,21 +181,21 @@ function mapaCanvas(M) {
     });
     /* cardio chests along the road */
     for (let k = 0; k < Math.min(M.cardios, M.N); k++) { const o = nos[Math.min(M.N - 1, Math.round(((k + 0.5) * Math.max(1, M.pr.feitos)) / Math.max(1, M.cardios)))]; cola(g, itemGrade('bau', '#E2B33C'), o.x + (o.x > 48 ? 4 : -16), o.y - 6); }
-    cola(g, decorGrade('covil'), chefe.x - 6, chefe.y - 13);
+    cola(g, decorGrade('covil'), caverna.x - 12, caverna.y - 19);
     return g;
   });
 }
 function mapaHTML(pid, H) {
   const M = mapaDados(pid);
   if (!M) return '';
-  const img = mapaCanvas(M), atual = Math.min(M.pr.feitos, M.N), o = atual >= M.N ? M.chefe : M.nos[atual];
+  const img = mapaCanvas(M), atual = Math.min(M.pr.feitos, M.N), o = atual >= M.N ? M.arena : M.nos[atual];
   const pct = (x, tot) => ((x / tot) * 100).toFixed(2) + '%';
   const B = CHEFES_LPC[M.R.chefe], corBandeira = lpcCorUI('cloth', H.h.roupa, 4);
   const flags = M.nos.filter(n => n.i < M.pr.feitos).map(n => `<span class="mp-flag" style="left:${pct(n.x - 1, MAPA_W)};top:${pct(n.y - 11, M.H)};width:${pct(12, MAPA_W)}">${imgPx(decor('bandeira', corBandeira))}</span>`).join('');
   return `<div class="mapa-rpg" style="aspect-ratio:${MAPA_W}/${M.H}">
     <img class="px mp-bg" src="${img.url}" alt="">
     ${flags}
-    <span class="mp-boss${M.pr.completo ? ' won' : ''}" style="left:${pct(M.chefe.x, MAPA_W)};top:${pct(M.chefe.y - 9, M.H)}">${lpcHTML(B.spec, { parado: true, esc: 1, cls: 'respira', alt: L3(B.nome) })}</span>
+    <span class="mp-boss${M.pr.completo ? ' won' : ''}" style="left:${pct(M.chefe.x, MAPA_W)};top:${pct(M.chefe.y, M.H)}">${lpcHTML(B.spec, { parado: true, esc: 1, cls: 'respira', alt: L3(B.nome) })}</span>
     <span class="mp-hero" style="left:${pct(o.x, MAPA_W)};top:${pct(o.y, M.H)}">${heroiAnimHTML(H, 'anda')}</span>
   </div>
   <div class="mp-leg small">${[['#F2D25B', 'legend_done'], ['#FFFFFF', 'legend_next'], ['#E7A8D8', 'legend_village']].map(([c, k]) => `<span><i style="background:${c}"></i>${t(k)}</span>`).join('')}<span>${imgPx(itemSprite('bau', '#E2B33C'), 'ico')}${t('legend_chest')}</span><span>${imgPx(decor('covil'), 'ico')}${t('legend_boss')}</span></div>`;
