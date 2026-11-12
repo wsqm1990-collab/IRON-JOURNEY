@@ -294,7 +294,10 @@ function itemGrade(tipo, cor) {
     case 'gema': elipse(g, 7, 7, 4, 5, cor); pinta(g, 6, 4, '#FFFFFF'); pinta(g, 5, 5, luz2); break;
     case 'trofeu': ret(g, 4, 2, 6, 5, cor); elipse(g, 7, 5, 3, 3, cor, (x, y) => y >= 5); ret(g, 6, 8, 2, 3, cor); ret(g, 4, 11, 6, 2, esc2); ret(g, 2, 3, 2, 2, cor); ret(g, 10, 3, 2, 2, cor); break;
     case 'martelo': linha(g, 3, 12, 8, 5, PX.madeira, 2); ret(g, 6, 1, 7, 5, cor); ret(g, 6, 1, 7, 1, luz2); break;
-    case 'armadura': ret(g, 3, 3, 8, 9, cor); ret(g, 1, 3, 3, 3, cor); ret(g, 10, 3, 3, 3, cor); ret(g, 6, 3, 2, 9, esc2); ret(g, 3, 3, 8, 1, luz2); break;
+    case 'armadura': /* a breastplate: round shoulder plates, V neck, ridge down the middle, narrow waist */
+      elipse(g, 3, 4, 2.2, 1.8, esc2); elipse(g, 10, 4, 2.2, 1.8, esc2); ret(g, 3, 3, 8, 7, cor); ret(g, 4, 10, 6, 2, cor);
+      apaga(g, 6.5, 2.4, 1.4, 1.4); g.px[4 * g.w + 6] = null; g.px[4 * g.w + 7] = null;
+      ret(g, 6, 5, 2, 4, esc2); ret(g, 4, 9, 6, 1, esc2); pinta(g, 6, 9, luz2); pinta(g, 7, 9, luz2); ret(g, 4, 4, 1, 4, luz2); pinta(g, 2, 3, luz2); pinta(g, 9, 3, luz2); break;
     case 'arco': for (let k = -5; k <= 5; k++) pinta(g, 4 + Math.round(4 - (k * k) / 6.5), 7 + k, cor); linha(g, 4, 2, 4, 12, '#E9E4D8'); linha(g, 2, 7, 12, 7, PX.aco); break;
     case 'cajado': linha(g, 7, 13, 7, 4, PX.madeira); elipse(g, 7, 3, 2.5, 2.5, cor); pinta(g, 6, 2, '#FFFFFF'); break;
     default: elipse(g, 7, 7, 4, 4, cor);

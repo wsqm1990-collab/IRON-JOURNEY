@@ -353,13 +353,16 @@ function iniciarBatalha(C) {
   const fala = $('#batalhaTxt');
   let ultimoTxt = '';
   const txt = s => { if (s !== ultimoTxt && fala) { fala.textContent = s; ultimoTxt = s; } };
-  const desenha = (s, x, y, alpha = 1) => { ctx.globalAlpha = alpha; ctx.drawImage(s.cv, Math.round(x) * E, Math.round(y) * E, s.w * E, s.h * E); ctx.globalAlpha = 1; };
+  const desenha = (s, x, y, alpha = 1, k = 1) => { ctx.globalAlpha = alpha; ctx.drawImage(s.cv, Math.round(x) * E, Math.round(y) * E, s.w * E * k, s.h * E * k); ctx.globalAlpha = 1; };
+  const brilho = (x, y) => { ctx.fillStyle = '#FFE58A'; [[1, 0], [-1, 0], [0, 1], [0, -1]].forEach(([a, b]) => ctx.fillRect((x + a) * E, (y + b) * E, E, E)); ctx.fillStyle = '#FFFFFF'; ctx.fillRect(x * E, y * E, E, E); };
   const r = rnd(C.R.id + 'cena');
   const fundo = sprite('cena:' + C.R.id, () => {
     const g = grade(W, Hh), cor = C.R;
     for (let y = 0; y < 47; y++) ret(g, 0, y, W, 1, mistura(cor.ceu[0], cor.ceu[1], y / 46));
     const altos = cor.deco.filter(d => d !== 'osso' && d !== 'pedra');
-    for (let i = 0; i < 5; i++) { const x = Math.floor(r() * (W - 12)); cola(g, decorGrade(altos[i % altos.length] || 'arbusto'), x, 32 + Math.floor(r() * 4)); }
+    /* keep the spot where the enemy stands and the loot drops clear, so a cactus never looks like it grows out of the chest */
+    const livres = [...Array(W - 12).keys()].filter(x => x < 58 || x > 106);
+    for (let i = 0; i < 5; i++) { const x = livres[Math.floor(r() * livres.length)]; cola(g, decorGrade(altos[i % altos.length] || 'arbusto'), x, 32 + Math.floor(r() * 4)); }
     ret(g, 0, 46, W, 26, cor.chao[0]);
     for (let i = 0; i < 260; i++) pinta(g, Math.floor(r() * W), 46 + Math.floor(r() * 26), r() < 0.5 ? cor.chao[1] : cor.chao[2]);
     ret(g, 0, 58, W, 3, cor.trilha); ret(g, 0, 57, W, 1, escurece(cor.trilha, 0.75)); ret(g, 0, 61, W, 1, escurece(cor.trilha, 0.75));
@@ -403,15 +406,27 @@ function iniciarBatalha(C) {
       const dentro = (t2 - T0 - 500) % TG, g = golpes[golpeAtual];
       if (dentro > 150) {
         ctx.font = `bold ${E * 7}px ui-monospace, monospace`; ctx.textAlign = 'center'; ctx.lineWidth = E * 1.6; ctx.strokeStyle = '#1B1D26'; ctx.fillStyle = '#FFE58A';
-        const y = (ey - 8 - (dentro - 150) / 40) * E, x = (ex + inimigo[0].w / 2) * E, s = (g[0] ? t(g[0]) + ' ' : '') + '-' + g[2];
+        const s = (g[0] ? t(g[0]) + ' ' : '') + '-' + g[2], w = ctx.measureText(s).width;
+        /* the number floats up from the enemy and always stays inside the picture */
+        const y = Math.max(8, (C.chefe ? ey + 12 : ey - 8) - Math.min(8, (dentro - 150) / 40)) * E, x = clamp((ex + inimigo[0].w / 2) * E, w / 2 + 6, cv.width - w / 2 - 6);
         ctx.strokeText(s, x, y); ctx.fillText(s, x, y);
       }
     }
     /* loot */
     if (derrotado && t2 > tGolpes + 400) {
-      const k = clamp((t2 - tGolpes - 400) / 400, 0, 1), y = chao - 14 - Math.sin(k * Math.PI) * 10;
-      desenha(C.final ? premio : bau, ex + 6, y);
-      if (C.prs && !C.chefe) desenha(gema, ex + 22, y - 2 + (f ? 1 : 0));
+      const k = clamp((t2 - tGolpes - 400) / 400, 0, 1), pulo = Math.sin(k * Math.PI) * 10;
+      if (C.final) {
+        /* the grand prize of the campaign: bigger, in a beam of light */
+        const px = ex + 9, py = chao - 21 - pulo;
+        if (k >= 1) { ctx.fillStyle = 'rgba(255,240,170,.32)'; ctx.fillRect((px + 3) * E, 0, 15 * E, (chao - 1) * E); }
+        desenha(premio, px, py, 1, 1.5);
+        if (k >= 1) [[px - 3, py + 4], [px + 23, py + 2], [px + 11, py - 4]].forEach(([a, b], i) => { if ((Math.floor(t2 / 160) + i) % 3) brilho(a, b); });
+      } else {
+        const y = chao - 14 - pulo;
+        desenha(bau, ex + 6, y);
+        if (C.prs && !C.chefe) desenha(gema, ex + 22, y - 2 + (f ? 1 : 0));
+        if (k >= 1) [[ex + 3, y + 2], [ex + 21, y + 1]].forEach(([a, b], i) => { if ((Math.floor(t2 / 160) + i) % 2) brilho(a, b); });
+      }
     }
     if (t2 < T0) txt(C.chefe ? t('boss_hp') + ' · ' + L3(C.R.nome) : t('stage_n', { n: C.n }));
     else if (t2 < tGolpes) txt(C.chefe ? golpes.map(g => `${t(g[0])} ${g[1]}`).join(' · ') : A ? t('duo_attack') : t('stage_n', { n: C.n }));
