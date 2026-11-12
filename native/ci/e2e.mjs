@@ -80,6 +80,7 @@ async function waitFor(expr, ms = 15000) {
   return false;
 }
 const A = (a, extra = '') => `[data-a="${a}"]${extra}`;
+const pronto = () => waitFor(`typeof window.IJ_BUILD === 'number' && typeof perfil === 'function' && typeof S === 'object' && S.ready`, 40000);
 function jsErrors() {
   return cdp.events.filter(m => m.method === 'Runtime.exceptionThrown').map(m => (m.params.exceptionDetails.exception && m.params.exceptionDetails.exception.description) || m.params.exceptionDetails.text)
     .concat(cdp.events.filter(m => m.method === 'Runtime.consoleAPICalled' && m.params.type === 'error').map(m => m.params.args.map(a => a.value || a.description).join(' ')));
@@ -87,6 +88,7 @@ function jsErrors() {
 
 async function main() {
   await connect();
+  await pronto();
   check('app opens to the welcome screen', await waitFor(`!!document.querySelector('[data-a="novoPerfil"]')`, 30000));
   check('native bridge is on', await ev('Nat.on'), await ev('({ build: window.IJ_BUILD, ua: navigator.userAgent })'));
   check('page fills the screen without sideways scroll', await ev('document.documentElement.scrollWidth <= innerWidth + 1'), await ev('[document.documentElement.scrollWidth, innerWidth]'));
@@ -145,6 +147,7 @@ async function main() {
   adb('shell', 'am', 'start', '-n', `${PKG}/.MainActivity`);
   await sleep(3000);
   await connect();
+  await pronto();
   const depois = await waitFor(`!P.on && !!document.querySelector('[data-a="cfSalvar"]')`, 10000);
   check('back in the app, the cardio log opens to save the session', depois);
   screen('09-after-hiit');
@@ -194,6 +197,7 @@ async function main() {
       await ev(`(() => { LS.set('ij_staged', { build: ${UP}, path: ${q(dir)} }); return aplicarAtualizacao(); })()`);
       await sleep(6000);
       await connect();
+      await pronto();
       const b1 = await ev('window.IJ_BUILD');
       check('update: app switched to the new version', b1 === UP, b1, false);
       await sleep(5000);
@@ -201,6 +205,7 @@ async function main() {
       adb('shell', 'am', 'force-stop', PKG); await sleep(1000);
       adb('shell', 'am', 'start', '-n', `${PKG}/.MainActivity`); await sleep(5000);
       await connect();
+      check('update: app starts again after a restart', await pronto(), null, false);
       const b2 = await ev('window.IJ_BUILD');
       check('update: still on the new version after restarting', b2 === UP, b2, false);
       check('update: data kept after the update', await ev(`!!perfil() && !!plano(S.me)`), null, false);

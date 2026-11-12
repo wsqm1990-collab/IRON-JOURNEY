@@ -10,9 +10,10 @@ public class MainActivity extends BridgeActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         registerPlugin(IronTimerPlugin.class);
+        super.onCreate(savedInstanceState);
+        // After Capacitor has switched from the launch theme, or the launch theme's title bar sticks.
         try {
             EdgeToEdge.enable(this);
         } catch (Exception ignored) { }
-        super.onCreate(savedInstanceState);
     }
 }

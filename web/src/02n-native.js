@@ -20,7 +20,7 @@ const Nat = (() => {
       if (!p || typeof p[m] !== 'function') throw { code: 'unavailable' };
       return p[m](o || {});
     },
-    safe(m, o, name) { return this.call(m, o, name).catch(e => { try { console.warn('native ' + m, (e && (e.message || e.code)) || e); } catch { /* none */ } return null; }); },
+    safe(m, o, name) { return this.call(m, o, name).catch(e => { try { console.warn('native ' + (name || 'IronTimer') + '.' + m + ': ' + ((e && (e.message || e.code)) || String(e))); } catch { /* none */ } return null; }); },
     listen(evt, fn, name = 'IronTimer') { const p = plugin(name); if (p && typeof p.addListener === 'function') { try { p.addListener(evt, fn); } catch { /* none */ } } },
   };
 })();
