@@ -125,7 +125,7 @@ img.px.ico{width:22px;height:auto;vertical-align:-5px;margin-right:4px}
 .premio img.big{width:56px;height:56px;flex:none}
 .aliados{display:flex;flex-direction:column;gap:8px}
 .aliado{display:flex;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 10px}
-.criador .cr-prev{display:flex;justify-content:center;background:var(--surface-2);border-radius:14px;padding:12px}
+.criador .cr-prev{display:flex;justify-content:center;background:var(--surface-2);border-radius:14px;padding:12px;position:sticky;top:var(--sheet-h,72px);z-index:1;box-shadow:0 6px 12px -8px rgba(0,0,0,.35)}
 .criador .cr-prev .pxa{width:120px}
 .sw{display:flex;flex-wrap:wrap;gap:10px}
 .sw button{width:34px;height:34px;border-radius:50%;border:2px solid var(--line);cursor:pointer}

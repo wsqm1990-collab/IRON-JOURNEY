@@ -272,6 +272,8 @@ function abrirCriador() {
   const pid = S.me, p = perfil(pid) || {};
   S.heroiDraft = { ...HEROI_PADRAO, nome: p.nome || '', ...(p.heroi || {}), premio: p.premio || '' };
   openSheet(t(p.heroi ? 'hero_edit' : 'hero_create'), criadorHTML(), () => { S.heroiDraft = null; });
+  const cab = $('.sheet-h'), painel = $('#sheetP');
+  if (cab && painel) painel.style.setProperty('--sheet-h', cab.offsetHeight + 'px');
 }
 function criadorHTML() {
   const h = S.heroiDraft, pid = S.me, p = perfil(pid) || {}, d = jornadaDados(pid), cl = classeDe(p.objetivo);
@@ -363,7 +365,7 @@ function iniciarBatalha(C) {
   const quadro = agora => {
     if (!$('#batalhaCv')) return;
     Batalha.raf = requestAnimationFrame(quadro);
-    const t2 = Batalha.fim ? TFIM : agora - ini, f = Math.floor(t2 / 180) % 2;
+    const t2 = Batalha.fim ? TFIM : Math.max(0, agora - ini), f = Math.floor(t2 / 180) & 1;
     ctx.clearRect(0, 0, cv.width, cv.height);
     desenha(fundo, 0, 0);
     const chao = 60, ex = C.chefe ? 78 : 88, ey = chao - inimigo[0].h + 2;
