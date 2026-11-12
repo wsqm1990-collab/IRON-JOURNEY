@@ -162,8 +162,12 @@ async function main() {
   await click('#sheet ' + A('fecharSheet'));
   await click('.tab[data-tab="coach"]'); screen('12-coach');
   await click('.tab[data-tab="cardio"]'); await click(A('stModo', '[data-v="assistir"]')); screen('13-watch');
-  adb('shell', 'input', 'keyevent', 'KEYCODE_BACK'); await sleep(800);
-  check('Android back button goes to Today instead of closing', (await ev('S.tab')) === 'hoje', await ev('S.tab'));
+  // a keyboard left open by an earlier field takes the first Back press for itself
+  await ev(`(() => { if (document.activeElement && document.activeElement.blur) document.activeElement.blur(); return true; })()`); await sleep(800);
+  adb('shell', 'input', 'keyevent', 'KEYCODE_BACK'); await sleep(1000);
+  if ((await ev('S.tab')) !== 'hoje' && /mInputShown=true/.test(adb('shell', 'dumpsys', 'input_method'))) { adb('shell', 'input', 'keyevent', 'KEYCODE_BACK'); await sleep(1000); }
+  if ((await ev('S.tab')) !== 'hoje') { adb('shell', 'input', 'keyevent', 'KEYCODE_BACK'); await sleep(1000); }
+  check('Android back button goes to Today instead of closing', (await ev('S.tab')) === 'hoje' && (await ev('document.visibilityState')) === 'visible', await ev('[S.tab, document.visibilityState]'));
   screen('14-today');
 
   // keyboard: a focused input must stay visible above the keyboard
