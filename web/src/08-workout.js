@@ -309,7 +309,7 @@ function mostrarRecompensa(antes, depois, prs, sess) {
   let cena = null;
   try { cena = sess.planoId ? cenaDoTreino(sess.pid, sess, prs, depois.ciclos > antes.ciclos) : null; } catch { cena = null; }
   openSheet(t('workout_saved'), recompensaHTML(antes, depois, linhas, recs, ci.meta > ci.feitos, cena ? batalhaHTML() : ''));
-  if (cena) setTimeout(() => iniciarBatalha(cena), 60);
+  if (cena) setTimeout(() => { iniciarBatalha(cena).catch(() => {}); }, 60);
 }
 
 /* ---------- cardio log (by hand or at the end of a guided session) ---------- */

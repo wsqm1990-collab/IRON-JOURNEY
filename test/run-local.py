@@ -1,5 +1,5 @@
 # Drives the built page in Chrome with a fake Android side and a fake Claude API.
-import sys, json, asyncio
+import os, sys, json, asyncio
 from playwright.async_api import async_playwright
 ROOT = sys.argv[1]; OUT = sys.argv[2]
 page_html = open(ROOT + '/web/www/index.html', encoding='utf-8').read()
@@ -31,7 +31,10 @@ async def main():
             await route.fulfill(status=200, content_type='text/event-stream', body=sse(text))
         await page.route('https://api.anthropic.com/**', anthropic)
         async def site(route):
-            if route.request.url.endswith('/index.html'): await route.fulfill(status=200, content_type='text/html', body=html)
+            url = route.request.url
+            if url.endswith('/index.html'): await route.fulfill(status=200, content_type='text/html', body=html)
+            elif '/art/' in url and os.path.exists(os.path.join(ROOT, 'web', 'www', 'art', url.split('/art/', 1)[1])):
+                await route.fulfill(status=200, content_type='image/png', body=open(os.path.join(ROOT, 'web', 'www', 'art', url.split('/art/', 1)[1]), 'rb').read())
             else: await route.fulfill(status=404, body='')
         await page.route('https://iron.test/**', site)
         await page.goto('https://iron.test/index.html')

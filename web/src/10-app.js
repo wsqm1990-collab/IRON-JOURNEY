@@ -46,6 +46,7 @@ function aoFicarPronto() {
   const p = perfil();
   if (!LS.get('td_lang') && p && p.lang) setLang(p.lang);
   retomarPlayerSalvo();
+  lpcPreparar();
   setTimeout(() => { window.__ijOk = true; confirmarVersao(); setTimeout(() => checarAtualizacao(true), 4000); }, 2500);
 }
 
@@ -146,7 +147,7 @@ const ACT = {
   guia: el => abrirGuia(el.dataset.id, el.dataset.nome || ''),
   figPausa: () => pausarFigura(),
   heroiEditar: () => abrirCriador(),
-  heroiSet: el => { if (!S.heroiDraft) return; S.heroiDraft[el.dataset.k] = Number(el.dataset.v); atualizarCriador(); },
+  heroiSet: el => { if (!S.heroiDraft) return; S.heroiDraft[el.dataset.k] = el.dataset.v; if (el.dataset.k === 'corpo' && el.dataset.v === 'f') S.heroiDraft.barba = ''; atualizarCriador(); },
   heroiSalvar: () => salvarHeroi(),
   batalhaPular: () => { Batalha.fim = true; },
   ritmo: () => iniciarRitmo(Guia.id),

@@ -10,7 +10,7 @@ const build = Number(process.env.BUILD_NUMBER || process.argv[2] || 0);
 const HEAD = ['01-head.html', '01b-journey.css', '01c-cardio.css'];
 const BODY = ['02-body.html'];
 const JS = ['02i-i18n.js', '02n-native.js', '03-data.js', '04-store.js', '05-ai.js', '05b-key.js', '05c-local-plan.js', '06-logic.js', '06b-carga.js',
-  '07-views-a.js', '08-workout.js', '08b-cardio.js', '08c-guia.js', '08d-figura.js', '08e-musculos.js', '08f-pegada.js', '09-coach-journey.js', '09b-evolucao.js', '09c-settings.js', '11-pixel.js', '12-mundo.js', '10-app.js'];
+  '07-views-a.js', '08-workout.js', '08b-cardio.js', '08c-guia.js', '08d-figura.js', '08e-musculos.js', '08f-pegada.js', '09-coach-journey.js', '09b-evolucao.js', '09c-settings.js', '11-pixel.js', '11a-lpc-dados.js', '11b-lpc.js', '12-mundo.js', '10-app.js'];
 const read = f => fs.readFileSync(path.join(src, f), 'utf8');
 const head = HEAD.map(read).join('\n').replace(/<meta name="claude:[^>]*>\n?/g, '');
 const body = BODY.map(read).join('\n');
@@ -42,4 +42,8 @@ ${js}
 `;
 fs.mkdirSync(out, { recursive: true });
 fs.writeFileSync(path.join(out, 'index.html'), html);
+// the characters' pixel art (web/art) goes next to the page
+const art = path.join(root, 'web', 'art');
+fs.rmSync(path.join(out, 'art'), { recursive: true, force: true });
+if (fs.existsSync(art)) fs.cpSync(art, path.join(out, 'art'), { recursive: true });
 console.log(`web/www/index.html: build ${build}, ${(html.length / 1024).toFixed(0)} KB`);

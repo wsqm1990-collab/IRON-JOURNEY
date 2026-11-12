@@ -57,6 +57,7 @@ function ajustesHTML() {
       <button class="btn ghost block" data-a="backupSalvar">${t('backup_save')}</button>
       <label class="btn ghost block" for="backupIn">${t('backup_restore')}</label><input type="file" id="backupIn" accept="application/json,.json" hidden>
     </div>
+    <details class="box"><summary>${t('art_credits')}</summary><div class="in stack"><p class="small">${esc(t('art_credits_text', { l: LPC_LICENCAS.join(', ') }))}</p><p class="xs muted">${esc(LPC_AUTORES.join(' · '))}</p><p class="xs muted">lpc.opengameart.org · github.com/LiberatedPixelCup/Universal-LPC-Spritesheet-Character-Generator</p></div></details>
     <div class="row between" style="gap:12px"><p class="xs muted num" style="margin:0">${t('version_x', { v: versaoTexto() })}</p>${Nat.on ? `<button class="btn quiet small" data-a="checarAgora">${t('check_updates')}</button>` : ''}</div>
   </div>`;
 }

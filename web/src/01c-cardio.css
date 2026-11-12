@@ -98,23 +98,26 @@ a.svc.yt span{color:var(--danger)}
 .pos{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:4px}
 .pos p{margin:0}.pos .small{line-height:1.45}
 .px{image-rendering:pixelated;image-rendering:crisp-edges}
-.pxa{display:inline-block;background-repeat:no-repeat;background-size:200% 100%;image-rendering:pixelated;animation:pxa var(--ms) steps(2) infinite}
-@keyframes pxa{from{background-position:0 0}to{background-position:200% 0}}
-@media (prefers-reduced-motion:reduce){.pxa{animation:none}}
-.pxa.grande{width:92px}.pxa.mini{width:44px;flex:none}
+.lpc{display:inline-block;width:var(--w);height:var(--w);flex:none;background-repeat:no-repeat;background-position:0 0;background-size:calc(var(--w) * var(--n)) var(--w);image-rendering:pixelated}
+.lpc.anda{animation:lpcan var(--d) steps(var(--n)) infinite}
+@keyframes lpcan{to{background-position:calc(var(--w) * var(--n) * -1) 0}}
+.lpc.respira{animation:lpcres 1.4s steps(2) infinite}
+@keyframes lpcres{50%{transform:translateY(1px)}}
+.lpc.lenda{filter:drop-shadow(0 0 6px rgba(255,214,90,.75))}
+@media (prefers-reduced-motion:reduce){.lpc.anda,.lpc.respira{animation:none}}
 .rpg-top{display:flex;gap:14px;align-items:center}
-.rpg-heroi{background:var(--surface-2);border-radius:14px;padding:6px 10px;flex:none}
-.mentor{display:flex;gap:8px;align-items:flex-end}
-.mentor .pxa{width:62px;flex:none}
+.rpg-heroi{background:var(--surface-2);border-radius:14px;padding:2px;flex:none;display:flex}
+.mentor{display:flex;gap:4px;align-items:flex-end}
+.mentor .lpc{margin-bottom:-4px}
 .mentor .balao{background:var(--surface);border:1px solid var(--line);border-radius:14px 14px 14px 4px;padding:10px 12px;display:flex;flex-direction:column;gap:6px;flex:1;min-width:0}
 .mentor .balao span{font-size:var(--t-sm);line-height:1.45}
 .mentor .balao .btn{align-self:flex-start}
 .mapa-rpg{position:relative;width:100%;border-radius:14px;overflow:hidden;box-shadow:inset 0 0 0 2px rgba(0,0,0,.15)}
 .mapa-rpg .mp-bg{position:absolute;inset:0;width:100%;height:100%}
 .mp-flag,.mp-boss,.mp-hero{position:absolute;display:block}
-.mp-flag img,.mp-boss img{width:100%;height:auto;display:block}
+.mp-flag img{width:100%;height:auto;display:block}
+.mp-boss,.mp-hero{transform:translate(-50%,-94%);line-height:0}
 .mp-boss.won{filter:grayscale(1);opacity:.55}
-.mp-hero .pxa{width:100%}
 .mp-leg{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;color:var(--muted)}
 .mp-leg i{display:inline-block;width:11px;height:11px;border-radius:50%;border:2px solid #1B1D26;margin-right:5px;vertical-align:-1px}
 img.px.ico{width:22px;height:auto;vertical-align:-5px;margin-right:4px}
@@ -127,9 +130,13 @@ img.px.ico{width:22px;height:auto;vertical-align:-5px;margin-right:4px}
 .premio img.big{width:56px;height:56px;flex:none}
 .aliados{display:flex;flex-direction:column;gap:8px}
 .aliado{display:flex;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 10px}
-.criador .cr-prev{position:sticky;top:var(--sheet-h,72px);z-index:1;background:var(--bg);padding-bottom:6px;margin-bottom:-6px}
-.criador .cr-box{display:flex;justify-content:center;background:var(--surface-2);border-radius:14px;padding:12px;box-shadow:0 6px 12px -8px rgba(0,0,0,.35)}
-.criador .cr-box .pxa{width:120px}
+.criador .cr-prev{position:sticky;top:var(--sheet-h,72px);z-index:1;background:var(--bg);padding:0 10px 6px;margin:0 -10px -6px}
+.criador .cr-box{display:flex;justify-content:center;gap:4px;background:var(--surface-2);border-radius:14px;padding:4px 12px;box-shadow:0 6px 12px -8px rgba(0,0,0,.35)}
+.rostos{display:grid;grid-template-columns:repeat(auto-fill,minmax(74px,1fr));gap:8px}
+.rosto{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 4px;border-radius:12px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font:inherit;color:inherit}
+.rosto span{font-size:11.5px;line-height:1.2;text-align:center}
+.rosto[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 2px var(--accent);background:var(--accent-soft)}
+.lpr{width:54px;height:54px;image-rendering:pixelated;background:var(--surface-2);border-radius:8px}
 .sw{display:flex;flex-wrap:wrap;gap:10px}
 .sw button{width:34px;height:34px;border-radius:50%;border:2px solid var(--line);cursor:pointer}
 .sw button[aria-pressed="true"]{outline:3px solid var(--accent);outline-offset:2px}
