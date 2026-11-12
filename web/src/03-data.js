@@ -5,7 +5,7 @@ const clone = o => (o == null ? o : JSON.parse(JSON.stringify(o)));
 const uid = (p = '') => p + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
 const clamp = (n, a, b) => Math.min(b, Math.max(a, n));
 const toInt = (v, d) => { const n = Math.round(Number(v)); return Number.isFinite(n) ? n : d; };
-const fmtKg = n => (Math.round(n * 10) / 10).toLocaleString(LOC());
+const fmtKg = n => (Math.round(n * 100) / 100).toLocaleString(LOC(), { maximumFractionDigits: 2 });
 const parseNum = s => { if (s == null || s === '') return null; const v = parseFloat(String(s).replace(',', '.')); return Number.isFinite(v) ? v : null; };
 const pad2 = n => String(n).padStart(2, '0');
 const dayKey = ts => { const d = new Date(ts); return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate()); };
@@ -202,7 +202,7 @@ function zonasFC(idade) {
   const max = Math.round(208 - 0.7 * i);
   return { max, leve: [Math.round(max * 0.6), Math.round(max * 0.7)], forte: [Math.round(max * 0.85), Math.round(max * 0.92)] };
 }
-Object.assign(STR, { u_reps: ['reps', 'reps', 'reps'], u_sec: ['sec', 'seg', 'seg'] });
+Object.assign(STR, { u_reps: ['reps', 'reps', 'reps'], u_sec: ['sec', 'seg', 'seg'], u_sec_long: ['seconds', 'segundos', 'segundos'] });
 
 /* ---------- local storage (per-device conveniences only) ---------- */
 const LS = {

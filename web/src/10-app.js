@@ -65,9 +65,13 @@ function marcarSerie(i, j) {
   const kgEl = $(`#kg-${i}-${j}`), rpEl = $(`#rp-${i}-${j}`);
   if (kgEl) z.kg = parseNum(kgEl.value);
   if (rpEl) { const r = parseNum(rpEl.value); z.reps = r == null ? null : Math.round(r); }
+  if (z.reps == null && testeLivre(x, j)) { toast(t('type_test_reps', { u: unidadeLonga(ex) })); if (rpEl) rpEl.focus(); return; }
+  if (z.reps == null && z.alvo != null) z.reps = z.alvo;
   if (!(z.reps > 0)) { toast(t('enter_reps', { u: ex.carga === 's' ? t('u_sec') : ex.carga === 'n' ? 'min' : t('reps_long') })); if (rpEl) rpEl.focus(); return; }
   if (usaCarga(ex) && z.kg == null) { toast(t('enter_load')); if (kgEl) kgEl.focus(); return; }
-  z.ok = true; saveLiveSoon(); refreshEx(i);
+  z.ok = true;
+  recalibrar(x, j);
+  saveLiveSoon(); refreshEx(i);
   const exFeito = x.sets.every(s => s.ok);
   const prox = L.exs.slice(i + 1).find(e => !e.pulado && e.sets.some(s => !s.ok));
   const c = contagem(L);
@@ -120,6 +124,8 @@ const ACT = {
   },
   gymTodos: el => { const g = EQUIP_GRUPOS[+el.dataset.g][1], s = S.gymDraft.itens, todos = g.every(r => s.has(r[0])); g.forEach(r => (todos ? s.delete(r[0]) : s.add(r[0]))); render(); },
   gymSalvar: () => salvarGym(),
+  pesoAnilha: el => { const p = S.gymDraft.pesos, v = Number(el.dataset.v), k = p.anilhas.indexOf(v); if (k >= 0) { if (p.anilhas.length > 1) p.anilhas.splice(k, 1); } else p.anilhas.push(v); p.anilhas.sort((a, b) => b - a); render(); },
+  pesoSet: el => { S.gymDraft.pesos[el.dataset.k] = Number(el.dataset.v); render(); },
   gymSair: () => { S.gymDraft = null; S.sub = null; render(); },
   tab: el => { closeSheet(); S.tab = TABS_OK.includes(el.dataset.tab) ? el.dataset.tab : 'hoje'; LS.set('td_tab', S.tab); S.sub = null; render(); window.scrollTo(0, 0); if (S.tab === 'coach') rolarChat(); },
   jsub: el => { S.jsub = el.dataset.v; render(); },
@@ -189,7 +195,7 @@ const INP = {
   gymOutros: el => { S.gymDraft.outros = el.value; },
   kg: el => {
     const i = +el.dataset.i, j = +el.dataset.j, x = S.live.exs[i], v = parseNum(el.value);
-    x.sets[j].kg = v;
+    x.sets[j].kg = v; x.sets[j].manual = true;
     for (let k = j + 1; k < x.sets.length; k++) if (!x.sets[k].ok) { x.sets[k].kg = v; const o = $(`#kg-${i}-${k}`); if (o) o.value = el.value; }
     saveLiveSoon();
   },

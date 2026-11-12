@@ -54,15 +54,18 @@ function exCard(x, i) {
   return `<article class="card ex${done ? ' done' : ''}${x.pulado ? ' skip' : ''}" id="ex-${i}">
     <div class="ex-top"><div class="nm"><h2 class="h3">${esc(ex.nome)}</h2>${x.trocadoDe ? `<p class="xs muted">${esc(t('replaced_x', { x: exInfo(x.trocadoDe, x.trocadoDe).nome }))}</p>` : ''}</div>${done ? `<span class="pill ok">${t('done_pill')}</span>` : ''}</div>
     <div class="target"><span class="pill num">${a.series} × ${faixa(a)} ${un}</span><span class="pill">RIR ${a.rir}</span><span class="pill">${t('rest_x', { x: fmtDesc(a.desc) })}</span></div>
-    ${x.sug ? `<div class="sugg">${x.sug.kg != null ? `<b class="num">${fmtKg(x.sug.kg)} kg</b>` : ''}<span class="muted">${esc(textoSug(x.sug))}</span></div>` : ''}
+    ${sugHTML(x)}
     ${ult ? `<p class="xs muted num">${esc(t('last_time', { x: ult }))}</p>` : ''}
     ${x.dica ? `<p class="tip">${esc(x.dica)}</p>` : ''}
+    ${x.pulado ? '' : regraHTML(x, okN)}
+    ${x.pulado || okN || !(x.aquec || []).length ? '' : `<div class="warm"><p class="eyebrow">${t('warmup')}</p>${x.aquec.map(w => `<p class="small num"><b>${fmtKg(w.kg)} kg × ${w.reps}</b> <span class="muted">${montarHTML(ex, w.kg)}</span></p>`).join('')}</div>`}
     ${x.pulado ? `<p class="small muted">${t('skipped_today')}</p>` : `<div class="sets">
       <div class="set-h"><span>${t('col_set')}</span><span>${colKg}</span><span>${un}</span><span></span></div>
-      ${x.sets.map((z, j) => `<div class="set${z.ok ? ' ok' : ''}"><span class="n">${j + 1}</span>
+      ${x.sets.map((z, j) => `<div class="set${z.ok ? ' ok' : ''}"><span class="n">${j + 1}${j === 0 && x.carga && x.carga.teste ? `<small>${t('test_tag')}</small>` : ''}</span>
         ${colKg ? `<input id="kg-${i}-${j}" data-in="kg" data-i="${i}" data-j="${j}" inputmode="decimal" enterkeyhint="next" value="${z.kg != null ? fmtKg(z.kg) : ''}" placeholder="${carga ? 'kg' : '0'}" aria-label="${t('load_of_set', { n: j + 1 })}">` : '<span></span>'}
-        <input id="rp-${i}-${j}" data-in="reps" data-i="${i}" data-j="${j}" inputmode="numeric" enterkeyhint="done" value="${z.reps ?? ''}" placeholder="${faixa(a)}" aria-label="${t('reps_of_set', { u: un, n: j + 1 })}">
-        <button class="ck" data-a="ok" data-i="${i}" data-j="${j}" aria-pressed="${z.ok}" aria-label="${t(z.ok ? 'undo_set' : 'complete_set', { n: j + 1 })}">${I.check}</button></div>`).join('')}
+        <input id="rp-${i}-${j}" data-in="reps" data-i="${i}" data-j="${j}" inputmode="numeric" enterkeyhint="done" value="${z.reps ?? ''}" placeholder="${testeLivre(x, j) ? t('test_day_ph') : z.alvo != null ? z.alvo : faixa(a)}" aria-label="${t('reps_of_set', { u: un, n: j + 1 })}">
+        <button class="ck" data-a="ok" data-i="${i}" data-j="${j}" aria-pressed="${z.ok}" aria-label="${t(z.ok ? 'undo_set' : 'complete_set', { n: j + 1 })}">${I.check}</button></div>
+        ${z.ok ? '' : infoSerie(ex, z, x, j)}`).join('')}
     </div>`}
     <div class="ex-actions">
       ${x.pulado ? `<button class="btn ghost small" data-a="despular" data-i="${i}">${t('back_to_it')}</button>` : `<button class="btn ghost small" data-a="maisSerie" data-i="${i}">${I.mais}${t('add_set')}</button>${x.sets.length > 1 ? `<button class="btn ghost small" data-a="menosSerie" data-i="${i}" aria-label="${t('remove_set')}">${I.menos}</button>` : ''}`}
@@ -71,6 +74,35 @@ function exCard(x, i) {
       ${x.pulado ? '' : `<button class="btn quiet small" data-a="pular" data-i="${i}">${t('skip')}</button>`}
     </div>
   </article>`;
+}
+/* why today's weight is what it is (the calculator already puts the weight on every set) */
+function sugHTML(x) {
+  const sg = x.sug, c = x.carga || {};
+  if (!sg) return '';
+  if (c.tipo || c.primeira) return c.primeira || !textoSug(sg) ? '' : `<p class="small muted">${esc(textoSug(sg))}</p>`;
+  return `<div class="sugg">${sg.kg != null ? `<b class="num">${fmtKg(sg.kg)} kg</b>` : ''}<span class="muted">${esc(textoSug(sg))}</span></div>`;
+}
+const unidadeLonga = ex => (ex.carga === 's' ? t('u_sec_long') : ex.carga === 'n' ? 'min' : t('reps_long'));
+/* first time on an exercise, set 1 is "as many as you can": the reps must be typed */
+const testeLivre = (x, j) => j === 0 && !!(x.carga && x.carga.primeira) && !x.sets[0].ok;
+/* what to do on this exercise today, in one or two sentences */
+function regraHTML(x, okN) {
+  const c = x.carga || {}, a = x.alvo, rir = c.rir != null ? c.rir : a.rir, ex = exInfo(x.id, x.nome);
+  if (okN && x.calib) return `<div class="calib">${esc(t(x.calib.k, x.calib.v))}</div>`;
+  if (okN) return '';
+  const z = x.sets[0] || {}, cap = a.rmax + 6, r = z.alvo != null ? z.alvo : a.rmax, u = unidadeLonga(ex);
+  if (!c.tipo) return `<div class="rule">${esc(c.primeira ? t('test_first_bw', { rir, u }) : t('test_bw', { r, rir, u }))}</div>`;
+  return `<div class="rule">${esc(c.primeira ? t('test_first', { rir, cap }) : t('test_day', { r, rir, cap }))}</div>`;
+}
+/* under each set: the exact goal and how to load it */
+function infoSerie(ex, z, x, j) {
+  const como = z.kg != null ? montarHTML(ex, z.kg) : '';
+  const livre = testeLivre(x, j), a = x.alvo, rir = x.carga && x.carga.rir != null ? x.carga.rir : a.rir;
+  if (z.alvo == null && !como && !livre) return '';
+  const meta = livre ? (x.carga.tipo ? t('target_test', { rir, cap: a.rmax + 6 }) : t('target_test_bw', { rir }))
+    : z.alvo != null ? `${t('target_reps')}: ${z.alvo} ${unidade(ex)}` : '';
+  const provisoria = j > 0 && !livre && testeLivre(x, 0) && !z.manual ? ` <span class="muted">(${t('after_test')})</span>` : '';
+  return `<p class="set-info num">${meta ? `<b>${esc(meta)}</b>${provisoria}` : ''}${como ? `<span class="load">${como}</span>` : ''}</p>`;
 }
 function viewWorkout() {
   const L = S.live;
@@ -237,7 +269,7 @@ async function salvarTreino() {
   const nota = (($('#fin-nota') || {}).value || '').trim().slice(0, 300);
   const sess = {
     pid: L.pid, planoId: L.planoId, ciclo: L.ciclo, dia: L.dia, diaNome: L.diaNome, foco: L.foco || '', semana: L.semana, fase: L.fase,
-    deload: !!L.deload, nDias: L.nDias, total: L.total, inicio: L.inicio, fim: Date.now(), sensacao: S.finSens || '', nota,
+    deload: !!L.deload, nDias: L.nDias, total: L.total, inicio: L.inicio, fim: Date.now(), sensacao: S.finSens || '', nota, rir: L.rir != null ? L.rir : null,
     exs: L.exs.map(x => ({ id: x.id, nome: x.nome, grupo: x.grupo, alvo: x.alvo, pulado: !!x.pulado, trocadoDe: x.trocadoDe || '', sets: x.sets.filter(z => z.ok).map(z => ({ kg: z.kg ?? null, reps: z.reps, ok: true })) }))
       .filter(x => x.sets.length || x.pulado),
   };

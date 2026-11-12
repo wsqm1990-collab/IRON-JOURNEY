@@ -24,6 +24,8 @@ const SLOTS = {
   triceps: ['triceps_overhead', 'triceps_frances', 'triceps_corda', 'triceps_barra_polia', 'triceps_testa', 'supino_fechado', 'mergulho'],
   abs: ['abd_polia', 'elev_pernas', 'prancha', 'pallof', 'abd_supra', 'elev_pernas_solo', 'prancha_lateral'],
 };
+/* strength is specific to the lift: for a strength goal the barbell versions come first */
+const FORCA_PRIMEIRO = { squat: ['agachamento'], hpush: ['supino_reto_barra'], ipush: ['supino_inclinado_barra'], hinge: ['terra', 'stiff'], vpush: ['desenv_barra'], hrow: ['remada_curvada'], vpull: ['barra_fixa'] };
 const SLOT_FOCO = { squat: 'pernas', legpress: 'pernas', quad_iso: 'pernas', hinge: 'pernas', ham_curl: 'pernas', glute: 'gluteos', glute_iso: 'gluteos', calves: 'pernas',
   hpush: 'peito', ipush: 'peito', chest_iso: 'peito', vpull: 'costas', hrow: 'costas', vpush: 'ombros', lateral: 'ombros', reardelt: 'ombros', biceps: 'bracos', triceps: 'bracos', abs: 'abdomen' };
 const EVITAR = {
@@ -94,7 +96,8 @@ function programaLocal(pid, modo) {
     const exs = [];
     for (const { s, f } of slots) {
       if (exs.length >= nEx) break;
-      const opcoes = SLOTS[s].filter(id => ok(id) && !usados.has(id));
+      const lista = obj === 'forca' && FORCA_PRIMEIRO[s] ? [...new Set([...FORCA_PRIMEIRO[s], ...SLOTS[s]])] : SLOTS[s];
+      const opcoes = lista.filter(id => ok(id) && !usados.has(id));
       if (!opcoes.length) continue;
       const id = opcoes[Math.min(variar, opcoes.length - 1)];
       usados.add(id);

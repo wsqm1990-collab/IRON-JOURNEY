@@ -201,8 +201,23 @@ async function salvarPerfil() {
 }
 
 /* ---------- gym equipment ---------- */
+function pesosHTML(g) {
+  const P = g.pesos, seg = (k, vals, fmt) => `<div class="seg wrap">${vals.map(v => `<button data-a="pesoSet" data-k="${k}" data-v="${v}" aria-pressed="${P[k] === v}">${fmt ? fmt(v) : fmtKg(v) + ' kg'}</button>`).join('')}</div>`;
+  return `<div class="equip-group stack">
+    <h2 class="h3">${t('gw_title')}</h2><p class="small muted">${t('gw_note')}</p>
+    <p class="eyebrow">${t('gw_plates')}</p>
+    <div class="chips">${ANILHAS_OPC.map(v => `<button class="chip num" data-a="pesoAnilha" data-v="${v}" aria-pressed="${P.anilhas.includes(v)}">${fmtKg(v)} kg</button>`).join('')}</div>
+    <p class="eyebrow">${t('gw_bar')}</p>${seg('barra', [20, 15, 10])}
+    <p class="eyebrow">${t('gw_barw')}</p>${seg('barraW', [6, 8, 10, 12])}
+    <p class="eyebrow">${t('gw_smith')}</p>${seg('smith', [0, 7, 10, 15, 20], v => (v ? fmtKg(v) + ' kg' : t('gw_dont_count')))}
+    <p class="eyebrow">${t('gw_db_max')}</p>${seg('halterMax', [20, 30, 40, 50, 60])}
+    <p class="eyebrow">${t('gw_db_step')}</p>${seg('halterPasso', [1, 2], v => t('gw_every', { n: fmtKg(v) }))}
+    <p class="eyebrow">${t('gw_machine')}</p>${seg('maquina', [2.5, 5, 10], v => t('gw_every', { n: fmtKg(v) }))}
+    <p class="eyebrow">${t('gw_cable')}</p>${seg('polia', [2.5, 5, 10], v => t('gw_every', { n: fmtKg(v) }))}
+  </div>`;
+}
 function viewGym() {
-  if (!S.gymDraft) S.gymDraft = { itens: new Set((S.gym && S.gym.itens) || []), outros: (S.gym && S.gym.outros) || '' };
+  if (!S.gymDraft) S.gymDraft = { itens: new Set((S.gym && S.gym.itens) || []), outros: (S.gym && S.gym.outros) || '', pesos: JSON.parse(JSON.stringify(pesosGym())) };
   const g = S.gymDraft;
   return `<section class="screen">
     <div class="row between"><p class="eyebrow">${t('gym_e')}</p>${S.gym ? `<button class="btn quiet small" data-a="gymSair">${t('cancel')}</button>` : ''}</div>
@@ -212,6 +227,7 @@ function viewGym() {
       <div class="row between"><h2 class="h3">${esc(L3(grupo))}</h2><button class="btn quiet small" data-a="gymTodos" data-g="${gi}">${t('tick_all')}</button></div>
       <div class="chips">${itens.map(r => `<button class="chip" data-a="gymToggle" data-v="${r[0]}" aria-pressed="${g.itens.has(r[0])}">${esc(L3(r.slice(1)))}</button>`).join('')}</div>
     </div>`).join('')}
+    ${pesosHTML(g)}
     <label class="f" for="gym-outros">${t('gym_other')}<textarea class="inp" id="gym-outros" data-in="gymOutros" maxlength="300" placeholder="${t('gym_other_ph')}">${esc(g.outros)}</textarea></label>
     <button class="btn big block" data-a="gymSalvar">${t('gym_save')} <span class="num">(${g.itens.size})</span></button>
   </section>`;
@@ -219,7 +235,7 @@ function viewGym() {
 async function salvarGym() {
   const g = S.gymDraft;
   if (g.itens.size < 3) { toast(t('gym_min')); return; }
-  const body = { itens: [...g.itens], outros: g.outros.trim().slice(0, 300), atualizadoEm: Date.now() };
+  const body = { itens: [...g.itens], outros: g.outros.trim().slice(0, 300), pesos: g.pesos || pesosGym(), atualizadoEm: Date.now() };
   try { await save('academia/principal', body, t('gym_saved')); } catch { return; }
   S.gym = body; S.gymDraft = null; S.sub = null; S.tab = 'plano';
   render();

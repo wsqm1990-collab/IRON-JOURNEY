@@ -70,16 +70,32 @@ function itemDoTreino(pid, item, sem) {
   const ex = exInfo(item.id, item.nome);
   const alv = alvo(item, sem);
   const sug = sugestao(pid, item, alv);
-  return { id: item.id, nome: ex.nome, grupo: ex.grupo, alvo: alv, sug, dica: item.dica || '', sets: Array.from({ length: alv.series }, () => ({ kg: sug.kg, reps: null, ok: false })) };
+  const pc = planoCarga(pid, item, alv, sug);
+  return {
+    id: item.id, nome: ex.nome, grupo: ex.grupo, alvo: alv, sug, dica: item.dica || '',
+    carga: { tipo: pc.tipo, rir: pc.rir, teste: pc.teste, primeira: !!pc.primeira, e1: pc.e1 },
+    sets: pc.sets.map(s => ({ kg: s.kg, alvo: s.alvo, reps: null, ok: false })),
+  };
 }
 function montarSessao(pid, diaIdx) {
   const pr = progresso(pid);
   const dia = pr.pg.dias[diaIdx];
   return {
     pid, planoId: pr.pl.id, ciclo: pr.pl.ciclo, dia: diaIdx, diaNome: dia.nome, foco: dia.foco, semana: pr.semana, fase: pr.fase,
-    deload: !!pr.sem.deload, nDias: pr.nD, total: pr.total, inicio: Date.now(),
-    exs: dia.exercicios.map(item => itemDoTreino(pid, item, pr.sem)),
+    deload: !!pr.sem.deload, nDias: pr.nD, total: pr.total, inicio: Date.now(), rir: pr.sem.rir,
+    exs: comAquecimento(dia.exercicios.map(item => itemDoTreino(pid, item, pr.sem))),
   };
+}
+/* the first heavy exercise for each muscle group gets warm-up sets with exact loads */
+function comAquecimento(exs) {
+  const vistos = new Set();
+  for (const x of exs) {
+    const ex = exInfo(x.id, x.nome);
+    if (vistos.has(ex.grupo)) continue;
+    const a = aquecimento(ex, x.sets[0] && x.sets[0].kg);
+    if (a.length) { x.aquec = a; vistos.add(ex.grupo); }
+  }
+  return exs;
 }
 
 /* ---------- cardio ---------- */

@@ -9,7 +9,7 @@ const src = path.join(root, 'web', 'src'), out = path.join(root, 'web', 'www');
 const build = Number(process.env.BUILD_NUMBER || process.argv[2] || 0);
 const HEAD = ['01-head.html', '01b-journey.css', '01c-cardio.css'];
 const BODY = ['02-body.html'];
-const JS = ['02i-i18n.js', '02n-native.js', '03-data.js', '04-store.js', '05-ai.js', '05b-key.js', '05c-local-plan.js', '06-logic.js',
+const JS = ['02i-i18n.js', '02n-native.js', '03-data.js', '04-store.js', '05-ai.js', '05b-key.js', '05c-local-plan.js', '06-logic.js', '06b-carga.js',
   '07-views-a.js', '08-workout.js', '08b-cardio.js', '09-coach-journey.js', '09b-evolucao.js', '09c-settings.js', '10-app.js'];
 const read = f => fs.readFileSync(path.join(src, f), 'utf8');
 const head = HEAD.map(read).join('\n').replace(/<meta name="claude:[^>]*>\n?/g, '');
