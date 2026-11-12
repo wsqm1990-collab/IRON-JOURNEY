@@ -97,4 +97,42 @@ a.svc.yt span{color:var(--danger)}
 .fig.mini svg{width:100%;height:100%;max-height:none}
 .pos{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:4px}
 .pos p{margin:0}.pos .small{line-height:1.45}
+.px{image-rendering:pixelated;image-rendering:crisp-edges}
+.pxa{display:inline-block;background-repeat:no-repeat;background-size:200% 100%;image-rendering:pixelated;animation:pxa var(--ms) steps(2) infinite}
+@keyframes pxa{from{background-position:0 0}to{background-position:200% 0}}
+@media (prefers-reduced-motion:reduce){.pxa{animation:none}}
+.pxa.grande{width:92px}.pxa.mini{width:44px;flex:none}
+.rpg-top{display:flex;gap:14px;align-items:center}
+.rpg-heroi{background:var(--surface-2);border-radius:14px;padding:6px 10px;flex:none}
+.mentor{display:flex;gap:8px;align-items:flex-end}
+.mentor .pxa{width:62px;flex:none}
+.mentor .balao{background:var(--surface);border:1px solid var(--line);border-radius:14px 14px 14px 4px;padding:10px 12px;display:flex;flex-direction:column;gap:6px;flex:1;min-width:0}
+.mentor .balao span{font-size:var(--t-sm);line-height:1.45}
+.mentor .balao .btn{align-self:flex-start}
+.mapa-rpg{position:relative;width:100%;border-radius:14px;overflow:hidden;box-shadow:inset 0 0 0 2px rgba(0,0,0,.15)}
+.mapa-rpg .mp-bg{position:absolute;inset:0;width:100%;height:100%}
+.mp-flag,.mp-boss,.mp-hero{position:absolute;display:block}
+.mp-flag img,.mp-boss img{width:100%;height:auto;display:block}
+.mp-boss.won{filter:grayscale(1);opacity:.55}
+.mp-hero .pxa{width:100%}
+.mp-leg{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;color:var(--muted)}
+.mp-leg i{display:inline-block;width:11px;height:11px;border-radius:50%;border:2px solid #1B1D26;margin-right:5px;vertical-align:-1px}
+img.px.ico{width:22px;height:auto;vertical-align:-5px;margin-right:4px}
+.inv{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
+.inv-it{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 6px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:2px}
+.inv-it img{width:40px;height:40px}.inv-it b{font-size:12px;line-height:1.25}.inv-it span{font-size:11px;color:var(--muted);line-height:1.3}
+.inv-it.off{opacity:.62}.inv-it.off img{filter:grayscale(1)}
+.premio img.big{width:56px;height:56px;flex:none}
+.aliados{display:flex;flex-direction:column;gap:8px}
+.aliado{display:flex;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 10px}
+.criador .cr-prev{display:flex;justify-content:center;background:var(--surface-2);border-radius:14px;padding:12px}
+.criador .cr-prev .pxa{width:120px}
+.sw{display:flex;flex-wrap:wrap;gap:10px}
+.sw button{width:34px;height:34px;border-radius:50%;border:2px solid var(--line);cursor:pointer}
+.sw button[aria-pressed="true"]{outline:3px solid var(--accent);outline-offset:2px}
+.batalha{width:100%}
+.batalha canvas{width:100%;height:auto;display:block;border-radius:12px;image-rendering:pixelated;cursor:pointer;background:#1B1D26}
+.batalha p{text-align:center;font-weight:700;min-height:1.4em;margin:8px 0 0}
+.xp.xp-heroi{display:flex;flex-direction:row;gap:12px;align-items:center}
+.xp-heroi .xp-track{display:block}
 </style>

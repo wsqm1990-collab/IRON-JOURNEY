@@ -283,10 +283,10 @@ async function salvarTreino() {
   closeSheet(); render(); window.scrollTo(0, 0);
   mostrarRecompensa(antes, depois, prs, sess);
 }
-function recompensaHTML(antes, depois, linhas, extra, oferecerCardio) {
+function recompensaHTML(antes, depois, linhas, extra, oferecerCardio, topo) {
   const ganho = depois.xp - antes.xp, subiu = depois.nivel.n > antes.nivel.n;
   const novas = reliquiasAtivas().filter(r => r.ok(depois) && !r.ok(antes));
-  return `<div class="reward">
+  return `<div class="reward">${topo || ''}
       <div class="big pop num">+${ganho} XP</div>
       ${subiu ? `<div class="lvup pop">${esc(t('level_up', { n: depois.nivel.n, x: depois.nivel.titulo }))}</div>` : `<p class="small muted num">${t('to_next', { n: depois.nivel.n, x: depois.nivel.prox - depois.xp })}</p>`}
       <div class="xp-lines num">${linhas.filter(l => l[1] > 0).map(([s, v]) => `<div><span>${esc(s)}</span><b>+${v}</b></div>`).join('')}</div>
@@ -306,7 +306,10 @@ function mostrarRecompensa(antes, depois, prs, sess) {
   if (depois.juntos > antes.juntos) linhas.push([t('together'), XP.juntos]);
   const recs = prs.length ? `<div class="stack" style="width:100%;text-align:left"><p class="eyebrow">${t('records_today')}</p>${prs.map(r => `<div class="row"><span class="pill pr">${t('record')}</span><span class="small">${esc(exInfo(r.exId, r.nomeX).nome)}: ${r.carga && r.kg ? fmtKg(r.kg) + ' kg × ' : ''}${r.reps}</span></div>`).join('')}</div>` : '';
   const ci = cardioSemanaInfo(sess.pid);
-  openSheet(t('workout_saved'), recompensaHTML(antes, depois, linhas, recs, ci.meta > ci.feitos));
+  let cena = null;
+  try { cena = sess.planoId ? cenaDoTreino(sess.pid, sess, prs, depois.ciclos > antes.ciclos) : null; } catch { cena = null; }
+  openSheet(t('workout_saved'), recompensaHTML(antes, depois, linhas, recs, ci.meta > ci.feitos, cena ? batalhaHTML() : ''));
+  if (cena) setTimeout(() => iniciarBatalha(cena), 60);
 }
 
 /* ---------- cardio log (by hand or at the end of a guided session) ---------- */

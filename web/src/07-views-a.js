@@ -243,10 +243,12 @@ async function salvarGym() {
 
 /* ---------- today ---------- */
 function xpMini(pid) {
-  const d = jornadaDados(pid), nv = d.nivel, pct = clamp(((d.xp - nv.base) / (nv.prox - nv.base)) * 100, 0, 100);
-  return `<button class="card pad xp" data-a="tab" data-tab="jornada" style="text-align:left;width:100%">
-    <div class="xp-top"><span class="lv">${t('level_n', { n: nv.n })}</span><span class="pill acc">${esc(nv.titulo)}</span><span class="small muted num" style="margin-left:auto">${d.xp - nv.base} / ${nv.prox - nv.base} XP</span></div>
-    <div class="xp-track"><div class="xp-fill" style="width:${pct}%"></div></div></button>`;
+  const d = jornadaDados(pid), nv = d.nivel, pct = clamp(((d.xp - nv.base) / (nv.prox - nv.base)) * 100, 0, 100), pr = progresso(pid);
+  let heroi = '', onde = '';
+  try { heroi = heroiAnimHTML(heroiDe(pid, d), 'parado', 'mini'); onde = pr ? t('ally_at', { r: L3(regiaoDe(pr.pl.ciclo).nome), a: Math.min(pr.feitos + (pr.completo ? 0 : 1), pr.total), b: pr.total }) : ''; } catch { heroi = ''; }
+  return `<button class="card pad xp xp-heroi" data-a="tab" data-tab="jornada" style="text-align:left;width:100%">${heroi}<span class="stack" style="gap:6px;flex:1;min-width:0">
+    <span class="xp-top"><span class="lv">${t('level_n', { n: nv.n })}</span><span class="pill acc">${esc(nv.titulo)}</span><span class="small muted num" style="margin-left:auto">${d.xp - nv.base} / ${nv.prox - nv.base} XP</span></span>
+    <span class="xp-track"><span class="xp-fill" style="width:${pct}%;display:block"></span></span>${onde ? `<span class="xs muted">${esc(onde)}</span>` : ''}</span></button>`;
 }
 function aliadosHoje() {
   const hoje = dayKey(Date.now()), outros = S.ordem.filter(p => p !== S.me);

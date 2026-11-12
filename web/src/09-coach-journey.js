@@ -167,6 +167,9 @@ function relicHTML(d, r) {
 function viewJornada() {
   const sub = `<div class="subtabs"><button data-a="jsub" data-v="jornada" aria-pressed="${S.jsub !== 'stats'}">${t('sub_journey')}</button><button data-a="jsub" data-v="stats" aria-pressed="${S.jsub === 'stats'}">${t('sub_stats')}</button></div>`;
   if (S.jsub === 'stats') return viewStats(sub);
+  return viewMundo(sub);
+}
+function viewJornadaAntiga(sub) {
   const pid = S.me, d = jornadaDados(pid), nv = d.nivel, { E, atual, pr } = etapas(pid);
   const pct = clamp(((d.xp - nv.base) / (nv.prox - nv.base)) * 100, 0, 100);
   const herois = S.ordem.map(p => {

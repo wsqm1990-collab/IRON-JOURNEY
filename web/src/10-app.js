@@ -145,6 +145,10 @@ const ACT = {
   tecnica: el => abrirTecnica(+el.dataset.i),
   guia: el => abrirGuia(el.dataset.id, el.dataset.nome || ''),
   figPausa: () => pausarFigura(),
+  heroiEditar: () => abrirCriador(),
+  heroiSet: el => { if (!S.heroiDraft) return; S.heroiDraft[el.dataset.k] = Number(el.dataset.v); atualizarCriador(); },
+  heroiSalvar: () => salvarHeroi(),
+  batalhaPular: () => { Batalha.fim = true; },
   ritmo: () => iniciarRitmo(Guia.id),
   guiaDeNovo: () => { const el = $('#guiaIA'); if (el) el.innerHTML = `<p class="msg think">${t('guide_writing')}</p>`; carregarAula(); },
   explicarPlano: () => pedirExplicacao(),
@@ -207,6 +211,8 @@ const INP = {
   reps: el => { const v = parseNum(el.value); live(el).sets[+el.dataset.j].reps = v == null ? null : Math.round(v); saveLiveSoon(); },
   chatTxt: el => { S.chatDraft = el.value; },
   cf: el => { if (S.cform) S.cform[el.dataset.k] = el.value; },
+  heroiNome: el => { if (S.heroiDraft) S.heroiDraft.nome = el.value; },
+  heroiPremio: el => { if (S.heroiDraft) S.heroiDraft.premio = el.value; },
 };
 document.addEventListener('click', e => {
   const el = e.target.closest('[data-a]');
