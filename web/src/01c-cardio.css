@@ -60,4 +60,12 @@ a.svc:focus-visible{outline:3px solid var(--accent)}
 .set .n small{font-family:var(--f-body);font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin-top:2px}
 .seg.wrap{display:flex;flex-wrap:wrap}
 .seg.wrap button{flex:1 1 auto;min-width:64px}
+.exitem .acts{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.exitem .why,.exitem .cue{grid-column:1/-1;font-size:var(--t-sm);line-height:1.4}
+.exitem .why{color:var(--muted)}
+.exitem .cue{color:var(--ink);background:var(--surface-2);border-radius:10px;padding:8px 10px}
+details.expl>summary{font-size:var(--t-md)}
+details.expl p{margin:0;line-height:1.5}
+a.svc.yt{border-color:var(--danger);color:var(--ink)}
+a.svc.yt span{color:var(--danger)}
 </style>

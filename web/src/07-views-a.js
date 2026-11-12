@@ -315,6 +315,35 @@ function escolherDia() {
 }
 
 /* ---------- plan ---------- */
+Object.assign(STR, {
+  understand_plan: ['Understand your plan', 'Entenda seu plano', 'Entiende tu plan'],
+  understand_ask: ['Your personal trainer explains every choice in this plan in plain words: the split, sets and reps, how the weight goes up, the weeks and the cardio.', 'Seu personal explica cada escolha deste plano em palavras simples: a divisão, as séries e repetições, como o peso sobe, as semanas e o cardio.', 'Tu entrenador explica cada decisión de este plan con palabras sencillas: la división, las series y repeticiones, cómo sube el peso, las semanas y el cardio.'],
+  explain_my_plan: ['Explain my plan', 'Explicar meu plano', 'Explicar mi plan'],
+  explaining_plan: ['Your personal trainer is explaining your plan…', 'Seu personal está explicando o seu plano…', 'Tu entrenador está explicando tu plan…'],
+  cue_label: ['Tip', 'Dica', 'Consejo'],
+});
+/* the plan explained like a personal trainer would (the built-in text when there is no AI key) */
+function explicacaoHTML(pg, p) {
+  let sec = pg.explicacao || [];
+  if (!sec.length && !AI.on) sec = explicacaoLocal(p, pg);
+  if (!sec.length) return `<div class="card pad stack"><h2 class="h3">${t('understand_plan')}</h2><p class="small muted">${t('understand_ask')}</p><div id="explBox"><button class="btn block" data-a="explicarPlano">${t('explain_my_plan')}</button></div></div>`;
+  return `<div class="stack"><h2 class="h3">${t('understand_plan')}</h2>${sec.map((x, i) => `<details class="box expl"${i === 0 ? ' open' : ''}><summary>${esc(x.titulo)}</summary><div class="in"><p class="small">${esc(x.texto)}</p></div></details>`).join('')}</div>`;
+}
+async function pedirExplicacao() {
+  const box = $('#explBox');
+  if (!box || box.dataset.busy) return;
+  box.dataset.busy = '1';
+  box.innerHTML = loaderHTML(t('explaining_plan'));
+  try {
+    const pl = await explicarPlano(S.me);
+    await save('planos/' + S.me, pl);
+    S.planos[S.me] = pl;
+    render();
+  } catch (e) {
+    const b = $('#explBox');
+    if (b) { delete b.dataset.busy; b.innerHTML = `<div class="note err">${esc(aiErrorText(e))}</div><button class="btn block" data-a="explicarPlano">${t('try_again')}</button>`; }
+  }
+}
 const fmtDesc = s => (s >= 60 ? (Math.round(s / 6) / 10).toLocaleString(LOC()) + ' min' : s + ' s');
 function viewPlano() {
   const pid = S.me, pr = progresso(pid), p = perfil(pid);
@@ -331,7 +360,7 @@ function viewPlano() {
   }).join('');
   const dias = pg.dias.map((d, di) => `<details class="box"${di === pr.proxDia ? ' open' : ''}><summary><span class="h3">${esc(d.nome)}</span><span class="small muted" style="font-weight:500">${esc(d.foco)}</span></summary><div class="in"><div class="exlist">${d.exercicios.map((item, xi) => {
     const ex = exInfo(item.id, item.nome), alv = alvo(item, pr.sem);
-    return `<div class="exitem"><span class="nm">${esc(ex.nome)}</span><button class="btn quiet small" data-a="trocarPlano" data-dia="${di}" data-i="${xi}" aria-label="${esc(t('swap_x', { x: ex.nome }))}">${I.troca}${t('swap')}</button><span class="mt num">${alv.series} × ${item.reps[0]}${item.reps[1] !== item.reps[0] ? '–' + item.reps[1] : ''} ${unidade(ex)} · ${t('rest_x', { x: fmtDesc(item.descanso) })}${item.dica ? '<br>' + esc(item.dica) : ''}</span></div>`;
+    return `<div class="exitem"><span class="nm">${esc(ex.nome)}</span><span class="mt num">${alv.series} × ${item.reps[0]}${item.reps[1] !== item.reps[0] ? '–' + item.reps[1] : ''} ${unidade(ex)} · ${t('rest_x', { x: fmtDesc(item.descanso) })}</span>${item.porque ? `<span class="why">${esc(item.porque)}</span>` : ''}${item.dica ? `<span class="cue"><b>${t('cue_label')}:</b> ${esc(item.dica)}</span>` : ''}<span class="acts"><button class="btn quiet small" data-a="guia" data-id="${esc(item.id)}" data-nome="${esc(item.nome || '')}">${I.info}${t('how_to')}</button><button class="btn quiet small" data-a="trocarPlano" data-dia="${di}" data-i="${xi}" aria-label="${esc(t('swap_x', { x: ex.nome }))}">${I.troca}${t('swap')}</button></span></div>`;
   }).join('')}</div></div></details>`).join('');
   const outraLingua = pg.lang && pg.lang !== LANG() ? `<p class="xs muted">${t('plan_other_lang', { x: LANGS[LI][1] })}</p>` : '';
   return `<section class="screen">
@@ -343,6 +372,7 @@ function viewPlano() {
       ${legendaFases()}${outraLingua}
     </div>
     ${AI.on ? `<button class="btn block" data-a="ajustar">${t('adjust_plan')}</button>` : ''}
+    ${explicacaoHTML(pg, p)}
     <div class="stack">${dias}</div>
     ${cardioPlanoCard(pg, pr)}
     <div class="card pad"><h2 class="h3">${t('week_by_week')}</h2><div class="exlist">${semanas}</div></div>

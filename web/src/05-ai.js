@@ -100,6 +100,22 @@ function resumoCiclo(pid) {
     `\nCardio this cycle: ${cs.length} sessions, ${cs.reduce((n, c) => n + (c.minutos || 0), 0)} minutes`;
 }
 
+/* ---------- what the coach knows, and how it explains ---------- */
+const EVIDENCIAS = `EVIDENCE BASE (apply what fits this person's goal, level and schedule)
+- Building muscle: about 10-20 hard sets per muscle per week (beginners 6-10; more only for priority muscles of advanced lifters), each muscle trained at least twice a week, sets ending 0-3 reps short of failure, mostly 6-15 reps (5-30 works when close to failure), full range of motion with emphasis on the stretched position, 2-3 min rest on compounds and 1-2 min on isolation, progressive overload with double progression.
+- Getting stronger: specificity. The main barbell lifts (squat, bench press, deadlift, overhead press) or their closest available versions 2-3 times a week, mostly 1-6 reps at about 75-90% of the 1RM with 1-3 reps in reserve, 3-5 min rest, technique practice with submaximal sets, plus accessory muscle-building work at 8-12 reps; undulating or block periodization.
+- Losing fat: the calorie deficit removes fat; strength training keeps heavy loads and enough volume (never swap to light "toning" sets) so muscle is kept; daily steps; mostly easy zone 2 cardio with at most 1-2 interval sessions a week; slightly less volume if recovery suffers.
+- Health and fitness: 150-300 min a week of moderate cardio (or 75-150 vigorous) plus strength training for all major muscles at least twice a week; full-body sessions; for non-beginners one interval session a week (e.g. Norwegian 4x4) to raise VO2max, a strong marker of long-term health.
+- Beginners: full body 2-3 times a week, few exercises, learn technique 3-4 reps short of failure; machines and dumbbells build muscle as well as barbells.
+- Women: the same principles; often recover well from a bit more volume and reps; glute focus only if asked.
+- Pain or injuries: pain-free variations and ranges of motion; never train through sharp pain.
+When you mention research, say it in plain words (e.g. "studies comparing 1 and 3 minutes of rest found more growth with longer rest"); never invent authors, years, study names or numbers.`;
+const REGRAS_EXPLICACAO = `EXPLANATIONS (this is what makes you a real personal trainer)
+Write for someone who has never trained. Define every technical word the first time you use it, in a few plain words (set, rep, RIR, 1RM, deload, progressive overload, compound, isolation, zone 2). Be concrete: numbers, examples, what to feel. No filler.
+- "resumo": 2 or 3 sentences with the logic of the plan.
+- "explicacao": 6 or 7 sections {"titulo","texto"}, each texto 3 to 6 sentences, in this order: how this plan works (the big picture); why this split and how often each muscle is trained; sets, reps, effort (RIR) and rest, and why; how to pick the weight and how it goes up (the test set and the app's calculator); the weeks of the block (phases and deload) and why; cardio (what, how hard, why; or why only steps); what to expect and how to recover (sleep, protein in general terms, soreness).
+- Every exercise: "porque" (1 or 2 sentences: what it trains and why it is in this person's plan) and "dica" (the most important technique cue with specifics, e.g. grip width relative to the shoulders, foot position, bench angle, where to stop).`;
+
 /* ---------- program design ---------- */
 function promptPrograma(pid, extra) {
   const p = perfil(pid), set = equipSet(S.gym);
@@ -107,7 +123,7 @@ function promptPrograma(pid, extra) {
   const forca = ok.filter(ex => ex.grupo !== 'cardio').map(ex => `${ex.id} | ${ex.nomeEn} | ${en3(GRUPOS[ex.grupo])}`).join('\n');
   const cardio = ok.filter(ex => ex.grupo === 'cardio').map(ex => `${ex.id} | ${ex.nomeEn}`).join('\n');
   const protos = PROTOCOLOS.map(pr => `${pr.id} | ${pr.nome[0]} | ${pr.desc[0]} | intensity: ${pr.nivel}`).join('\n');
-  return `You are an elite strength, hypertrophy and conditioning coach who follows the most current scientific evidence. Design one periodized, individualized training block (mesocycle) of strength training and cardio.
+  return `You are an elite personal trainer and strength, hypertrophy and conditioning coach. You apply the best-supported scientific evidence together with what works in practice in real gyms. Design one periodized, individualized training block (mesocycle) of strength training and cardio for this person, and explain it so that someone who has never trained understands every choice.
 
 PERSON
 ${ctxPerfil(p)}
@@ -124,6 +140,8 @@ ${cardio}
 CARDIO PROTOCOLS THE APP CAN GUIDE (use ONLY these ids in cardio.sessoes[].protocolo)
 ${protos}
 ${extra ? '\n' + extra + '\n' : ''}
+${EVIDENCIAS}
+
 PRINCIPLES
 1. Split: choose the best split for ${p.dias} days per week and the goal (full body, upper/lower, push/pull/legs or hybrid). Train each muscle twice a week whenever the days allow. "dias" must contain exactly ${p.dias} workouts.
 2. Weekly sets per muscle (hard sets): beginner 6-10; intermediate 10-16; advanced 12-20. Priority muscles near the top of the range; the rest in the middle or at maintenance.
@@ -135,12 +153,15 @@ PRINCIPLES
 8. Injuries: avoid what could aggravate the reported problem and choose safe alternatives.
 9. Periodization over 4-6 weeks: effort rises week to week (e.g. RIR 3, 2, 1, 1) and, if it makes sense, +1 set on priority muscles at the end (seriesExtra). The last week is always a deload: deload true and rir 4 (the app halves the sets by itself).
 10. Fat loss: keep heavy strength training to preserve muscle; easy cardio and daily steps as a complement. Strength goal: more heavy work on the main lifts.
-11. Cardio is part of the plan, in the "cardio" field (never inside "dias"). Respect how many sessions per week the person wants, their favorite modalities and when they prefer to do it; if they want no cardio, leave "sessoes" empty and recommend daily steps in the summary. The base is easy continuous cardio (protocol z2). Use high-intensity protocols (h3030, h4020, tabata, n4x4, piramide, sprint) only for intermediate or advanced people, at most once a week, away from the heavy leg day; beginners can use fartlek or ladeira for variety. For fat loss cardio complements strength training and daily steps, never replaces them. With knee or hip pain prefer bike, elliptical or incline walking over running and jump rope. On strength days cardio comes after lifting. Raise minutes gradually with "cardioExtra" per week (the app shortens cardio in the deload week by itself). In "intensidade" use plain language (talk test and effort from 0 to 10).
+11. The app has a load calculator: on every exercise the first set is a test, and from it the app gives the exact weight (plates per side, dumbbell, machine pin) and the exact reps of the other sets, and it raises the weight when the person beats the top of the rep range. Count on it and explain it.
+12. Cardio is part of the plan, in the "cardio" field (never inside "dias"). Respect how many sessions per week the person wants, their favorite modalities and when they prefer to do it; if they want no cardio, leave "sessoes" empty and recommend daily steps in the summary. The base is easy continuous cardio (protocol z2). Use high-intensity protocols (h3030, h4020, tabata, n4x4, piramide, sprint) only for intermediate or advanced people, at most once a week, away from the heavy leg day; beginners can use fartlek or ladeira for variety. For fat loss cardio complements strength training and daily steps, never replaces them. With knee or hip pain prefer bike, elliptical or incline walking over running and jump rope. On strength days cardio comes after lifting. Raise minutes gradually with "cardioExtra" per week (the app shortens cardio in the deload week by itself). In "intensidade" use plain language (talk test and effort from 0 to 10).
+
+${REGRAS_EXPLICACAO}
 
 LANGUAGE: ${idioma()} Ids and the "fase" codes stay exactly as specified.
 
 ANSWER: only one JSON object, no text outside it, in this shape:
-{"nome":"short plan name","resumo":"2 or 3 simple sentences explaining the logic of the plan","semanas":[{"fase":"adapt","rir":3,"seriesExtra":0,"cardioExtra":0,"deload":false,"nota":"short guidance for the week"}],"dias":[{"nome":"Workout A","foco":"Upper body","exercicios":[{"id":"supino_reto_halteres","series":3,"reps":[8,12],"descanso":120,"dica":"short technique cue, optional"}]}],"cardio":{"resumo":"1 or 2 sentences about this block's cardio","sessoes":[{"nome":"Easy cardio","protocolo":"z2","opcoes":["bike","esteira_inclinada"],"minutos":30,"porSemana":2,"intensidade":"you can hold a conversation, effort 5 of 10","quando":"after Workout B and Workout D"}]},"dicas":["up to 3 practical, personal tips"]}
+{"nome":"short plan name","resumo":"2 or 3 simple sentences explaining the logic of the plan","explicacao":[{"titulo":"How this plan works","texto":"3 to 6 sentences"}],"semanas":[{"fase":"adapt","rir":3,"seriesExtra":0,"cardioExtra":0,"deload":false,"nota":"short guidance for the week"}],"dias":[{"nome":"Workout A","foco":"Upper body","exercicios":[{"id":"supino_reto_halteres","series":3,"reps":[8,12],"descanso":120,"porque":"what it trains and why it is here","dica":"key technique cue with specifics"}]}],"cardio":{"resumo":"1 or 2 sentences about this block's cardio","sessoes":[{"nome":"Easy cardio","protocolo":"z2","opcoes":["bike","esteira_inclinada"],"minutos":30,"porSemana":2,"intensidade":"you can hold a conversation, effort 5 of 10","quando":"after Workout B and Workout D"}]},"dicas":["up to 3 practical, personal tips"]}
 "fase" must be one of: adapt, accum, intens, deload.`;
 }
 const FASE_ALIAS = { adapt: 'adapt', adaptation: 'adapt', 'adaptação': 'adapt', adaptacao: 'adapt', 'adaptación': 'adapt', accum: 'accum', accumulation: 'accum', 'acumulação': 'accum', acumulacao: 'accum', 'acumulación': 'accum', intens: 'intens', intensification: 'intens', 'intensificação': 'intens', intensificacao: 'intens', 'intensificación': 'intens', deload: 'deload', descarga: 'deload' };
@@ -156,7 +177,8 @@ function normalizarPrograma(raw, pid) {
       if (b < a) [a, b] = [b, a];
       const item = { id: known ? id : 'x_' + slug(x.nome || id || 'exercise'), series: clamp(toInt(x.series, 3), 1, 8), reps: [a, b], descanso: clamp(toInt(x.descanso, 90), 20, 300) };
       if (!known) item.nome = String(x.nome || id || 'Exercise').slice(0, 60);
-      if (x.dica) item.dica = String(x.dica).slice(0, 180);
+      if (x.dica) item.dica = String(x.dica).slice(0, 300);
+      if (x.porque) item.porque = String(x.porque).slice(0, 300);
       return item;
     }).filter(Boolean);
     return { nome: String((d && d.nome) || 'Workout ' + 'ABCDEFG'[i]).slice(0, 40), foco: String((d && d.foco) || '').slice(0, 70), exercicios: exs };
@@ -186,8 +208,10 @@ function normalizarPrograma(raw, pid) {
       };
     });
   }
+  const explicacao = (Array.isArray(raw.explicacao) ? raw.explicacao : []).filter(e => e && (e.texto || e.text)).slice(0, 8)
+    .map(e => ({ titulo: String(e.titulo || e.title || '').slice(0, 90), texto: String(e.texto || e.text || '').slice(0, 1400) }));
   return {
-    nome: String(raw.nome || 'My plan').slice(0, 60), resumo: String(raw.resumo || '').slice(0, 600), semanas, dias, cardio,
+    nome: String(raw.nome || 'My plan').slice(0, 60), resumo: String(raw.resumo || '').slice(0, 600), explicacao, semanas, dias, cardio,
     dicas: (Array.isArray(raw.dicas) ? raw.dicas : []).slice(0, 3).map(s => String(s).slice(0, 220)), lang: LANG(),
   };
 }
@@ -206,6 +230,39 @@ async function gerarPrograma(pid, modo, pedido, signal) {
   return { prog, mudancas };
 }
 
+/* plans made before the explanations existed: the coach explains them now */
+async function explicarPlano(pid, signal) {
+  const p = perfil(pid), pg = plano(pid).programa;
+  const ids = [...new Set(pg.dias.flatMap(d => d.exercicios.map(x => x.id)))];
+  const prompt = `You are ${p.nome}'s personal trainer. Explain the training plan below so that someone who has never trained understands every choice.
+
+PERSON
+${ctxPerfil(p)}
+
+PLAN (JSON)
+${JSON.stringify({ nome: pg.nome, semanas: pg.semanas, dias: pg.dias.map(d => ({ nome: d.nome, foco: d.foco, exercicios: d.exercicios.map(x => ({ id: x.id, nome: exInfo(x.id, x.nome).nomeEn, series: x.series, reps: x.reps, descanso: x.descanso })) })), cardio: pg.cardio })}
+
+${EVIDENCIAS}
+
+${REGRAS_EXPLICACAO}
+
+LANGUAGE: ${idioma()}
+
+ANSWER: only one JSON object: {"explicacao":[{"titulo":"...","texto":"..."}],"exercicios":{"exercise id":{"porque":"...","dica":"..."}}} with one entry in "exercicios" for each of these ids: ${ids.join(', ')}.`;
+  const raw = await aiJSON(prompt, { modelTier: 'complex', signal, cache: false });
+  const exp = normalizarPrograma({ dias: [{ exercicios: [{ id: ids[0] }] }], explicacao: raw && raw.explicacao }, pid).explicacao;
+  if (!exp.length) throw { code: 'invalid_json' };
+  const pl = clone(plano(pid)), info = (raw && raw.exercicios) || {};
+  pl.programa.explicacao = exp;
+  for (const d of pl.programa.dias) for (const x of d.exercicios) {
+    const e = info[x.id];
+    if (!e) continue;
+    if (e.porque) x.porque = String(e.porque).slice(0, 300);
+    if (e.dica) x.dica = String(e.dica).slice(0, 300);
+  }
+  return pl;
+}
+
 /* ---------- swaps, technique, chat ---------- */
 async function aiTroca(pid, exId, motivo, candidatos, signal) {
   const p = perfil(pid), ex = exInfo(exId);
@@ -222,18 +279,29 @@ Answer only with JSON: [{"id":"...","motivo":"..."}]`;
 }
 function promptTecnica(pid, exId, nomeFallback) {
   const p = perfil(pid), ex = exInfo(exId, nomeFallback), lim = limitesEn(p);
-  return `Explain how to perform "${ex.nomeEn}" with good technique for a ${nivelEn(p.nivel).toLowerCase()} lifter. Practical, no introduction. ${idioma()} Use exactly these bold headings, translated to that language:
-**Setup**: 1 or 2 sentences
-**Execution**: a list of 3 short steps
-**Common mistakes**: a list of 2 or 3 items
-**Golden tip**: 1 sentence
-${lim ? `The person reported: ${lim}. If any of it matters for this exercise, add a bold **Caution** heading with 1 sentence.\n` : ''}At most 130 words.`;
+  const sexo = p.sexo === 'f' ? 'woman' : p.sexo === 'm' ? 'man' : 'not stated';
+  return `You are an expert personal trainer. Teach ${p.nome} (level: ${nivelEn(p.nivel).toLowerCase()}; sex: ${sexo}; goal: ${objEn(p.objetivo).toLowerCase()}) exactly how to perform "${ex.nomeEn}" so that a beginner could do it perfectly from your text alone. Base every cue on biomechanics and on what experienced coaches use in practice. Be precise and measurable: e.g. "hands about one and a half times shoulder width, so your forearms are vertical when the bar touches your chest", "feet shoulder-width apart, toes turned out 15 to 30 degrees", "bench at about 30 degrees", "seat high enough that the handles line up with the middle of your chest". No introduction. ${idioma()}
+Use exactly these bold headings, translated to that language, each followed by short sentences or a list:
+**Setup**: adjustments before the first rep (seat, bench angle, pads, pulley height, pin, safety bars, collars). Skip what doesn't apply.
+**Grip**: grip type (overhand, underhand or neutral), width with a body reference, thumbs, wrist position. If the hands don't hold anything, say where they go.
+**Stance and body position**: feet (width, angle, where on the floor or platform), back, chest, shoulder blades, head and neck, how to brace the core.
+**Step by step**: numbered steps from the starting position to the end of one rep.
+**Range of motion**: where each rep starts and stops, and how to know you got there.
+**Tempo and breathing**: seconds down, pause and up; when to breathe in and out (and bracing on heavy compound lifts).
+**What you should feel**: the muscles that should work, and what you should not feel.
+**Common mistakes**: 3 or 4 items, each with its fix.
+**Weight and reps**: how to pick the weight using the app's test set (set 1: as many reps as you can while leaving the planned reps in reserve; the app calculates the rest) and the signs that the weight is too heavy.
+${lim ? `The person reported: ${lim}. If any of it matters for this exercise, add a bold **Caution** heading with what to change.\n` : ''}Between 300 and 450 words. Never invent study names or numbers.`;
 }
 function regrasCoach(pid) {
   const p = perfil(pid);
-  return `You are ${p.nome}'s personal trainer inside "Iron Journey", a strength and cardio app. Talk like an experienced, friendly coach: direct, motivating without exaggeration, grounded in current science on strength training, hypertrophy, conditioning, fat loss and periodization.
+  return `You are ${p.nome}'s personal trainer inside "Iron Journey", a strength and cardio app. Talk like an experienced, caring personal trainer who explains everything: direct, warm, motivating without exaggeration, grounded in the best current evidence on strength training, hypertrophy, conditioning, fat loss and periodization, and in what works in practice in the gym.
 Rules:
-- ${idioma()} Keep it short and practical (up to 150 words) unless asked for more. Short lists help. **Bold** is fine.
+- ${idioma()} Assume the person is a layperson: define technical words the first time in plain terms, give the reason behind every recommendation, and be concrete (numbers, positions, what to feel, examples from their own data).
+- Start with the direct answer in 1 or 2 sentences, then the details in short steps or bullets. Usually 120-300 words; up to 600 for "how" or "why" questions, technique or planning; shorter for simple yes or no questions. **Bold** is fine.
+- Technique questions: cover the grip (type and width relative to the shoulders), stance and feet, body position, range of motion, tempo, breathing, what they should feel, and the most common mistake with its fix.
+- The app calculates the exact weight for every set: set 1 of each exercise is a test, and from it the app gives the weight (plates per side, dumbbell or machine pin) and the exact reps of the other sets. Mention it when they ask about weights.
+- When you mention research, describe it in plain words; never invent authors, years, study names or numbers.
 - Personalize with the data below. Only suggest exercises and cardio that this gym allows (outdoor walking and running always work).
 - For cardio, explain intensity simply (talk test, effort 0-10 and the heart rate range from the data, if any). The app has a Cardio Studio with guided protocols (zone 2, tempo, HIIT 30/30 and 40/20, Tabata, Norwegian 4x4, pyramid, sprints, fartlek, incline walk) and Watch and Listen modes for training while watching a show or listening to music; recommend them when they fit.
 - If the person wants to change the plan (swap exercises, change days, change focus), explain what you would do and tell them to tap "Adjust my plan" to apply it.
@@ -253,15 +321,19 @@ ${ctxHistorico(pid)}`;
 }
 function md(s) {
   const inline = x => x.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
-  let html = '', inList = false;
+  let html = '', inList = '';
   for (const ln of esc(s).split('\n')) {
-    const li = ln.match(/^\s*(?:[-•*]|\d+[.)])\s+(.*)$/);
-    if (li) { if (!inList) { html += '<ul>'; inList = true; } html += '<li>' + inline(li[1]) + '</li>'; continue; }
-    if (inList) { html += '</ul>'; inList = false; }
+    const li = ln.match(/^\s*(?:([-•*])|\d+[.)])\s+(.*)$/);
+    if (li) {
+      const tipo = li[1] ? 'ul' : 'ol';
+      if (inList !== tipo) { if (inList) html += '</' + inList + '>'; html += '<' + tipo + '>'; inList = tipo; }
+      html += '<li>' + inline(li[2]) + '</li>'; continue;
+    }
+    if (inList) { html += '</' + inList + '>'; inList = ''; }
     const h = ln.match(/^\s*#{1,4}\s+(.*)$/);
     if (h) html += '<h4>' + inline(h[1]) + '</h4>';
     else if (ln.trim()) html += '<p>' + inline(ln) + '</p>';
   }
-  if (inList) html += '</ul>';
+  if (inList) html += '</' + inList + '>';
   return html;
 }

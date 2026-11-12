@@ -69,7 +69,7 @@ function exCard(x, i) {
     </div>`}
     <div class="ex-actions">
       ${x.pulado ? `<button class="btn ghost small" data-a="despular" data-i="${i}">${t('back_to_it')}</button>` : `<button class="btn ghost small" data-a="maisSerie" data-i="${i}">${I.mais}${t('add_set')}</button>${x.sets.length > 1 ? `<button class="btn ghost small" data-a="menosSerie" data-i="${i}" aria-label="${t('remove_set')}">${I.menos}</button>` : ''}`}
-      ${AI.on ? `<button class="btn ghost small" data-a="tecnica" data-i="${i}">${I.info}${t('how_to')}</button>` : ''}
+      <button class="btn ghost small" data-a="guia" data-id="${esc(x.id)}" data-nome="${esc(x.nome || '')}">${I.info}${t('how_to')}</button>
       <button class="btn ghost small" data-a="trocarLive" data-i="${i}">${I.troca}${t('swap')}</button>
       ${x.pulado ? '' : `<button class="btn quiet small" data-a="pular" data-i="${i}">${t('skip')}</button>`}
     </div>
@@ -223,14 +223,18 @@ async function aplicarTroca(novoId) {
   const trocarNoPlano = async (diaIdx, velhoId) => {
     const pl = clone(plano(S.me)), it = pl.programa.dias[diaIdx].exercicios.find(e => e.id === velhoId);
     if (!it) return;
-    it.id = novoId; delete it.nome; delete it.dica;
+    it.id = novoId; delete it.nome; delete it.dica; delete it.porque;
     try { await save('planos/' + S.me, pl); S.planos[S.me] = pl; } catch { /* toast already shown */ }
   };
   if (w.ctx.scope === 'live') {
     const L = S.live, i = w.ctx.i, x = L.exs[i];
     const restantes = x.sets.filter(z => !z.ok).length || x.sets.length;
-    const sug = sugestao(S.me, { id: novoId, reps: [x.alvo.rmin, x.alvo.rmax] }, x.alvo);
-    const novoX = { id: novoId, nome: novo.nome, grupo: novo.grupo, alvo: x.alvo, sug, dica: '', trocadoDe: x.id, sets: Array.from({ length: restantes }, () => ({ kg: sug.kg, reps: null, ok: false })) };
+    const item = { id: novoId, reps: [x.alvo.rmin, x.alvo.rmax] }, alv = { ...x.alvo, series: restantes };
+    const sug = sugestao(S.me, item, alv), pc = planoCarga(S.me, item, alv, sug);
+    const novoX = { id: novoId, nome: novo.nome, grupo: novo.grupo, alvo: x.alvo, sug, dica: '', trocadoDe: x.id,
+      carga: { tipo: pc.tipo, rir: pc.rir, teste: pc.teste, primeira: !!pc.primeira, e1: pc.e1 },
+      sets: pc.sets.map(z => ({ kg: z.kg, alvo: z.alvo, reps: null, ok: false })) };
+    if (x.aquec && !x.sets.some(z => z.ok)) { const aq = aquecimento(exInfo(novoId), novoX.sets[0] && novoX.sets[0].kg); if (aq.length) novoX.aquec = aq; }
     if (x.sets.some(z => z.ok)) { x.sets = x.sets.filter(z => z.ok); L.exs.splice(i + 1, 0, novoX); } else L.exs[i] = novoX;
     saveLiveNow();
     if (w.escopo === 'plano') await trocarNoPlano(L.dia, x.id);
@@ -243,12 +247,7 @@ async function aplicarTroca(novoId) {
 }
 
 /* ---------- technique ---------- */
-function abrirTecnica(i) {
-  const x = S.live.exs[i], ctl = new AbortController(), nome = exInfo(x.id, x.nome).nome;
-  openSheet(t('how_title', { x: nome }), `<p class="msg think">${t('coach_writing')}</p>`, () => ctl.abort());
-  aiText(promptTecnica(S.me, x.id, x.nome), { modelTier: 'quick', cache: { gcTime: 86400000 }, signal: ctl.signal, onText: ({ text }) => sheetBody(`<div class="md">${md(text)}</div>`) })
-    .catch(e => { if (e.code !== 'cancelled') sheetBody(`<div class="note err">${esc(aiErrorText(e))}</div>`); });
-}
+function abrirTecnica(i) { const x = S.live.exs[i]; abrirGuia(x.id, x.nome); }
 
 /* ---------- finish + rewards ---------- */
 function abrirFinalizar() {

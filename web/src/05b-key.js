@@ -101,7 +101,7 @@ async function iaComChave(input, opts = {}) {
   if (usaCache && !r.truncated) {
     const c = LS.get(CACHE_IA) || {};
     c[chave] = { text: r.text, em: Date.now() };
-    const ks = Object.keys(c).sort((a, b) => c[b].em - c[a].em).slice(0, 30);
+    const ks = Object.keys(c).sort((a, b) => c[b].em - c[a].em).slice(0, 60);
     LS.set(CACHE_IA, Object.fromEntries(ks.map(k => [k, c[k]])));
   }
   return r;
