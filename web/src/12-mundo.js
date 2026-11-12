@@ -402,7 +402,7 @@ async function iniciarBatalha(C) {
     if (fugiu) pe(TE.foge, Math.floor((t2 - tGolpes) / 90), xE + (t2 - tGolpes) / 5, kE);
     else if (derrotado) {
       const k = t2 - tGolpes;
-      if (k < 1100) pe(TE.cai, Math.min(5, Math.floor(k / 90)), xE, kE, k > 700 ? 1 - (k - 700) / 400 : 1);
+      if (k < 900) pe(TE.cai, Math.min(5, Math.floor(k / 90)), xE, kE, k > 600 ? 1 - (k - 600) / 300 : 1);
     } else {
       const bob = Math.floor(t2 / 420) % 2 ? 2 : 0;
       ctx.save(); ctx.translate(tremor, -bob);
@@ -463,8 +463,8 @@ async function iniciarBatalha(C) {
       ctx.strokeText(s2, x, y); ctx.fillText(s2, x, y);
     }
     /* loot */
-    if (derrotado && t2 > tGolpes + 600) {
-      const k = clamp((t2 - tGolpes - 600) / 450, 0, 1), pulo = Math.sin(k * Math.PI) * 40, f = Math.floor(t2 / 160);
+    if (derrotado && t2 > tGolpes + 820) {
+      const k = clamp((t2 - tGolpes - 820) / 450, 0, 1), pulo = Math.sin(k * Math.PI) * 40, f = Math.floor(t2 / 160);
       if (C.final) {
         const tam = 14 * 6, px = xE - tam / 2, py = CHAO - tam - pulo;
         if (k >= 1) { ctx.fillStyle = 'rgba(255,240,170,.32)'; ctx.fillRect(px + 12, 0, tam - 24, CHAO - 4); }
