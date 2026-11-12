@@ -279,7 +279,7 @@ Answer only with JSON: [{"id":"...","motivo":"..."}]`;
   return (Array.isArray(r) ? r : []).filter(x => x && candidatos.some(c => c.id === x.id)).slice(0, 3).map(x => ({ id: x.id, motivo: String(x.motivo || '').slice(0, 160) }));
 }
 function promptTecnica(pid, exId, nomeFallback) {
-  const p = perfil(pid), ex = exInfo(exId, nomeFallback), lim = limitesEn(p);
+  const p = perfil(pid) || { nome: 'the person' }, ex = exInfo(exId, nomeFallback), lim = limitesEn(p);
   const sexo = p.sexo === 'f' ? 'woman' : p.sexo === 'm' ? 'man' : 'not stated';
   return `You are an expert personal trainer. Teach ${p.nome} (level: ${nivelEn(p.nivel).toLowerCase()}; sex: ${sexo}; goal: ${objEn(p.objetivo).toLowerCase()}) exactly how to perform "${ex.nomeEn}" so that a beginner could do it perfectly from your text alone. Base every cue on biomechanics and on what experienced coaches use in practice. Be precise and measurable: e.g. "hands about one and a half times shoulder width, so your forearms are vertical when the bar touches your chest", "feet shoulder-width apart, toes turned out 15 to 30 degrees", "bench at about 30 degrees", "seat high enough that the handles line up with the middle of your chest". No introduction. ${idioma()}
 Use exactly these bold headings, translated to that language, each followed by short sentences or a list:

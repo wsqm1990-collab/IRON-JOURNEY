@@ -90,4 +90,9 @@ a.svc.yt span{color:var(--danger)}
 .mapa p{margin:0;line-height:1.5}
 .mapa .dot1,.mapa .dot2{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px;background:var(--danger)}
 .mapa .dot2{opacity:.36}
+.tiras{display:flex;gap:4px;overflow-x:auto;padding-bottom:4px}
+.tiras img{height:72px;border-radius:6px;flex:none}
+#ritmoBtn svg{width:18px;height:18px}
+.fig.mini{width:64px;height:52px;padding:3px;flex:none;border-radius:10px}
+.fig.mini svg{width:100%;height:100%;max-height:none}
 </style>

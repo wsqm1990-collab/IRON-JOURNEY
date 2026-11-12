@@ -53,7 +53,7 @@ function exCard(x, i) {
   const colKg = carga ? 'kg' : ex.carga === 'c' ? t('col_extra_kg') : '';
   const ult = textoUltima(x.sug);
   return `<article class="card ex${done ? ' done' : ''}${x.pulado ? ' skip' : ''}" id="ex-${i}">
-    <div class="ex-top"><div class="nm"><h2 class="h3">${esc(ex.nome)}</h2>${x.trocadoDe ? `<p class="xs muted">${esc(t('replaced_x', { x: exInfo(x.trocadoDe, x.trocadoDe).nome }))}</p>` : ''}</div>${done ? `<span class="pill ok">${t('done_pill')}</span>` : ''}</div>
+    <div class="ex-top">${miniFigura(x.id) ? `<button class="fig mini" data-a="guia" data-id="${esc(x.id)}" data-nome="${esc(x.nome || '')}" aria-label="${esc(t('how_to') + ': ' + ex.nome)}">${miniFigura(x.id)}</button>` : ''}<div class="nm"><h2 class="h3">${esc(ex.nome)}</h2>${x.trocadoDe ? `<p class="xs muted">${esc(t('replaced_x', { x: exInfo(x.trocadoDe, x.trocadoDe).nome }))}</p>` : ''}</div>${done ? `<span class="pill ok">${t('done_pill')}</span>` : ''}</div>
     <div class="target"><span class="pill num">${a.series} × ${faixa(a)} ${un}</span><span class="pill">RIR ${a.rir}</span><span class="pill">${t('rest_x', { x: fmtDesc(a.desc) })}</span></div>
     ${sugHTML(x)}
     ${ult ? `<p class="xs muted num">${esc(t('last_time', { x: ult }))}</p>` : ''}

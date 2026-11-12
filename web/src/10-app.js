@@ -145,6 +145,7 @@ const ACT = {
   tecnica: el => abrirTecnica(+el.dataset.i),
   guia: el => abrirGuia(el.dataset.id, el.dataset.nome || ''),
   figPausa: () => pausarFigura(),
+  ritmo: () => iniciarRitmo(Guia.id),
   guiaDeNovo: () => { const el = $('#guiaIA'); if (el) el.innerHTML = `<p class="msg think">${t('guide_writing')}</p>`; carregarAula(); },
   explicarPlano: () => pedirExplicacao(),
   trocarLive: el => abrirTroca({ scope: 'live', i: +el.dataset.i }),
@@ -213,6 +214,7 @@ document.addEventListener('click', e => {
   if (e.target.id === 'sheet') closeSheet();
 });
 document.addEventListener('input', e => { const el = e.target.closest('[data-in]'); if (el && INP[el.dataset.in]) INP[el.dataset.in](el, e); });
+document.addEventListener('change', e => { const el = e.target.closest('[data-in="formaVideo"]'); if (el) analisarForma(el); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSheet(); });
 
 /* ---------- start ---------- */

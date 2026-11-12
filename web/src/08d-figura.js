@@ -624,6 +624,16 @@ function figuraDe(id) {
   return { ...base, o, camA: cam, pose: k => base.pose(k, o) };
 }
 
+/* a still picture of the exercise for the workout card (cached: cards redraw often) */
+const MINI = {};
+function miniFigura(id) {
+  if (MINI[id] != null) return MINI[id];
+  const f = figuraDe(id);
+  if (!f) return (MINI[id] = '');
+  const cam = camera(f.camA[0], f.camA[1]), k = f.iso ? 0 : 0.7, { prims, J } = cena(f, k);
+  return (MINI[id] = `<svg viewBox="${enquadrar(f, cam).join(' ')}" aria-hidden="true">${svgFormas(achatar(prims, cam, J))}</svg>`);
+}
+
 /* ---------- the player inside the "How to" sheet ---------- */
 Object.assign(STR, {
   fig_exc: ['Return slowly, in control: 2–3 s', 'Volte devagar, controlando: 2–3 s', 'Vuelve despacio, con control: 2–3 s'],
