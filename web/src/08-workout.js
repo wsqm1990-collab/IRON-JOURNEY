@@ -271,7 +271,7 @@ async function salvarTreino() {
   const nota = (($('#fin-nota') || {}).value || '').trim().slice(0, 300);
   const sess = {
     pid: L.pid, planoId: L.planoId, ciclo: L.ciclo, dia: L.dia, diaNome: L.diaNome, foco: L.foco || '', semana: L.semana, fase: L.fase,
-    deload: !!L.deload, nDias: L.nDias, total: L.total, inicio: L.inicio, fim: Date.now(), sensacao: S.finSens || '', nota, rir: L.rir != null ? L.rir : null, ...(L.casa ? { casa: L.casa } : {}),
+    deload: !!L.deload, nDias: L.nDias, total: L.total, inicio: L.inicio, fim: Date.now(), sensacao: S.finSens || '', nota, rir: L.rir != null ? L.rir : null, ...(L.casa ? { casa: L.casa } : {}), ...(L.ajuste ? { ajuste: L.ajuste } : {}),
     exs: L.exs.map(x => ({ id: x.id, nome: x.nome, grupo: x.grupo, alvo: x.alvo, pulado: !!x.pulado, trocadoDe: x.trocadoDe || '', sets: x.sets.filter(z => z.ok).map(z => ({ kg: z.kg ?? null, reps: z.reps, ok: true })) }))
       .filter(x => x.sets.length || x.pulado),
   };
@@ -280,7 +280,7 @@ async function salvarTreino() {
   const sid = L.pid + '-' + L.inicio.toString(36);
   try { await save('sessoes/' + sid, sess); } catch { return; }
   if (!S.sessoes.some(s => s._id === sid)) S.sessoes.unshift({ ...sess, _id: sid });
-  if (L.casa) limparCasa(L.pid);
+  if (L.casa || L.ajuste) limparCasa(L.pid);
   Store.del('aovivo/' + L.pid).catch(() => {});
   S.live = null; S.finNota = ''; stopRest(); stopWakeLock();
   closeSheet(); render(); window.scrollTo(0, 0);

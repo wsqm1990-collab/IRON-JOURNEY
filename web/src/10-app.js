@@ -146,9 +146,17 @@ const ACT = {
     c.equip = CASA_EQUIP.map(e => e[0]).filter(id => set.has(id)); sheetBody(casaHTML());
   },
   casaTempo: el => { if (!S.casa) return; S.casa.tempo = Number(el.dataset.v); sheetBody(casaHTML()); },
+  casaOnde: el => { if (!S.casa) return; S.casa.onde = el.dataset.v === 'casa' ? 'casa' : 'academia'; sheetBody(casaHTML()); },
+  casaModo: el => { if (!S.casa) return; S.casa.modo = el.dataset.v; sheetBody(casaHTML()); },
+  casaFoco: el => {
+    const c = S.casa; if (!c) return;
+    const set = new Set(c.foco), v = el.dataset.v;
+    if (set.has(v)) set.delete(v); else set.add(v);
+    c.foco = FOCOS.map(f => f[0]).filter(id => set.has(id)); sheetBody(casaHTML());
+  },
   casaGerar: () => gerarCasa(),
   casaComecar: () => iniciarTreinoCasa(),
-  casaVoltar: () => { limparCasa(S.me); render(); window.scrollTo(0, 0); toast(t('home_back_done')); },
+  casaVoltar: () => { limparCasa(S.me); render(); window.scrollTo(0, 0); toast(t('dif_back_done')); },
   iniciar: el => iniciarTreino(+el.dataset.dia),
   ok: el => marcarSerie(+el.dataset.i, +el.dataset.j),
   maisSerie: el => { const x = live(el), u = x.sets[x.sets.length - 1]; x.sets.push({ kg: u ? u.kg : null, reps: null, ok: false }); saveLiveSoon(); refreshEx(+el.dataset.i); },
@@ -215,6 +223,7 @@ const ACT = {
 const INP = {
   wz: el => { S.wizard.d[el.dataset.k] = el.value; },
   gymOutros: el => { S.gymDraft.outros = el.value; },
+  casaPedido: el => { if (S.casa) S.casa.pedido = el.value.slice(0, 300); },
   kg: el => {
     const i = +el.dataset.i, j = +el.dataset.j, x = S.live.exs[i], v = parseNum(el.value);
     x.sets[j].kg = v; x.sets[j].manual = true;

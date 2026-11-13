@@ -65,12 +65,19 @@ function ctxPlano(pid) {
   const cardio = cs.length ? '\nPlanned cardio: ' + cs.map(c => `${c.nome} (protocol ${c.protocolo || c.tipo}) ${c.porSemana}x/week, ${cardioAlvo(c, pr.sem).minutosAlvo} min this week, ${c.intensidade}`).join('; ') : '\nPlanned cardio: none.';
   return `Current plan: ${pr.pg.nome}, chapter ${pr.pl.ciclo}, week ${pr.semana} of ${pr.nW} (${en3(FASES[pr.fase] || FASES.accum)}, RIR ${pr.sem.rir})\n${dias}${cardio}`;
 }
+/* a one-day change of the plan's workout (the plan itself stayed the same) */
+function ajusteEn(s) {
+  const a = s.ajuste || (s.casa ? { onde: 'casa', modo: 'mesmos' } : null);
+  if (!a) return '';
+  const onde = a.onde === 'casa' ? 'at home (' + (((s.casa && s.casa.equip) || []).join(', ') || 'body weight only') + ')' : 'at the gym';
+  return ` [one-day change, plan unchanged: ${onde}${a.modo === 'leve' ? ', lighter day' : a.modo === 'foco' ? ', other focus: ' + (a.foco || []).join(', ') : ''}]`;
+}
 function linhaSessao(s) {
   const exs = (s.exs || []).filter(x => (x.sets || []).some(z => z.ok)).map(x => {
     const ex = exInfo(x.id, x.nome);
     return ex.nomeEn + ' ' + x.sets.filter(z => z.ok).map(z => (usaCarga(ex) && z.kg ? z.kg + 'kg×' : '') + z.reps).join(', ');
   }).join('; ');
-  return `${dayKey(s.inicio)} ${fmtHoraEn(s.inicio)}${s.fim ? '-' + fmtHoraEn(s.fim) : ''} ${s.diaNome}${s.casa ? ' [trained at home, one-day adaptation: ' + ((s.casa.equip || []).join(', ') || 'body weight only') + ']' : ''}${s.sensacao ? ' (felt: ' + en3((SENSACOES.find(x => x[0] === s.sensacao) || [0, s.sensacao]).slice(1)) + ')' : ''}${s.nota ? ' - note: ' + s.nota : ''}: ${exs}`;
+  return `${dayKey(s.inicio)} ${fmtHoraEn(s.inicio)}${s.fim ? '-' + fmtHoraEn(s.fim) : ''} ${s.diaNome}${ajusteEn(s)}${s.sensacao ? ' (felt: ' + en3((SENSACOES.find(x => x[0] === s.sensacao) || [0, s.sensacao]).slice(1)) + ')' : ''}${s.nota ? ' - note: ' + s.nota : ''}: ${exs}`;
 }
 const fmtHoraEn = ts => { const d = new Date(ts); return pad2(d.getHours()) + ':' + pad2(d.getMinutes()); };
 const linhaCardio = c => `${dayKey(c.inicio)} ${fmtHoraEn(c.inicio)} ${exInfo(c.modo, c.nome).nomeEn}${c.protocolo ? ' (' + c.protocolo + ')' : ''} ${c.minutos} min${c.km ? ', ' + c.km + ' km' : ''}${c.esforco ? ', effort ' + c.esforco + '/10' : ''}${c.fc ? ', avg HR ' + c.fc : ''}${c.nota ? ' - note: ' + c.nota : ''}`;
