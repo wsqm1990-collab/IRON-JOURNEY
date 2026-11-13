@@ -11,7 +11,10 @@ const CARGA2 = ['leg_press', 'hack', 'pendulo', 'pant_leg'];
 const CARGA1 = ['pant_sentado', 'remada_cavalinho'];
 const HALTER1 = ['goblet', 'agach_sumo', 'serrote', 'stiff_unilateral', 'triceps_frances'];
 const BARRA_W = ['triceps_testa', 'rosca_scott'];
+const MOCHILA = ['remada_mochila', 'rosca_mochila', 'agach_mochila'], KETTLE = ['kb_swing'];
 function tipoCarga(ex) {
+  if (MOCHILA.includes(ex.id)) return 'mochila';
+  if (KETTLE.includes(ex.id)) return 'kettle';
   if (CARGA2.includes(ex.id)) return 'carga2';
   if (CARGA1.includes(ex.id)) return 'carga1';
   if (HALTER1.includes(ex.id)) return 'halter1';
@@ -76,6 +79,8 @@ function arredondar(ex, kg, dir = 0) {
     return L.reduce((m, k) => (Math.abs(k - kg) < Math.abs(m - kg) ? k : m), L[0]);
   }
   if (tipo === 'maquina' || tipo === 'polia') { const passo = tipo === 'polia' ? P.polia : P.maquina; return Math.max(passo, arredPasso(kg, passo, dir)); }
+  if (tipo === 'mochila') return Math.max(1, arredPasso(kg, 1, dir));
+  if (tipo === 'kettle') return Math.max(4, arredPasso(kg, 2, dir));
   return Math.round(kg * 2) / 2;
 }
 /* "20 + 10 + 2.5 each side" and friends */
@@ -93,6 +98,8 @@ function comoMontar(ex, kg) {
   if (tipo === 'halter1') return t('mt_db_one', { k: f(kg) });
   if (tipo === 'maquina') return t('mt_pin', { k: f(kg) });
   if (tipo === 'polia') return t('mt_cable', { k: f(kg) });
+  if (tipo === 'mochila') return t('mt_backpack', { k: f(kg) });
+  if (tipo === 'kettle') return t('mt_kb', { k: f(kg) });
   return '';
 }
 
@@ -137,7 +144,7 @@ function e1Inicial(ex, p) {
 }
 
 /* the plan for one exercise today: weight and exact reps for every set, test-set rules */
-function planoCarga(pid, item, alv, sug) {
+function planoCarga(pid, item, alv, sug, casa = false) {
   const ex = exInfo(item.id, item.nome), tipo = tipoCarga(ex), p = perfil(pid) || {};
   const rir = alv.deload ? Math.max(alv.rir, 3) : alv.rir;
   const meio = Math.round((alv.rmin + alv.rmax) / 2);
@@ -149,7 +156,7 @@ function planoCarga(pid, item, alv, sug) {
     return { tipo: null, rir, sets: Array.from({ length: alv.series }, (_, j) => ({ kg: null, alvo: cansaco(alvoR, j) })), teste: true, primeira: !ult, e1: null };
   }
   let e1 = null, kg = null, primeira = false;
-  const u = ultimaVez(pid, item.id);
+  const u = ultimaVez(pid, item.id, casa);
   if (u) {
     const feitos = u.x.sets.filter(z => z.ok && z.reps > 0 && z.kg > 0);
     if (feitos.length) e1 = Math.max(...feitos.map(z => e1rmRIR(z.kg, z.reps, z.rir != null ? z.rir : (u.s.rir != null ? u.s.rir : rir))));
@@ -183,6 +190,19 @@ function recalibrar(x, j) {
   if (!(z.kg > 0 && z.reps > 0)) return null;
   const e1 = e1rmRIR(z.kg, z.reps, pc.rir);
   pc.e1 = e1;
+  if (pc.fixo) {
+    /* at home the weight is what you have: keep it and set the reps that give the planned effort */
+    let k = 0;
+    for (let i = j + 1; i < x.sets.length; i++) {
+      const s = x.sets[i];
+      if (s.ok || s.manual) continue;
+      k++;
+      s.kg = z.kg;
+      s.alvo = clamp(repsPara(e1, z.kg, pc.rir) - Math.floor(k / 2), a.rmin, Math.max(a.rmax, 30));
+    }
+    x.calib = { k: 'cal_home', v: { n: j + 1, r: z.reps, kg: fmtKg(z.kg) } };
+    return x.calib;
+  }
   let novo = z.kg, motivo = 'cal_keep';
   const prevista = repsPara(e1, z.kg, pc.rir) - 1;
   if (z.reps > a.rmax || prevista > a.rmax) { novo = arredondar(ex, kgPara(e1, Math.max(a.rmin, a.rmax - 1), pc.rir), -1); motivo = novo > z.kg ? 'cal_up' : 'cal_keep'; }
@@ -220,6 +240,9 @@ Object.assign(STR, {
   mt_each_side: ['each side: {p}', 'de cada lado: {p}', 'en cada lado: {p}'], mt_plates: ['plates: {p}', 'anilhas: {p}', 'discos: {p}'],
   mt_each_side_l: ['each side:', 'de cada lado:', 'en cada lado:'], mt_plates_l: ['plates:', 'anilhas:', 'discos:'],
   after_test: ['adjusts after the test', 'ajusta depois do teste', 'se ajusta tras la prueba'],
+  mt_backpack: ['backpack with {k} kg (a 1 L water bottle = 1 kg)', 'mochila com {k} kg (garrafa de 1 L de água = 1 kg)', 'mochila con {k} kg (una botella de 1 L de agua = 1 kg)'],
+  mt_kb: ['{k} kg kettlebell', 'kettlebell de {k} kg', 'kettlebell de {k} kg'],
+  cal_home: ['Set {n}: {kg} kg × {r}. Same weight for the next sets; the reps are set to give the planned effort.', 'Série {n}: {kg} kg × {r}. Mesmo peso nas próximas séries; as repetições foram ajustadas para dar o esforço planejado.', 'Serie {n}: {kg} kg × {r}. Mismo peso en las próximas series; las repeticiones se ajustan para dar el esfuerzo planificado.'],
   mt_db_each: ['{k} kg dumbbell in each hand', 'halter de {k} kg em cada mão', 'mancuerna de {k} kg en cada mano'], mt_db_one: ['one {k} kg dumbbell', 'um halter de {k} kg', 'una mancuerna de {k} kg'],
   mt_ankle: ['{k} kg ankle weight', 'caneleira de {k} kg', 'tobillera de {k} kg'], mt_pin: ['pin at {k} kg', 'pino em {k} kg', 'pasador en {k} kg'], mt_cable: ['cable at {k} kg', 'polia em {k} kg', 'polea en {k} kg'],
   test_first: ['First time on this one: start light on purpose. Set 1 is the test: do as many reps as you can while leaving {rir} in the tank (stop at {cap}). The app then calculates the other sets.', 'Primeira vez neste exercício: comece leve de propósito. A série 1 é o teste: faça o máximo de repetições deixando {rir} sobrando (pare em {cap}). Depois o app calcula as outras séries.', 'Primera vez en este ejercicio: empieza ligero a propósito. La serie 1 es la prueba: haz todas las repeticiones que puedas dejando {rir} en reserva (para en {cap}). Luego la app calcula las demás series.'],

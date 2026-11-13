@@ -15,9 +15,10 @@ function alvo(item, sem) {
   const series = ex.grupo === 'cardio' ? item.series : sem.deload ? Math.max(1, Math.ceil(item.series / 2)) : clamp(item.series + (sem.seriesExtra || 0), 1, 10);
   return { series, rmin: item.reps[0], rmax: item.reps[1], rir: sem.rir, desc: item.descanso, deload: !!sem.deload };
 }
-function ultimaVez(pid, exId) {
+function ultimaVez(pid, exId, casa = false) {
   let reserva = null;
   for (const s of sessoesDe(pid)) {
+    if (!!s.casa !== !!casa) continue;
     const x = (s.exs || []).find(e => e.id === exId && (e.sets || []).some(z => z.ok && z.reps > 0));
     if (!x) continue;
     if (!s.deload) return { s, x };
@@ -39,9 +40,9 @@ Object.assign(STR, {
 });
 /* double progression: hit the top of the range on every set -> add the smallest jump.
    The advice is stored as a key + numbers so it shows in whatever language is active. */
-function sugestao(pid, item, alv) {
+function sugestao(pid, item, alv, casa = false) {
   const ex = exInfo(item.id, item.nome);
-  const u = ultimaVez(pid, item.id);
+  const u = ultimaVez(pid, item.id, casa);
   if (!u) return usaCarga(ex) ? { kg: null, k: 'sug_first_load', v: { n: Math.max(alv.rir, 2) }, ult: [] } : { kg: null, k: 'sug_first', v: {}, ult: [] };
   const ok = u.x.sets.filter(z => z.ok && z.reps > 0);
   const ult = ok.map(z => [usaCarga(ex) ? z.kg || 0 : 0, z.reps]);
@@ -66,14 +67,14 @@ function textoSug(sug) {
   return t(sug.k, v);
 }
 const textoUltima = sug => ((sug && sug.ult) || []).map(([kg, r]) => (kg ? fmtKg(kg) + ' kg × ' : '') + r).join(' · ');
-function itemDoTreino(pid, item, sem) {
+function itemDoTreino(pid, item, sem, casa = false) {
   const ex = exInfo(item.id, item.nome);
   const alv = alvo(item, sem);
-  const sug = sugestao(pid, item, alv);
-  const pc = planoCarga(pid, item, alv, sug);
+  const sug = sugestao(pid, item, alv, casa);
+  const pc = planoCarga(pid, item, alv, sug, casa);
   return {
     id: item.id, nome: ex.nome, grupo: ex.grupo, alvo: alv, sug, dica: item.dica || '',
-    carga: { tipo: pc.tipo, rir: pc.rir, teste: pc.teste, primeira: !!pc.primeira, e1: pc.e1 },
+    carga: { tipo: pc.tipo, rir: pc.rir, teste: pc.teste, primeira: !!pc.primeira, e1: pc.e1, ...(casa && pc.tipo ? { fixo: true } : {}) },
     sets: pc.sets.map(s => ({ kg: s.kg, alvo: s.alvo, reps: null, ok: false })),
   };
 }

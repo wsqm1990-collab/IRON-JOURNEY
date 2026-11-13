@@ -39,6 +39,19 @@ const MUSC_EX = {
   prancha: [['abs'], ['obliquos', 'delt_f']], prancha_lateral: [['obliquos'], ['abs', 'gluteo_med']], abd_polia: [['abs'], ['obliquos']], elev_pernas: [['abs'], ['obliquos', 'antebraco']],
   abd_supra: [['abs'], []], elev_pernas_solo: [['abs'], []], pallof: [['obliquos', 'abs'], []],
 };
+/* home versions */
+Object.assign(MUSC_EX, {
+  flexao_inclinada: [['peito'], ['delt_f', 'triceps']], flexao_declinada: [['peito', 'delt_f'], ['triceps', 'abs']], flexao_diamante: [['triceps', 'peito'], ['delt_f']],
+  flexao_pike: [['delt_f', 'delt_l'], ['triceps', 'trapezio']], supino_chao: [['peito'], ['triceps', 'delt_f']], mergulho_cadeira: [['triceps'], ['peito', 'delt_f']],
+  remada_invertida: [['costas_meio', 'dorsal'], ['biceps', 'delt_r', 'abs']], remada_mochila: REMA, remada_halteres: REMA, remada_elastico: REMA, puxada_elastico: PUXA,
+  barra_supinada: [['dorsal', 'biceps'], ['costas_meio', 'antebraco']], ytw: [['delt_r', 'trapezio'], ['costas_meio', 'delt_l']], superman: [['lombar'], ['gluteo', 'posteriores', 'delt_r']],
+  rosca_mochila: ROSCA, rosca_elastico: ROSCA, rosca_toalha: ROSCA, face_pull_elastico: [['delt_r'], ['costas_meio', 'trapezio']], elev_lateral_elastico: [['delt_l'], ['trapezio']],
+  agach_livre: AGACHA, agach_salto: [['quadriceps', 'gluteo'], ['panturrilha', 'posteriores']], agach_mochila: AGACHA, afundo_reverso: UNI,
+  afundo_lateral: [['adutores', 'quadriceps', 'gluteo'], ['gluteo_med']], bulgaro_cadeira: UNI, agach_parede: [['quadriceps'], ['gluteo']], sissy: [['quadriceps'], ['abs']],
+  ponte_unilateral: [['gluteo'], ['posteriores', 'gluteo_med']], stiff_corpo: [['posteriores', 'gluteo'], ['gluteo_med', 'lombar']], flexora_toalha: [['posteriores'], ['gluteo', 'panturrilha']],
+  kb_swing: [['gluteo', 'posteriores'], ['lombar', 'quadriceps', 'abs', 'antebraco']], hollow: [['abs'], ['obliquos']], escalador: [['abs'], ['delt_f', 'quadriceps', 'obliquos']],
+  abd_bicicleta: [['abs', 'obliquos'], []], perdigueiro: [['lombar', 'abs'], ['gluteo', 'delt_f']],
+});
 const MUSC_GRUPO = { peito: ['peito'], costas: ['dorsal', 'costas_meio'], ombros: ['delt_f', 'delt_l'], biceps: ['biceps'], triceps: ['triceps'], quadriceps: ['quadriceps'], posteriores: ['posteriores'], gluteos: ['gluteo'], adutores: ['adutores'], panturrilhas: ['panturrilha'], abdomen: ['abs'] };
 function musculosDe(id) {
   if (MUSC_EX[id]) return MUSC_EX[id];

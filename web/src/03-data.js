@@ -36,6 +36,7 @@ const I = {
   estrela: SV('<path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/>'),
   som: SV('<path d="M4 9.5h4l5-4v13l-5-4H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/>'),
   globo: SV('<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.7 5.6 3.7 9s-1.2 6.4-3.7 9c-2.5-2.6-3.7-5.6-3.7-9S9.5 5.6 12 3z"/>'),
+  casa: SV('<path d="M3.5 11.5L12 4.5l8.5 7"/><path d="M6 9.8V19.5h12V9.8"/><path d="M10 19.5v-5h4v5"/>'),
 };
 
 /* ---------- vocabulary (ids are stored; labels follow the chosen language) ---------- */
@@ -180,7 +181,48 @@ const EX_RAW = [
   ['corrida_esteira', ['Treadmill run', 'Corrida na esteira', 'Carrera en cinta'], 'cardio', 'esteira', 'I', 'n'],
   ['caminhada', ['Outdoor walk', 'Caminhada ao ar livre', 'Caminata al aire libre'], 'cardio', '', 'I', 'n'],
   ['corrida', ['Outdoor run', 'Corrida ao ar livre', 'Carrera al aire libre'], 'cardio', '', 'I', 'n'],
+  /* home versions (body weight, a chair, a table, a backpack, bands): used only when a workout is adapted to train at home */
+  ['flexao_inclinada', ['Incline push-up (hands on a chair or table)', 'Flexão inclinada (mãos na cadeira ou mesa)', 'Flexiones inclinadas (manos en una silla o mesa)'], 'peito', 'cadeira|mesa', 'C', 'c'],
+  ['flexao_declinada', ['Decline push-up (feet on a chair)', 'Flexão declinada (pés na cadeira)', 'Flexiones declinadas (pies en una silla)'], 'peito', 'cadeira', 'C', 'c'],
+  ['flexao_diamante', ['Diamond push-up', 'Flexão diamante', 'Flexiones diamante'], 'triceps', '', 'C', 'c'],
+  ['flexao_pike', ['Pike push-up', 'Flexão pike (ombros)', 'Flexiones pike (hombros)'], 'ombros', '', 'C', 'c'],
+  ['supino_chao', ['Dumbbell floor press', 'Supino no chão com halteres', 'Press en el suelo con mancuernas'], 'peito', 'halteres', 'C', 'h'],
+  ['mergulho_cadeira', ['Chair dips', 'Mergulho na cadeira', 'Fondos en una silla'], 'triceps', 'cadeira', 'C', 'c'],
+  ['remada_invertida', ['Inverted row under a table', 'Remada invertida embaixo da mesa', 'Remo invertido bajo una mesa'], 'costas', 'mesa', 'C', 'c'],
+  ['remada_mochila', ['Bent-over backpack row', 'Remada curvada com mochila', 'Remo inclinado con mochila'], 'costas', 'mochila', 'C', 'h'],
+  ['remada_halteres', ['Bent-over dumbbell row', 'Remada curvada com halteres', 'Remo inclinado con mancuernas'], 'costas', 'halteres', 'C', 'h'],
+  ['remada_elastico', ['Band row', 'Remada com elástico', 'Remo con banda elástica'], 'costas', 'elastico', 'C', 'c'],
+  ['puxada_elastico', ['Band lat pulldown', 'Puxada com elástico', 'Jalón con banda elástica'], 'costas', 'elastico', 'C', 'c'],
+  ['barra_supinada', ['Chin-up (palms toward you)', 'Barra fixa supinada', 'Dominadas supinas'], 'costas', 'barra_fixa', 'C', 'c'],
+  ['ytw', ['Prone Y-T-W raise', 'Elevação Y-T-W deitado', 'Elevaciones Y-T-W tumbado'], 'ombros', '', 'I', 'c'],
+  ['superman', ['Superman back extension', 'Super-homem (extensão lombar no chão)', 'Superman (extensión lumbar en el suelo)'], 'posteriores', '', 'I', 'c'],
+  ['rosca_mochila', ['Backpack curl', 'Rosca com mochila', 'Curl con mochila'], 'biceps', 'mochila', 'I', 'h'],
+  ['rosca_elastico', ['Band curl', 'Rosca com elástico', 'Curl con banda elástica'], 'biceps', 'elastico', 'I', 'c'],
+  ['rosca_toalha', ['Towel curl against your own foot', 'Rosca com toalha (contra o próprio pé)', 'Curl con toalla contra tu propio pie'], 'biceps', '', 'I', 'c'],
+  ['face_pull_elastico', ['Band face pull', 'Face pull com elástico', 'Face pull con banda elástica'], 'ombros', 'elastico', 'I', 'c'],
+  ['elev_lateral_elastico', ['Band lateral raise', 'Elevação lateral com elástico', 'Elevación lateral con banda'], 'ombros', 'elastico', 'I', 'c'],
+  ['agach_livre', ['Bodyweight squat', 'Agachamento livre (sem peso)', 'Sentadilla sin peso'], 'quadriceps', '', 'C', 'c'],
+  ['agach_salto', ['Jump squat', 'Agachamento com salto', 'Sentadilla con salto'], 'quadriceps', '', 'C', 'c'],
+  ['agach_mochila', ['Backpack squat', 'Agachamento com mochila', 'Sentadilla con mochila'], 'quadriceps', 'mochila', 'C', 'h'],
+  ['afundo_reverso', ['Reverse lunge', 'Afundo para trás', 'Zancada hacia atrás'], 'quadriceps', '', 'C', 'c'],
+  ['afundo_lateral', ['Lateral lunge', 'Afundo lateral', 'Zancada lateral'], 'adutores', '', 'C', 'c'],
+  ['bulgaro_cadeira', ['Bulgarian split squat (rear foot on a chair)', 'Búlgaro com o pé de trás na cadeira', 'Sentadilla búlgara (pie trasero en una silla)'], 'quadriceps', 'cadeira', 'C', 'c'],
+  ['agach_parede', ['Wall sit', 'Cadeirinha na parede', 'Sentadilla isométrica en la pared'], 'quadriceps', '', 'I', 's'],
+  ['sissy', ['Assisted sissy squat', 'Sissy squat com apoio', 'Sentadilla sissy asistida'], 'quadriceps', '', 'I', 'c'],
+  ['ponte_unilateral', ['Single-leg glute bridge', 'Ponte de glúteo com uma perna', 'Puente de glúteo a una pierna'], 'gluteos', '', 'I', 'c'],
+  ['stiff_corpo', ['Single-leg Romanian deadlift (no weight)', 'Stiff unilateral sem peso', 'Peso muerto rumano a una pierna sin peso'], 'posteriores', '', 'C', 'c'],
+  ['flexora_toalha', ['Sliding leg curl on a towel', 'Flexora deslizando na toalha', 'Curl femoral deslizando sobre una toalla'], 'posteriores', '', 'I', 'c'],
+  ['kb_swing', ['Kettlebell swing', 'Swing com kettlebell', 'Swing con kettlebell'], 'gluteos', 'kettlebell', 'C', 'h'],
+  ['hollow', ['Hollow body hold', 'Canoa (hollow hold)', 'Hollow hold'], 'abdomen', '', 'I', 's'],
+  ['escalador', ['Mountain climbers', 'Escalador', 'Escaladores'], 'abdomen', '', 'I', 's'],
+  ['abd_bicicleta', ['Bicycle crunch', 'Abdominal bicicleta', 'Crunch bicicleta'], 'abdomen', '', 'I', 'c'],
+  ['perdigueiro', ['Bird dog', 'Perdigueiro', 'Bird dog'], 'abdomen', '', 'I', 'c'],
 ];
+/* the home versions above stay out of gym plans and gym swaps */
+const CASA_IDS = new Set(['flexao_inclinada', 'flexao_declinada', 'flexao_diamante', 'flexao_pike', 'supino_chao', 'mergulho_cadeira', 'remada_invertida', 'remada_mochila', 'remada_halteres',
+  'remada_elastico', 'puxada_elastico', 'barra_supinada', 'ytw', 'superman', 'rosca_mochila', 'rosca_elastico', 'rosca_toalha', 'face_pull_elastico', 'elev_lateral_elastico', 'agach_livre',
+  'agach_salto', 'agach_mochila', 'afundo_reverso', 'afundo_lateral', 'bulgaro_cadeira', 'agach_parede', 'sissy', 'ponte_unilateral', 'stiff_corpo', 'flexora_toalha', 'kb_swing', 'hollow',
+  'escalador', 'abd_bicicleta', 'perdigueiro']);
 const EX = {};
 for (const [id, nomes, grupo, req, tipo, carga, step] of EX_RAW) {
   EX[id] = { id, nomes, grupo, tipo, carga, step: step || 0, req: req.split('|').map(a => (a ? a.split('+') : [])), get nome() { return L3(this.nomes); }, get nomeEn() { return this.nomes[0]; } };

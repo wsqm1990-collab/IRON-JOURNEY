@@ -93,7 +93,7 @@ function regraHTML(x, okN) {
   if (okN) return '';
   const z = x.sets[0] || {}, cap = a.rmax + 6, r = z.alvo != null ? z.alvo : a.rmax, u = unidadeLonga(ex);
   if (!c.tipo) return `<div class="rule">${esc(c.primeira ? t('test_first_bw', { rir, u }) : t('test_bw', { r, rir, u }))}</div>`;
-  return `<div class="rule">${esc(c.primeira ? t('test_first', { rir, cap }) : t('test_day', { r, rir, cap }))}</div>`;
+  return `<div class="rule">${esc(c.primeira ? t(c.fixo ? 'test_first_home' : 'test_first', { rir, cap }) : t('test_day', { r, rir, cap }))}</div>`;
 }
 /* under each set: the exact goal and how to load it */
 function infoSerie(ex, z, x, j) {
@@ -183,9 +183,11 @@ document.addEventListener('visibilitychange', () => {
 
 /* ---------- swaps ---------- */
 function candidatosTroca(exId, excluir) {
-  const ex = exInfo(exId), set = equipSet(S.gym), grupos = [ex.grupo, ...(RELACIONADOS[ex.grupo] || [])];
+  const ex = exInfo(exId), grupos = [ex.grupo, ...(RELACIONADOS[ex.grupo] || [])];
+  /* at home: only what can be done with what the person has there */
+  const casa = S.live && S.live.casa, set = casa ? null : equipSet(S.gym), deCasa = casa ? new Set(opcoesCasa(casa.equip)) : null;
   return Object.values(EX)
-    .filter(c => c.id !== exId && !excluir.has(c.id) && grupos.includes(c.grupo) && disponivel(c, set))
+    .filter(c => c.id !== exId && !excluir.has(c.id) && grupos.includes(c.grupo) && (casa ? deCasa.has(c.id) : !CASA_IDS.has(c.id) && disponivel(c, set)))
     .sort((a, b) => (grupos.indexOf(a.grupo) - grupos.indexOf(b.grupo)) || ((a.tipo === ex.tipo ? 0 : 1) - (b.tipo === ex.tipo ? 0 : 1)))
     .slice(0, 14);
 }
@@ -206,7 +208,7 @@ function swapHTML() {
   return `<div class="stack">
     <p class="small muted">${t('why_swap')}</p>
     <div class="chips">${MOTIVOS.map(m => `<button class="chip" data-a="swapMotivo" data-v="${m[0]}" aria-pressed="${w.motivo === m[0]}">${esc(L3(m.slice(1)))}</button>`).join('')}</div>
-    ${w.ctx.scope === 'live' ? `<div class="seg"><button data-a="swapEscopo" data-v="hoje" aria-pressed="${w.escopo === 'hoje'}">${t('today_only')}</button><button data-a="swapEscopo" data-v="plano" aria-pressed="${w.escopo === 'plano'}">${t('in_plan_too')}</button></div>` : ''}
+    ${w.ctx.scope === 'live' && !(S.live && S.live.casa) ? `<div class="seg"><button data-a="swapEscopo" data-v="hoje" aria-pressed="${w.escopo === 'hoje'}">${t('today_only')}</button><button data-a="swapEscopo" data-v="plano" aria-pressed="${w.escopo === 'plano'}">${t('in_plan_too')}</button></div>` : ''}
     ${AI.on && w.cands.length ? `<button class="btn block" data-a="swapIA"${w.ia === 'carregando' ? ' disabled' : ''}>${t('ask_best_swap')}</button>${ia}` : ''}
     <p class="eyebrow">${t('options_gym')}</p>
     ${w.cands.length ? `<div class="stack">${w.cands.map(c => opc(c)).join('')}</div>` : `<p class="small muted">${t('no_alt')}</p>`}
@@ -230,15 +232,15 @@ async function aplicarTroca(novoId) {
   if (w.ctx.scope === 'live') {
     const L = S.live, i = w.ctx.i, x = L.exs[i];
     const restantes = x.sets.filter(z => !z.ok).length || x.sets.length;
-    const item = { id: novoId, reps: [x.alvo.rmin, x.alvo.rmax] }, alv = { ...x.alvo, series: restantes };
-    const sug = sugestao(S.me, item, alv), pc = planoCarga(S.me, item, alv, sug);
+    const item = { id: novoId, reps: [x.alvo.rmin, x.alvo.rmax] }, alv = { ...x.alvo, series: restantes }, casa = !!L.casa;
+    const sug = sugestao(S.me, item, alv, casa), pc = planoCarga(S.me, item, alv, sug, casa);
     const novoX = { id: novoId, nome: novo.nome, grupo: novo.grupo, alvo: x.alvo, sug, dica: '', trocadoDe: x.id,
-      carga: { tipo: pc.tipo, rir: pc.rir, teste: pc.teste, primeira: !!pc.primeira, e1: pc.e1 },
+      carga: { tipo: pc.tipo, rir: pc.rir, teste: pc.teste, primeira: !!pc.primeira, e1: pc.e1, ...(casa && pc.tipo ? { fixo: true } : {}) },
       sets: pc.sets.map(z => ({ kg: z.kg, alvo: z.alvo, reps: null, ok: false })) };
-    if (x.aquec && !x.sets.some(z => z.ok)) { const aq = aquecimento(exInfo(novoId), novoX.sets[0] && novoX.sets[0].kg); if (aq.length) novoX.aquec = aq; }
+    if (x.aquec && !casa && !x.sets.some(z => z.ok)) { const aq = aquecimento(exInfo(novoId), novoX.sets[0] && novoX.sets[0].kg); if (aq.length) novoX.aquec = aq; }
     if (x.sets.some(z => z.ok)) { x.sets = x.sets.filter(z => z.ok); L.exs.splice(i + 1, 0, novoX); } else L.exs[i] = novoX;
     saveLiveNow();
-    if (w.escopo === 'plano') await trocarNoPlano(L.dia, x.id);
+    if (w.escopo === 'plano' && !casa) await trocarNoPlano(L.dia, x.id);
     closeSheet(); render();
     toast(w.escopo === 'plano' ? t('swapped_both') : t('swapped_today'));
   } else {
@@ -269,7 +271,7 @@ async function salvarTreino() {
   const nota = (($('#fin-nota') || {}).value || '').trim().slice(0, 300);
   const sess = {
     pid: L.pid, planoId: L.planoId, ciclo: L.ciclo, dia: L.dia, diaNome: L.diaNome, foco: L.foco || '', semana: L.semana, fase: L.fase,
-    deload: !!L.deload, nDias: L.nDias, total: L.total, inicio: L.inicio, fim: Date.now(), sensacao: S.finSens || '', nota, rir: L.rir != null ? L.rir : null,
+    deload: !!L.deload, nDias: L.nDias, total: L.total, inicio: L.inicio, fim: Date.now(), sensacao: S.finSens || '', nota, rir: L.rir != null ? L.rir : null, ...(L.casa ? { casa: L.casa } : {}),
     exs: L.exs.map(x => ({ id: x.id, nome: x.nome, grupo: x.grupo, alvo: x.alvo, pulado: !!x.pulado, trocadoDe: x.trocadoDe || '', sets: x.sets.filter(z => z.ok).map(z => ({ kg: z.kg ?? null, reps: z.reps, ok: true })) }))
       .filter(x => x.sets.length || x.pulado),
   };
@@ -278,6 +280,7 @@ async function salvarTreino() {
   const sid = L.pid + '-' + L.inicio.toString(36);
   try { await save('sessoes/' + sid, sess); } catch { return; }
   if (!S.sessoes.some(s => s._id === sid)) S.sessoes.unshift({ ...sess, _id: sid });
+  if (L.casa) limparCasa(L.pid);
   Store.del('aovivo/' + L.pid).catch(() => {});
   S.live = null; S.finNota = ''; stopRest(); stopWakeLock();
   closeSheet(); render(); window.scrollTo(0, 0);

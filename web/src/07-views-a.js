@@ -331,6 +331,9 @@ function viewHoje() {
     ${aliadosHoje()}
   </section>`;
   }
+  /* training at home today: the adapted version replaces today's workout on this screen (for today only) */
+  const casa = casaHoje(pid);
+  if (casa) return hojeCasaHTML(pid, pr, casa, topo, `${cardioCard(pid)}${xpMini(pid)}${aliadosHoje()}`);
   return `<section class="screen">
     <div class="hero">
       ${topo}
@@ -340,6 +343,7 @@ function viewHoje() {
       ${pr.sem.nota ? `<p class="tip">${esc(pr.sem.nota)}</p>` : ''}
       <p class="small muted">${t('effort_week', { n: pr.sem.rir, d: pr.sem.deload ? t('effort_half') : '' })}</p>
       <button class="btn big block" data-a="iniciar" data-dia="${pr.proxDia}">${t('start_workout')}</button>
+      <button class="btn ghost block" data-a="casaAbrir">${I.casa}<span>${t('home_btn')}</span></button>
       <button class="btn quiet small" data-a="escolherDia">${t('other_workout')}</button>
     </div>
     <div class="card pad"><div class="row between"><h2 class="h3">${t('coming_up')}</h2><span class="xs muted">${t('sugg_load')}</span></div><div class="exlist">${lista}</div></div>

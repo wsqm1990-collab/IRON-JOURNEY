@@ -70,7 +70,7 @@ function linhaSessao(s) {
     const ex = exInfo(x.id, x.nome);
     return ex.nomeEn + ' ' + x.sets.filter(z => z.ok).map(z => (usaCarga(ex) && z.kg ? z.kg + 'kg×' : '') + z.reps).join(', ');
   }).join('; ');
-  return `${dayKey(s.inicio)} ${fmtHoraEn(s.inicio)}${s.fim ? '-' + fmtHoraEn(s.fim) : ''} ${s.diaNome}${s.sensacao ? ' (felt: ' + en3((SENSACOES.find(x => x[0] === s.sensacao) || [0, s.sensacao]).slice(1)) + ')' : ''}${s.nota ? ' - note: ' + s.nota : ''}: ${exs}`;
+  return `${dayKey(s.inicio)} ${fmtHoraEn(s.inicio)}${s.fim ? '-' + fmtHoraEn(s.fim) : ''} ${s.diaNome}${s.casa ? ' [trained at home, one-day adaptation: ' + ((s.casa.equip || []).join(', ') || 'body weight only') + ']' : ''}${s.sensacao ? ' (felt: ' + en3((SENSACOES.find(x => x[0] === s.sensacao) || [0, s.sensacao]).slice(1)) + ')' : ''}${s.nota ? ' - note: ' + s.nota : ''}: ${exs}`;
 }
 const fmtHoraEn = ts => { const d = new Date(ts); return pad2(d.getHours()) + ':' + pad2(d.getMinutes()); };
 const linhaCardio = c => `${dayKey(c.inicio)} ${fmtHoraEn(c.inicio)} ${exInfo(c.modo, c.nome).nomeEn}${c.protocolo ? ' (' + c.protocolo + ')' : ''} ${c.minutos} min${c.km ? ', ' + c.km + ' km' : ''}${c.esforco ? ', effort ' + c.esforco + '/10' : ''}${c.fc ? ', avg HR ' + c.fc : ''}${c.nota ? ' - note: ' + c.nota : ''}`;
@@ -120,7 +120,7 @@ Write for someone who has never trained. Define every technical word the first t
 /* ---------- program design ---------- */
 function promptPrograma(pid, extra) {
   const p = perfil(pid), set = equipSet(S.gym);
-  const ok = Object.values(EX).filter(ex => disponivel(ex, set));
+  const ok = Object.values(EX).filter(ex => !CASA_IDS.has(ex.id) && disponivel(ex, set));
   const forca = ok.filter(ex => ex.grupo !== 'cardio').map(ex => `${ex.id} | ${ex.nomeEn} | ${en3(GRUPOS[ex.grupo])}`).join('\n');
   const cardio = ok.filter(ex => ex.grupo === 'cardio').map(ex => `${ex.id} | ${ex.nomeEn}`).join('\n');
   const protos = PROTOCOLOS.map(pr => `${pr.id} | ${pr.nome[0]} | ${pr.desc[0]} | intensity: ${pr.nivel}`).join('\n');

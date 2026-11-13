@@ -175,19 +175,23 @@ const ombroDe = (P, T) => vAdd(vSub(nkDe(P, T), vMul(vNorm(T), 4)), [0, 0, C.OMB
 const emPe = (z = 13, x = 0, az = 14) => ({ a: [x, 3, z], polo: [1, 0.15, 0.25], pe: D(az, -6) });
 const giro90 = v => [-v[1], v[0], 0]; /* rotate a direction in the side plane by +90° */
 const meio = J => vLerp(J.hR, J.hL, 0.5);
+/* home versions: hands on the hips, a loaded backpack, bands from under the feet */
+const naCintura = P => ({ m: vAdd(P, [3, 4, 19]), polo: [-1, 0.2, 1] });
+const mochila = (c, frente, cima) => caixaO(c, vMul(vNorm(frente), 6), vMul(vNorm(cima), 13), [0, 0, 12], 'pd');
+const elasticos = J => ['R', 'L'].map(s => Q.l(vAdd(vLerp(J['a' + s], J['t' + s], 0.5), [0, -1.5, 0]), J['h' + s], 1.4, 'cb'));
 const pegaZ = (J, z = 6) => [Q.l(vAdd(J.hR, [0, 0, z]), vSub(J.hR, [0, 0, z]), 4, 'eq'), Q.l(vAdd(J.hL, [0, 0, z]), vSub(J.hL, [0, 0, z]), 4, 'eq')];
 const rolo = (p, meia = 16) => Q.l(vAdd(p, [0, 0, meia]), vSub(p, [0, 0, meia]), 8, 'pd');
 const assento = (x0, x1, y, encosto) => [...banco(x0, x1, y), ...(encosto ? [prancha3(encosto.a, encosto.d, encosto.len || 70, encosto.n)] : [])];
 const FIG = {
   supino: { cam: [32, 18], exc: true, pose(k, o) {
-    const inc = o.inc || 0, T = D(180, inc), P = inc ? [16, 57, 0] : [24, 53, 0], nk = nkDe(P, T), sh = ombroDe(P, T), N = peitoDe(T);
+    const inc = o.inc || 0, chao = !!o.chao, T = D(180, inc), P = chao ? [24, 10, 0] : inc ? [16, 57, 0] : [24, 53, 0], nk = nkDe(P, T), sh = ombroDe(P, T), N = peitoDe(T);
     const hal = o.imp === 'halter', fech = !!o.fechada;
-    const topo = [sh[0] + (inc ? 3 : 1), sh[1] + 50, 0], fundo = vAdd(vSub(nk, vMul(T, fech ? 20 : 14)), vMul(N, hal ? 6 : 12));
-    const c = vLerp(topo, fundo, k), z = nLerp(hal ? 15 : fech ? 14 : 26, hal ? 30 : fech ? 14 : 26, k);
+    const topo = [sh[0] + (inc ? 3 : 1), sh[1] + 50, 0], fundo = chao ? [sh[0] + 4, 31, 0] : vAdd(vSub(nk, vMul(T, fech ? 20 : 14)), vMul(N, hal ? 6 : 12));
+    const c = vLerp(topo, fundo, k), z = chao ? nLerp(15, 40, k) : nLerp(hal ? 15 : fech ? 14 : 26, hal ? 30 : fech ? 14 : 26, k);
     return {
-      corpo: { P, tr: T, hd: D(180, inc + 6), bR: { m: [c[0], c[1], z], polo: fech ? [0.45, -0.8, 0.3] : [0.2, -0.55, 0.8] }, pR: { a: [P[0] + 36, 3, 24], polo: [0.4, 1, 0.3], pe: D(10, -10) } },
+      corpo: { P, tr: T, hd: D(180, inc + 6), bR: { m: [c[0], c[1], z], polo: chao ? [0.1, -0.35, 1] : fech ? [0.45, -0.8, 0.3] : [0.2, -0.55, 0.8] }, pR: chao ? { a: [P[0] + 40, 3, 16], polo: [0.3, 1, 0.2] } : { a: [P[0] + 36, 3, 24], polo: [0.4, 1, 0.3], pe: D(10, -10) } },
       eq: J => [
-        ...(inc ? [...banco(P[0] - 8, P[0] + 28, P[1] - 9), prancha3(vSub(vSub(P, vMul(N, 10)), vMul(T, 6)), T, 78, N)] : banco(-62, 58, 46)),
+        ...(chao ? [] : inc ? [...banco(P[0] - 8, P[0] + 28, P[1] - 9), prancha3(vSub(vSub(P, vMul(N, 10)), vMul(T, 6)), T, 78, N)] : banco(-62, 58, 46)),
         ...(hal ? [...halter(J.hR, [0, 0, 1]), ...halter(J.hL, [0, 0, 1])] : barra(meio(J))),
         ...(o.imp === 'smith' ? trilhos(c[0], 0, 172) : []),
       ],
@@ -223,9 +227,14 @@ const FIG = {
         Q.l(J.hR, [-10, sh[1] + 30, 30], 3, 'eqf'), Q.l(J.hL, [-10, sh[1] + 30, -30], 3, 'eqf')],
     };
   } },
-  flexao: { cam: [24, 10], exc: true, pose(k) {
-    const th = nLerp(19, 6, k), A = [-58, 13, 10], q = vAdd(A, vMul(D(0, th), 85)), P = [q[0], q[1], 0], T = D(0, th), sh = ombroDe(P, T);
-    return { corpo: { P, tr: T, hd: D(0, th + 10), bR: { m: [sh[0] + 3, 3, 25], polo: [-0.5, 0.6, 0.7], mao: [1, 0, 0.15] }, pR: { th: D(180, -th), sh: D(180, -th), pe: D(0, -70) } } };
+  flexao: { cam: [24, 10], exc: true, pose(k, o) {
+    const inc = !!o.inc, dec = !!o.dec, th = inc ? nLerp(38, 23, k) : dec ? nLerp(3, -11, k) : nLerp(19, 6, k), A = [-58, dec ? 50 : 13, 10];
+    const q = vAdd(A, vMul(D(0, th), 85)), P = [q[0], q[1], 0], T = D(0, th), sh = ombroDe(P, T);
+    const m = inc ? [57, 47, 25] : dec ? [73, 3, 25] : [sh[0] + 3, 3, o.diamante ? 6 : 25];
+    return {
+      corpo: { P, tr: T, hd: D(0, th + 10), bR: { m, polo: o.diamante ? [-0.8, 0.5, 0.25] : [-0.5, 0.6, 0.7], mao: [1, 0, 0.15] }, pR: { th: D(180, -th), sh: D(180, -th), pe: D(0, -70) } },
+      ...(inc ? { eq: () => banco(42, 76, 44, 32) } : dec ? { eq: () => banco(-74, -36, 38, 22) } : {}),
+    };
   } },
   mergulho: { cam: [28, 8], exc: true, pose(k) {
     const T = vSlerp(D(0, 86), D(0, 62), k), nk = vLerp([-3, 173, 0], [4, 141, 0], k);
@@ -253,12 +262,14 @@ const FIG = {
     };
   } },
   remadaCurvada: { cam: [26, 8], exc: false, pose(k, o) {
-    const P = [-22, 80, 0], T = D(0, 35), sh = ombroDe(P, T), N = peitoDe(T), z = o.tbar ? 7 : 23;
+    const P = [-22, 80, 0], T = D(0, 35), sh = ombroDe(P, T), N = peitoDe(T), z = o.tbar || o.mochila ? 7 : o.halter ? 19 : 23;
     const cima = vAdd(vAdd(P, vMul(T, 30)), vMul(N, 13)), m = vLerp([sh[0] + 1, sh[1] - 52, z], [cima[0], cima[1], z], k);
     return {
       corpo: { P, tr: T, hd: D(0, 22), bR: { m, polo: [-0.6, 0.75, 0.25] }, pR: emPe(15) },
       eq: J => {
         const c = meio(J);
+        if (o.halter) return [...halter(J.hR, [1, 0, 0]), ...halter(J.hL, [1, 0, 0])];
+        if (o.mochila) return [mochila(vAdd(c, [0, -15, 0]), [1, 0, 0], [0, 1, 0])];
         if (!o.tbar) return barra(c);
         const ponta = vAdd(c, [9, 0, 0]), dir = vSub(ponta, [-100, 3, 0]);
         return [Q.l([-100, 3, 0], ponta, 3.5, 'eq'), Q.disco(vAdd(c, [4, 0, 0]), dir, 20), Q.l(J.hR, J.hL, 3, 'eq')];
@@ -320,7 +331,7 @@ const FIG = {
       corpo: { P, tr: T, bR, ...(o.cabo ? { bL: { m: vAdd(P, [8, 6, -20]), polo: [-0.5, -0.5, -1] } } : {}), pR: sentado ? { a: [40, 3, 17], polo: [0.3, 1, 0.2] } : emPe(14) },
       eq: J => [
         ...(sentado ? [...assento(-16, 26, 47, { a: [P[0] - 11, P[1] - 4, 0], d: T, n: [1, 0.1, 0] }), rolo(vLerp(J.eR, J.sR, 0.35), 5), rolo(vLerp(J.eL, J.sL, 0.35), 5)] : []),
-        ...(o.cabo ? cabo([8, 14, -46], J.hR) : o.maq ? [] : [...halter(J.hR, [1, 0, 0]), ...halter(J.hL, [1, 0, 0])]),
+        ...(o.cabo ? cabo([8, 14, -46], J.hR) : o.maq ? [] : o.elastico ? elasticos(J) : [...halter(J.hR, [1, 0, 0]), ...halter(J.hL, [1, 0, 0])]),
       ],
     };
   } },
@@ -333,11 +344,15 @@ const FIG = {
     const P = [-16, 80, 0], T = D(0, 14), sh = ombroDe(P, T);
     return { corpo: { P, tr: T, hd: D(0, 0), bR: { m: vLerp([sh[0] + 1, sh[1] - 50, 13], [sh[0] - 1, sh[1] - 6, 62], k), polo: [0, 0.3, -1] }, pR: emPe(15) }, eq: J => [...halter(J.hR, [1, 0, 0]), ...halter(J.hL, [1, 0, 0])] };
   } },
-  facePull: { cam: [60, 14], exc: false, pose(k) {
+  facePull: { cam: [60, 14], exc: false, pose(k, o) {
     const P = [0, 87, 0], T = D(180, 86), sh = ombroDe(P, T);
     return {
       corpo: { P, tr: T, bR: { m: vLerp([sh[0] + 50, sh[1] + 5, 8], [sh[0] + 7, sh[1] + 15, 24], k), polo: vSlerp([0, -0.4, 1], [0, 0.6, 1], k) }, pR: emPe(15) },
-      eq: J => { const e = vAdd(meio(J), [12, 0, 0]); return [Q.l(e, J.hR, 2.6, 'eq'), Q.l(e, J.hL, 2.6, 'eq'), ...cabo([106, sh[1] + 8, 0], e)]; },
+      eq: J => {
+        const ancora = [106, sh[1] + 8, 0];
+        if (o.elastico) return [Q.l(ancora, J.hR, 1.4, 'cb'), Q.l(ancora, J.hL, 1.4, 'cb'), { t: 'c', p: ancora, r: 3.2, c: 'eqf' }];
+        const e = vAdd(meio(J), [12, 0, 0]); return [Q.l(e, J.hR, 2.6, 'eq'), Q.l(e, J.hL, 2.6, 'eq'), ...cabo(ancora, e)];
+      },
     };
   } },
   rosca: { cam: o => [o.barra || o.cabo ? 36 : 18, 6], exc: false, pose(k, o) {
@@ -346,6 +361,8 @@ const FIG = {
     return {
       corpo: { P, tr: T, bR: { ua, fa }, ...(o.alt || o.martelo ? { bL: o.alt ? parado : { ua: vMir(ua), fa: vMir(fa) } } : {}), pR: emPe(13) },
       eq: J => {
+        if (o.mochila) return [mochila(vAdd(meio(J), [3, -3, 0]), [1, 0, 0], [0, 1, 0])];
+        if (o.elastico) return elasticos(J);
         if (o.barra || o.cabo) { const c = meio(J); return [...barra(c, [0, 0, 1], 44, 12), ...(o.cabo ? cabo([62, 12, 0], c) : [])]; }
         const eixo = J2 => (o.martelo ? giro90(vNorm(vSub(J2.w, J2.e))) : [0, 0, 1]);
         return [...halter(J.hR, eixo({ w: J.wR, e: J.eR })), ...halter(J.hL, eixo({ w: J.wL, e: J.eL }))];
@@ -414,7 +431,8 @@ const FIG = {
     let bR, eq;
     if (o.goblet) {
       const c = vAdd(vSub(nk, vMul(T, 12)), vMul(N, 15));
-      bR = { m: vAdd(c, [0, -3, 6]), polo: [0, -1, 0.5] }; eq = () => halter(c, [0, 1, 0], 9);
+      bR = { m: vAdd(c, [0, -3, 6]), polo: [0, -1, 0.5] };
+      eq = o.livre ? () => [] : o.mochila ? () => [mochila(c, N, T)] : () => halter(c, [0, 1, 0], 9);
     } else if (o.sumo) {
       bR = { m: [sh[0] + 3, sh[1] - 50, 5], polo: [0, 0, 1] }; eq = J => halter(vAdd(meio(J), [0, -8, 0]), [0, 1, 0], 9);
     } else {
@@ -441,18 +459,18 @@ const FIG = {
         caixaO(vAdd(plat, vMul(sobe, 6)), vMul(dir, 2), vMul(sobe, 22), [0, 0, 28], 'eqf'), Q.l(vAdd(P, vAdd(vMul(dir, 30), [0, -20, 28])), vAdd(P, vAdd(vMul(dir, 120), [0, -20, 28])), 3, 'eqf'), Q.l(vAdd(P, vAdd(vMul(dir, 30), [0, -20, -28])), vAdd(P, vAdd(vMul(dir, 120), [0, -20, -28])), 3, 'eqf')],
     };
   } },
-  bulgaro: { cam: [16, 8], exc: true, pose(k) {
+  bulgaro: { cam: [16, 8], exc: true, pose(k, o) {
     const P = vLerp([0, 87, 0], [-4, 50, 0], k), T = vSlerp(D(0, 86), D(0, 76), k);
     return {
-      corpo: { P, tr: T, bR: { ua: D(0, -90), fa: D(0, -90) }, pR: { a: [30, 3, 10], polo: [1, 0.2, 0.15] }, pL: { a: [-54, 47, -10], polo: [0.2, -1, 0], pe: D(180, 12) } },
-      eq: J => [Q.caixa([-76, 36, -26], [-36, 43, 6]), Q.l([-56, 0, -10], [-56, 36, -10], 4, 'eq'), ...halter(J.hR, [1, 0, 0]), ...halter(J.hL, [1, 0, 0])],
+      corpo: { P, tr: T, bR: o.livre ? naCintura(P) : { ua: D(0, -90), fa: D(0, -90) }, pR: { a: [30, 3, 10], polo: [1, 0.2, 0.15] }, pL: { a: [-54, 47, -10], polo: [0.2, -1, 0], pe: D(180, 12) } },
+      eq: J => [Q.caixa([-76, 36, -26], [-36, 43, 6]), Q.l([-56, 0, -10], [-56, 36, -10], 4, 'eq'), ...(o.livre ? [] : [...halter(J.hR, [1, 0, 0]), ...halter(J.hL, [1, 0, 0])])],
     };
   } },
-  afundo: { cam: [16, 8], exc: true, pose(k) {
+  afundo: { cam: [16, 8], exc: true, pose(k, o) {
     const P = vLerp([-2, 86, 0], [-4, 48, 0], k);
     return {
-      corpo: { P, tr: D(0, 89), bR: { ua: D(0, -90), fa: D(0, -90) }, pR: { a: [32, 3, 11], polo: [1, 0.2, 0.15] }, pL: { a: [-40, 8, -11], polo: [0.3, -1, 0], pe: D(0, -48) } },
-      eq: J => [...halter(J.hR, [1, 0, 0]), ...halter(J.hL, [1, 0, 0])],
+      corpo: { P, tr: D(0, 89), bR: o.livre ? naCintura(P) : { ua: D(0, -90), fa: D(0, -90) }, pR: { a: [32, 3, 11], polo: [1, 0.2, 0.15] }, pL: { a: [-40, 8, -11], polo: [0.3, -1, 0], pe: D(0, -48) } },
+      eq: J => (o.livre ? [] : [...halter(J.hR, [1, 0, 0]), ...halter(J.hL, [1, 0, 0])]),
     };
   } },
   stepUp: { cam: [18, 8], exc: false, pose(k) {
@@ -488,7 +506,7 @@ const FIG = {
     return {
       corpo: { P, tr: T, hd: D(0, Math.max(th - 20, 0)), bR: { ua: D(0, -90), fa: D(0, -90) },
         pR: o.uni ? { a: [0, 3, 9], polo: [1, 0.1, 0.1] } : emPe(13, 0, 8), ...(o.uni ? { pL: { th: pernaTras, sh: pernaTras, pe: vSlerp(D(0, -60), D(180, -30), k) } } : {}) },
-      eq: J => (o.uni ? halter(J.hL, [1, 0, 0]) : o.imp === 'halter' ? [...halter(J.hR, [0, 0, 1]), ...halter(J.hL, [0, 0, 1])] : [...barra(meio(J)), ...(o.imp === 'smith' ? trilhos(meio(J)[0], 0, 172) : [])]),
+      eq: J => (o.livre ? [] : o.uni ? halter(J.hL, [1, 0, 0]) : o.imp === 'halter' ? [...halter(J.hR, [0, 0, 1]), ...halter(J.hL, [0, 0, 1])] : [...barra(meio(J)), ...(o.imp === 'smith' ? trilhos(meio(J)[0], 0, 172) : [])]),
     };
   } },
   terra: { cam: [24, 6], exc: false, pose(k) {
@@ -509,7 +527,8 @@ const FIG = {
     const T = vSlerp(ponte ? D(180, 2) : D(180, 40), ponte ? D(180, -28) : D(180, -3), k), P = vSub(nk, vMul(T, C.T)), N = peitoDe(T);
     const barC = vSub(vAdd(P, vMul(N, 14)), vMul(T, 3));
     return {
-      corpo: { P, tr: T, hd: vSlerp(T, D(0, 60), 0.5), bR: ponte ? { m: [P[0] - 12, 2, 26], polo: [0, 1, 0.3], mao: [1, 0, 0] } : { m: [barC[0], barC[1], 30], polo: [0, -1, 0.4], mao: [0, 1, 0] }, pR: { a: [ponte ? 40 : 52, 3, 15], polo: [0, 1, 0.25] } },
+      corpo: { P, tr: T, hd: vSlerp(T, D(0, 60), 0.5), bR: ponte ? { m: [P[0] - 12, 2, 26], polo: [0, 1, 0.3], mao: [1, 0, 0] } : { m: [barC[0], barC[1], 30], polo: [0, -1, 0.4], mao: [0, 1, 0] }, pR: { a: [ponte ? 40 : 52, 3, 15], polo: [0, 1, 0.25] },
+        ...(o.uni ? { pL: (d => ({ th: d, sh: d, pe: giro90(d) }))(vSlerp(D(0, 50), D(0, 24), k)) } : {}) },
       eq: () => (ponte ? [] : [...banco(-66, -26, 44), ...(o.maq ? [rolo(barC, 26)] : [...barra(barC, [0, 0, 1], 62, 22), rolo(barC, 12)]), ...(o.smith ? trilhos(barC[0], 0, 120) : [])]),
     };
   } },
@@ -593,6 +612,69 @@ const FIG = {
       eq: J => cabo([8, sh[1] - 10, -84], meio(J)),
     };
   } },
+  /* ---------- home exercises ---------- */
+  pike: { cam: [24, 10], exc: true, pose(k) {
+    const P = vLerp([0, 80, 0], [8, 72, 0], k), T = vSlerp(D(0, -40), D(0, -66), k);
+    return { corpo: { P, tr: T, bR: { m: [52, 3, 24], polo: [-1, 0.4, 0.4], mao: [1, 0, 0.15] }, pR: { a: [-46, 12, 11], polo: [1, 0, 0], pe: D(0, -50) } } };
+  } },
+  dipCadeira: { cam: [40, 10], exc: true, pose(k) {
+    const P = vLerp([6, 56, 0], [6, 31, 0], k);
+    return {
+      corpo: { P, tr: D(0, 86), bR: { m: [-12, 49, 19], polo: [-1, 0.2, 0.1], mao: [1, 0, 0] }, pR: { a: [54, 3, 12], polo: [0.2, 1, 0.1] } },
+      eq: () => [...banco(-52, -8, 44, 24), Q.caixa([-54, 44, -24], [-48, 92, 24], 'pd')],
+    };
+  } },
+  remadaInvertida: { cam: [20, 6], exc: false, pose(k) {
+    const th = nLerp(7, 24, k), A = [110, 8, 10], T = D(180, th), P = vAdd(A, vMul(T, 85));
+    return {
+      corpo: { P: [P[0], P[1], 0], tr: T, bR: { m: [-6, 74, 24], polo: [0.5, -1, 0.5] }, pR: { th: D(0, -th), sh: D(0, -th), pe: D(0, 76) } },
+      eq: () => [Q.caixa([-112, 70, -42], [-2, 76, 42], 'pd'), ...[-8, -104].flatMap(x => [Q.l([x, 0, 36], [x, 70, 36], 4, 'eqf'), Q.l([x, 0, -36], [x, 70, -36], 4, 'eqf')])],
+    };
+  } },
+  superman: { cam: [24, 12], exc: false, pose(k) {
+    const sobe = el => vSlerp(D(0, 0), D(0, el), k), braco = vSlerp(D(5, 1), D(5, 16), k), perna = vSlerp(D(180, 0), D(180, 11), k);
+    return { corpo: { P: [-5, 9, 0], tr: sobe(13), hd: sobe(22), bR: { ua: braco, fa: braco }, pR: { th: perna, sh: perna, pe: vSlerp(D(180, -50), D(180, -30), k) } } };
+  } },
+  ytw: { cam: [14, 50], exc: false, pose(k) {
+    const braco = vSlerp(D(38, -4), D(38, 14), k), perna = D(180, 0);
+    return { corpo: { P: [-5, 9, 0], tr: vSlerp(D(0, 0), D(0, 6), k), hd: D(0, 4), bR: { ua: braco, fa: braco, mao: braco }, pR: { th: perna, sh: perna, pe: D(180, -50) } } };
+  } },
+  hollow: { cam: [22, 12], iso: true, pose(k) {
+    const b = Math.sin(k * Math.PI) * 1.5, perna = D(0, 24 + b), braco = D(180, 30 + b);
+    return { corpo: { P: [10, 10, 0], tr: D(180, 22 + b), bR: { ua: braco, fa: braco }, pR: { th: perna, sh: perna, pe: D(0, 34) } } };
+  } },
+  perdigueiro: { cam: [40, 18], exc: false, pose(k) {
+    const P = [-20, 49, 0], T = D(0, 6), parado = { ua: D(0, -90), fa: D(0, -90) }, joelho = { th: D(0, -90), sh: D(180, 0), pe: D(180, -30) };
+    const braco = vSlerp(D(0, -90), D(0, 4), k), perna = vSlerp(D(0, -90), D(180, 3), k);
+    return { corpo: { P, tr: T, hd: D(0, -6), bR: { ua: braco, fa: braco }, bL: parado, pR: joelho, pL: { th: perna, sh: vSlerp(D(180, 0), D(180, 3), k), pe: vSlerp(D(180, -30), D(180, -60), k) } } };
+  } },
+  escalador: { cam: [24, 10], exc: false, pose(k) {
+    const th = 19, A = [-58, 13, 10], q = vAdd(A, vMul(D(0, th), 85)), P = [q[0], q[1], 0], T = D(0, th), sh = ombroDe(P, T), reta = D(180, -th);
+    return { corpo: { P, tr: T, hd: D(0, th + 10), bR: { m: [sh[0] + 3, 3, 25], polo: [-0.5, 0.6, 0.7], mao: [1, 0, 0.15] },
+      pR: { th: vSlerp(reta, D(0, -30), k), sh: vSlerp(reta, D(180, -15), k), pe: D(0, -70) }, pL: { th: vMir(reta), sh: vMir(reta), pe: D(0, -70) } } };
+  } },
+  parede: { cam: [30, 8], iso: true, pose(k) {
+    const b = Math.sin(k * Math.PI) * 0.6, P = [-18, 46 + b, 0], T = D(0, 89), nk = nkDe(P, T);
+    return {
+      corpo: { P, tr: T, bR: { m: vAdd(nk, [9, -13, -9]), polo: [0, -1, 0.6] }, pR: { th: D(0, -2), sh: D(0, -90), pe: D(14, -6) } },
+      eq: () => [Q.caixa([-42, 0, -46], [-31, 150, 46], 'pd')],
+    };
+  } },
+  flexoraToalha: { cam: [26, 14], exc: false, pose(k) {
+    const nk = [-36, 10, 0], T = vSlerp(D(180, -12), D(180, -28), k), P = vSub(nk, vMul(T, C.T)), a = vLerp([95, 4, 12], [42, 4, 12], k);
+    return {
+      corpo: { P, tr: T, hd: vSlerp(T, D(0, 60), 0.5), bR: { m: [P[0] - 12, 2, 26], polo: [0, 1, 0.3], mao: [1, 0, 0] }, pR: { a, polo: [0, 1, 0.2], pe: D(0, 70) } },
+      eq: () => [Q.caixa([a[0] - 12, 0, -24], [a[0] + 8, 1.6, 24], 'pd')],
+    };
+  } },
+  kbSwing: { cam: [26, 6], exc: false, pose(k) {
+    const th = nLerp(32, 86, k), shY = nLerp(92, 133, k), P = [6 - 46 * Math.cos(th * RAD), shY - 46 * Math.sin(th * RAD), 0], T = D(0, th);
+    const ombros = vSub(nkDe(P, T), vMul(T, 4)), dir = vSlerp(D(180, -64), D(0, -4), k), m = vAdd(ombros, vMul(dir, 56));
+    return {
+      corpo: { P, tr: T, hd: D(0, Math.max(th - 25, 5)), bR: { m: [m[0], m[1], 5], polo: [0, -1, 0] }, pR: emPe(15, 0, 10) },
+      eq: J => { const c = vAdd(meio(J), vMul(dir, 9)); return [Q.l(J.hR, J.hL, 3, 'eq'), { t: 'c', p: c, r: 8.5, c: 'eqf' }]; },
+    };
+  } },
 };
 /* which drawing each exercise uses */
 const FIG_EX = {
@@ -616,6 +698,14 @@ const FIG_EX = {
   abdutora: ['abdutora'], ponte_gluteo: ['hipThrust', { ponte: 1 }], coice_caneleira: ['coice', { quad: 1 }], agach_sumo: ['agachamento', { sumo: 1 }], abducao_elastico: ['abdutora', { band: 1 }], adutora: ['abdutora', { adu: 1 }],
   pant_pe: ['panturrilha'], pant_sentado: ['panturrilha', { sent: 1 }], pant_leg: ['panturrilha', { leg: 1 }], pant_smith: ['panturrilha', { smith: 1 }], pant_unilateral: ['panturrilha', { uni: 1 }],
   prancha: ['prancha'], prancha_lateral: ['prancha', { lat: 1 }], abd_polia: ['abdPolia'], elev_pernas: ['elevPernas'], abd_supra: ['crunch'], elev_pernas_solo: ['elevPernas', { solo: 1 }], pallof: ['pallof'],
+  /* home versions */
+  flexao_inclinada: ['flexao', { inc: 1 }], flexao_declinada: ['flexao', { dec: 1 }], flexao_diamante: ['flexao', { diamante: 1 }], supino_chao: ['supino', { imp: 'halter', chao: 1 }],
+  agach_livre: ['agachamento', { goblet: 1, livre: 1 }], agach_salto: ['agachamento', { goblet: 1, livre: 1 }], agach_mochila: ['agachamento', { goblet: 1, mochila: 1 }],
+  afundo_reverso: ['afundo', { livre: 1 }], bulgaro_cadeira: ['bulgaro', { livre: 1 }], stiff_corpo: ['stiff', { uni: 1, livre: 1 }], ponte_unilateral: ['hipThrust', { ponte: 1, uni: 1 }],
+  remada_halteres: ['remadaCurvada', { halter: 1 }], remada_mochila: ['remadaCurvada', { mochila: 1 }], barra_supinada: ['barraFixa'],
+  rosca_mochila: ['rosca', { mochila: 1 }], rosca_elastico: ['rosca', { elastico: 1 }], elev_lateral_elastico: ['elevLateral', { elastico: 1 }], face_pull_elastico: ['facePull', { elastico: 1 }],
+  flexao_pike: ['pike'], mergulho_cadeira: ['dipCadeira'], remada_invertida: ['remadaInvertida'], superman: ['superman'], ytw: ['ytw'], hollow: ['hollow'], perdigueiro: ['perdigueiro'],
+  escalador: ['escalador'], agach_parede: ['parede'], flexora_toalha: ['flexoraToalha'], kb_swing: ['kbSwing'],
 };
 function figuraDe(id) {
   const m = FIG_EX[id];

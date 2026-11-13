@@ -146,4 +146,8 @@ img.px.ico{width:22px;height:auto;vertical-align:-5px;margin-right:4px}
 .done-ok{color:var(--ok);display:flex;align-items:center;gap:6px}.done-ok svg{width:16px;height:16px;flex:none}
 .xp.xp-heroi{display:flex;flex-direction:row;gap:12px;align-items:center}
 .xp-heroi .xp-track{display:block}
+/* training at home today */
+.casa-eb{color:var(--accent);display:flex;align-items:center;gap:6px}.casa-eb svg{width:16px;height:16px;flex:none}
+.casa-tags{display:flex;flex-wrap:wrap;gap:6px}
+.casa-acts{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 8px}
 </style>
