@@ -1,0 +1,897 @@
+11-14 13:00:26.194  1742  2445 W chromium: [1114/130026.194610:WARNING:dns_config_service_android.cc(81)] Failed to read DnsConfig.
+11-14 13:00:26.226   523   806 I SdkSandboxManager: No SDKs used. Skipping SDK data reconcilation for CallingInfo{mUid=10192, mPackageName='com.wsqm1990.ironjourney, mAppProcessToken='null'}
+11-14 13:00:26.605   523  2106 I ActivityTaskManager: START u0 {flg=0x10000000 cmp=com.wsqm1990.ironjourney/.MainActivity} with LAUNCH_SINGLE_TASK from uid 2000 (BAL_ALLOW_PERMISSION) result code=0
+11-14 13:00:26.664   523   551 I ActivityManager: Start proc 2532:com.wsqm1990.ironjourney/u0a192 for next-top-activity {com.wsqm1990.ironjourney/com.wsqm1990.ironjourney.MainActivity}
+11-14 13:00:26.690   523  2086 D CoreBackPreview: Window{413d2b3 u0 Splash Screen com.wsqm1990.ironjourney}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@3955248, mPriority=0, mIsAnimationCallback=false}
+11-14 13:00:26.713   523  2127 D TextToSpeechManagerPerUserService: Trying to start connection to TTS engine: com.google.android.tts
+11-14 13:00:26.714  1613  2451 I TextToSpeech: Sucessfully bound to com.google.android.tts
+11-14 13:00:26.752  2532  2532 I 990.ironjourney: Late-enabling -Xcheck:jni
+11-14 13:00:26.753   523   551 I ActivityManager: Start proc 2542:com.google.android.tts/u0a146 for service {com.google.android.tts/com.google.android.apps.speech.tts.googletts.service.GoogleTtsService}
+11-14 13:00:26.778  2532  2532 I 990.ironjourney: Using CollectorTypeCC GC.
+11-14 13:00:26.778  2532  2532 W 990.ironjourney: Unexpected CPU variant for x86: x86_64.
+11-14 13:00:26.778  2532  2532 W 990.ironjourney: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, tremont, kabylake, default
+11-14 13:00:26.932  2542  2542 I gle.android.tts: Using CollectorTypeCC GC.
+11-14 13:00:26.932  2542  2542 W gle.android.tts: Unexpected CPU variant for x86: x86_64.
+11-14 13:00:26.932  2542  2542 W gle.android.tts: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, tremont, kabylake, default
+11-14 13:00:27.056  1049  1049 D CarrierSvcBindHelper: onPackageAdded: com.wsqm1990.ironjourney
+11-14 13:00:27.059  2542  2542 E gle.android.tts: Not starting debugger since process cannot load the jdwp agent.
+11-14 13:00:27.102  1049  1372 D ImsResolver: maybeAddedImsService, packageName: com.wsqm1990.ironjourney
+11-14 13:00:27.154   523   540 V WindowManager:     info={id=5 t=CLOSE f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{RemoteToken{3ad4c3f Task{1979202 #8 type=standard A=10192:com.wsqm1990.ironjourney}}} m=OPEN f=MOVE_TO_TOP leash=Surface(name=Task=8)/@0x47daee0 sb=Rect(0, 0 - 320, 640) eb=Rect(0, 0 - 320, 640) d=0}]}
+11-14 13:00:27.174  2532  2532 W ziparchive: Unable to open '/data/app/~~pHyCu0XtzewY-nvfSkIBCA==/com.wsqm1990.ironjourney-y9PPUXjC_jbiv5nZik5wwA==/base.dm': No such file or directory
+11-14 13:00:27.175  2532  2532 W ziparchive: Unable to open '/data/app/~~pHyCu0XtzewY-nvfSkIBCA==/com.wsqm1990.ironjourney-y9PPUXjC_jbiv5nZik5wwA==/base.dm': No such file or directory
+11-14 13:00:27.312  2542  2542 D nativeloader: Configuring product-clns-6 for unbundled product apk /product/app/GoogleTTS/GoogleTTS.apk. target_sdk_version=33, uses_libraries=, library_path=/product/app/GoogleTTS/lib/x86_64:/product/app/GoogleTTS/GoogleTTS.apk!/lib/x86_64:/product/lib64:/system/product/lib64, permitted_path=/data:/mnt/expand:/data/user/0/com.google.android.tts:/product/lib64:/system/product/lib64
+11-14 13:00:27.417  2532  2532 D nativeloader: Configuring clns-6 for other apk /data/app/~~pHyCu0XtzewY-nvfSkIBCA==/com.wsqm1990.ironjourney-y9PPUXjC_jbiv5nZik5wwA==/base.apk. target_sdk_version=36, uses_libraries=, library_path=/data/app/~~pHyCu0XtzewY-nvfSkIBCA==/com.wsqm1990.ironjourney-y9PPUXjC_jbiv5nZik5wwA==/lib/x86_64, permitted_path=/data:/mnt/expand:/data/user/0/com.wsqm1990.ironjourney
+11-14 13:00:27.431  2542  2542 V GraphicsEnvironment: ANGLE GameManagerService for com.google.android.tts: false
+11-14 13:00:27.431  2542  2542 V GraphicsEnvironment: com.google.android.tts is not listed in per-application setting
+11-14 13:00:27.434   850   850 I SafetyLabelChangedBroadcastReceiver: received broadcast packageName: com.wsqm1990.ironjourney, current user: UserHandle{0}, packageChangeEvent: NEW_INSTALL, intent user: UserHandle{0}
+11-14 13:00:27.521  2532  2532 V GraphicsEnvironment: ANGLE GameManagerService for com.wsqm1990.ironjourney: false
+11-14 13:00:27.522  2532  2532 V GraphicsEnvironment: com.wsqm1990.ironjourney is not listed in per-application setting
+11-14 13:00:27.544  1049  1049 D CarrierSvcBindHelper: onPackageModified: com.wsqm1990.ironjourney
+11-14 13:00:27.550  1049  1372 D ImsResolver: maybeAddedImsService, packageName: com.wsqm1990.ironjourney
+11-14 13:00:27.604  2542  2542 I GoogleTTSApplication: Beginning load of tts_android...
+11-14 13:00:27.692  2542  2542 I GoogleTTSApplication: tts_android (null) was loaded normally!
+11-14 13:00:27.928  2542  2688 W gle.android.tts: Accessing hidden field Ljava/util/Collections$SynchronizedCollection;->mutex:Ljava/lang/Object; (max-target-o, reflection, denied)
+11-14 13:00:27.930  2532  2532 W 990.ironjourney: Accessing hidden method Landroid/view/ViewGroup;->makeOptionalFitsSystemWindows()V (unsupported, reflection, allowed)
+11-14 13:00:27.930  2542  2688 W gle.android.tts: Accessing hidden method Ljava/util/Collections$SynchronizedSet;-><init>(Ljava/util/Set;Ljava/lang/Object;)V (max-target-o, reflection, denied)
+11-14 13:00:27.961  2542  2688 W gle.android.tts: Accessing hidden method Ljava/util/Collections$SynchronizedCollection;-><init>(Ljava/util/Collection;Ljava/lang/Object;)V (max-target-o, reflection, denied)
+11-14 13:00:27.988  2532  2532 W 990.ironjourney: Entry not found
+11-14 13:00:27.992   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{5fd3a42 com.android.cts.priv.ctsshim/10180} BLOCKED
+11-14 13:00:27.994   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{59e1a53 com.android.internal.display.cutout.emulation.corner/10025} BLOCKED
+11-14 13:00:27.994   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{f88af90 com.android.internal.display.cutout.emulation.double/10048} BLOCKED
+11-14 13:00:27.995   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{c10d089 com.google.android.googlequicksearchbox/10132} BLOCKED
+11-14 13:00:27.995   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{5a8b88e com.google.android.onetimeinitializer/10126} BLOCKED
+11-14 13:00:27.995   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{ce608af com.google.android.ext.shared/10100} BLOCKED
+11-14 13:00:27.995   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{af134bc com.android.internal.systemui.navbar.gestural_wide_back/10007} BLOCKED
+11-14 13:00:27.995   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{c2cec45 com.android.virtualmachine.res/10188} BLOCKED
+11-14 13:00:27.995   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{17bcf9a com.google.android.federatedcompute/10186} BLOCKED
+11-14 13:00:27.995   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{61480cb com.android.managedprovisioning.auto_generated_rro_product__/10024} BLOCKED
+11-14 13:00:27.995   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{dfae0a8 com.android.carrierconfig.auto_generated_rro_vendor__/10078} BLOCKED
+11-14 13:00:27.995   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{e3507c1 com.android.systemui.emulation.pixel_3_xl/10034} BLOCKED
+11-14 13:00:27.995   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{5374b66 com.android.systemui.emulation.pixel_4_xl/10059} BLOCKED
+11-14 13:00:27.995   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{8685ea7 com.android.systemui.emulation.pixel_fold/10009} BLOCKED
+11-14 13:00:27.997   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{d715f54 com.android.simappdialog.auto_generated_rro_product__/10030} BLOCKED
+11-14 13:00:27.997   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{3495efd com.android.htmlviewer/10115} BLOCKED
+11-14 13:00:27.997   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{5dcb7f2 com.google.android.health.connect.backuprestore/10183} BLOCKED
+11-14 13:00:27.997   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{6323e43 com.android.systemui.auto_generated_rro_product__/10031} BLOCKED
+11-14 13:00:27.997   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{d2f1cc0 com.google.android.apps.messaging/10130} BLOCKED
+11-14 13:00:27.997   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{451edf9 com.google.android.soundpicker/10136} BLOCKED
+11-14 13:00:27.998   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{4fa613e com.google.android.marvin.talkbackoverlay/10077} BLOCKED
+11-14 13:00:27.998   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{c307b9f com.google.android.configupdater/10129} BLOCKED
+11-14 13:00:27.998   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{24944ec com.android.internal.emulation.pixel_3a_xl/10044} BLOCKED
+11-14 13:00:27.998   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{6ba70b5 com.android.internal.emulation.pixel_6_pro/10018} BLOCKED
+11-14 13:00:27.998   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{cb7534a com.android.internal.emulation.pixel_7_pro/10004} BLOCKED
+11-14 13:00:27.998   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{aab32bb com.android.internal.emulation.pixel_8_pro/10058} BLOCKED
+11-14 13:00:27.998   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{bfbc3d8 com.android.internal.emulation.pixel_3a/10053} BLOCKED
+11-14 13:00:27.998   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{ee6331 com.android.internal.emulation.pixel_4a/10011} BLOCKED
+11-14 13:00:27.998   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{9f5a16 com.android.internal.emulation.pixel_6a/10023} BLOCKED
+11-14 13:00:27.998   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{4503f97 com.android.internal.emulation.pixel_7a/10033} BLOCKED
+11-14 13:00:27.998   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{f554584 com.google.android.overlay.googlewebview/10049} BLOCKED
+11-14 13:00:27.998   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{a95016d com.google.android.hotspot2.osulogin/10179} BLOCKED
+11-14 13:00:27.998   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{f2f01a2 com.android.simappdialog/10111} BLOCKED
+11-14 13:00:27.998   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{ecf3e33 com.android.internal.display.cutout.emulation.hole/10073} BLOCKED
+11-14 13:00:27.998   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{1a335f0 com.android.internal.display.cutout.emulation.tall/10065} BLOCKED
+11-14 13:00:27.999   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{48d4769 com.android.internal.systemui.navbar.threebutton/10068} BLOCKED
+11-14 13:00:27.999   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{1f95ee com.android.camera2/10145} BLOCKED
+11-14 13:00:27.999   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{1358a8f com.android.systemui.auto_generated_rro_vendor__/10076} BLOCKED
+11-14 13:00:28.003   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{d9dc11c com.google.android.deskclock/10152} BLOCKED
+11-14 13:00:28.003   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{4a9f125 com.android.internal.systemui.navbar.twobutton/10020} BLOCKED
+11-14 13:00:28.003   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{b7322fa com.google.android.as/10125} BLOCKED
+11-14 13:00:28.003   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{c0a40ab com.google.android.gm/10143} BLOCKED
+11-14 13:00:28.003   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{f53d308 com.android.internal.systemui.navbar.gestural_extra_wide_back/10045} BLOCKED
+11-14 13:00:28.003   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{12d7aa1 com.android.systemui.emulation.pixel_3/10015} BLOCKED
+11-14 13:00:28.003   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{54074c6 com.android.systemui.emulation.pixel_4/10037} BLOCKED
+11-14 13:00:28.003   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{72a3c87 com.android.systemui.emulation.pixel_5/10071} BLOCKED
+11-14 13:00:28.003   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{2d717b4 com.android.systemui.emulation.pixel_6/10074} BLOCKED
+11-14 13:00:28.003   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{8061fdd com.android.systemui.emulation.pixel_7/10072} BLOCKED
+11-14 13:00:28.004   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{1a7fb20 com.android.systemui.emulation.pixel_8/10070} BLOCKED
+11-14 13:00:28.004   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{dc9dcd9 com.android.nfc.auto_generated_rro_product__/10027} BLOCKED
+11-14 13:00:28.005   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{913569e com.android.printspooler/10103} BLOCKED
+11-14 13:00:28.005   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{dd4357f com.android.emergency.auto_generated_rro_product__/10041} BLOCKED
+11-14 13:00:28.005   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{ae1a94c com.google.android.connectivity.resources.goldfish.overlay/10079} BLOCKED
+11-14 13:00:28.005   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{726d95 com.android.dreams.basic/10104} BLOCKED
+11-14 13:00:28.005   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{45a3eaa com.google.android.networkstack.tethering.emulator/10022} BLOCKED
+11-14 13:00:28.005   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{b00aa9b com.android.providers.settings.auto_generated_rro_product__/10002} BLOCKED
+11-14 13:00:28.005   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{2260e38 com.google.android.as.oss/10122} BLOCKED
+11-14 13:00:28.006   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{9d94e11 com.android.traceur.auto_generated_rro_product__/10005} BLOCKED
+11-14 13:00:28.006   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{9759b76 com.google.android.devicelockcontroller/10173} BLOCKED
+11-14 13:00:28.006   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{fb55577 com.google.android.dialer/10128} BLOCKED
+11-14 13:00:28.006   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{149d5e4 com.android.internal.emulation.pixel_3/10046} BLOCKED
+11-14 13:00:28.006   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{df3ba4d com.android.internal.emulation.pixel_4/10060} BLOCKED
+11-14 13:00:28.006   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{817f902 com.android.internal.emulation.pixel_5/10012} BLOCKED
+11-14 13:00:28.006   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{690a34e com.android.internal.emulation.pixel_6/10038} BLOCKED
+11-14 13:00:28.006   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{9ab7c6f com.android.internal.emulation.pixel_7/10067} BLOCKED
+11-14 13:00:28.006   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{ac7fd7c com.android.internal.emulation.pixel_8/10039} BLOCKED
+11-14 13:00:28.006   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{4ae605 com.google.android.captiveportallogin/10113} BLOCKED
+11-14 13:00:28.006   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{ed7a65a com.android.musicfx/10088} BLOCKED
+11-14 13:00:28.006   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{d557568 com.google.android.apps.docs/10155} BLOCKED
+11-14 13:00:28.006   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{b571504 com.google.android.apps.maps/10153} BLOCKED
+11-14 13:00:28.006   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{d98dd81 com.google.android.modulemetadata/10147} BLOCKED
+11-14 13:00:28.006   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{59ce26 com.google.android.markup/10135} BLOCKED
+11-14 13:00:28.007   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{a708a67 com.android.providers.settings.auto_generated_rro_vendor__/10080} BLOCKED
+11-14 13:00:28.007   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{ec08014 com.google.android.rkpdapp/10185} BLOCKED
+11-14 13:00:28.007   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{274d0bd com.google.android.contacts/10154} BLOCKED
+11-14 13:00:28.007   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{284a6b2 com.android.server.telecom.auto_generated_rro_product__/10032} BLOCKED
+11-14 13:00:28.007   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{cf16603 com.google.android.overlay.googleconfig/10055} BLOCKED
+11-14 13:00:28.007   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{92f8980 com.android.chrome/10149} BLOCKED
+11-14 13:00:28.007   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{e22bbb9 com.android.bips.auto_generated_rro_product__/10035} BLOCKED
+11-14 13:00:28.007   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{4127bfe com.google.android.apps.customization.pixel/10144} BLOCKED
+11-14 13:00:28.007   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{21a5f5f com.google.android.tag/10082} BLOCKED
+11-14 13:00:28.007   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{c3bdac com.google.android.overlay.permissioncontroller/10003} BLOCKED
+11-14 13:00:28.007   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{62a5a75 com.google.android.partnersetup/10124} BLOCKED
+11-14 13:00:28.007   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{3165a0a com.google.android.apps.wallpaper.nexus/10141} BLOCKED
+11-14 13:00:28.008   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{daf927b com.google.android.apps.nexuslauncher/10169} BLOCKED
+11-14 13:00:28.008   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{8850898 com.google.android.nearby.halfsheet/10172} BLOCKED
+11-14 13:00:28.008   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{6d328f1 com.android.theme.font.notoserifsource/10066} BLOCKED
+11-14 13:00:28.008   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{9c80cd6 com.google.android.safetycenter.resources/10175} BLOCKED
+11-14 13:00:28.008   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{19adb57 com.android.internal.display.cutout.emulation.waterfall/10040} BLOCKED
+11-14 13:00:28.008   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{a0e1644 com.android.internal.systemui.navbar.transparent/10029} BLOCKED
+11-14 13:00:28.008   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{f60632d com.google.android.connectivity.resources/10171} BLOCKED
+11-14 13:00:28.008   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{c102062 com.android.providers.contacts.auto_generated_rro_product__/10019} BLOCKED
+11-14 13:00:28.008   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{a87d5f3 com.google.android.feedback/10162} BLOCKED
+11-14 13:00:28.008   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{bf852b0 com.google.android.printservice.recommendation/10110} BLOCKED
+11-14 13:00:28.008   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{60d0529 com.google.android.apps.photos/10140} BLOCKED
+11-14 13:00:28.008   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{5579b58 com.google.android.calendar/10148} BLOCKED
+11-14 13:00:28.009   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{1d3e0ae com.google.android.documentsui/10098} BLOCKED
+11-14 13:00:28.009   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{a3fde4f com.android.systemui.emulation.pixel_3a_xl/10021} BLOCKED
+11-14 13:00:28.009   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{307e9dc com.android.systemui.emulation.pixel_6_pro/10063} BLOCKED
+11-14 13:00:28.009   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{fc7cae5 com.android.systemui.emulation.pixel_7_pro/10054} BLOCKED
+11-14 13:00:28.009   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{a0159ba com.android.systemui.emulation.pixel_8_pro/10001} BLOCKED
+11-14 13:00:28.009   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{bc6106b com.google.mainline.telemetry/10151} BLOCKED
+11-14 13:00:28.009   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{a17c7c8 com.android.carrierconfig.auto_generated_rro_product__/10064} BLOCKED
+11-14 13:00:28.009   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{7af3061 com.android.providers.partnerbookmarks/10101} BLOCKED
+11-14 13:00:28.009   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{25b5786 com.android.wallpaper.livepicker/10089} BLOCKED
+11-14 13:00:28.009   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{d334847 com.android.providers.telephony.auto_generated_rro_product__/10062} BLOCKED
+11-14 13:00:28.010   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{cc59874 com.android.phone.auto_generated_rro_vendor__/10081} BLOCKED
+11-14 13:00:28.010   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{24d719d com.google.mainline.adservices/10137} BLOCKED
+11-14 13:00:28.011   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{56612 com.android.imsserviceentitlement/10117} BLOCKED
+11-14 13:00:28.011   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{b5221e3 com.google.android.healthconnect.controller/10182} BLOCKED
+11-14 13:00:28.011   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{ddc7e0 com.android.internal.emulation.pixel_2_xl/10016} BLOCKED
+11-14 13:00:28.011   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{8948a99 com.android.internal.emulation.pixel_3_xl/10056} BLOCKED
+11-14 13:00:28.011   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{4cfd15e com.android.internal.emulation.pixel_4_xl/10047} BLOCKED
+11-14 13:00:28.011   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{afaf93f com.android.internal.emulation.pixel_fold/10006} BLOCKED
+11-14 13:00:28.011   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{a87820c com.android.bookmarkprovider/10114} BLOCKED
+11-14 13:00:28.011   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{69a3755 com.google.android.overlay.pixelconfigcommon/10014} BLOCKED
+11-14 13:00:28.011   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{d43a56a com.android.systemui.accessibility.accessibilitymenu.auto_generated_rro_product__/10050} BLOCKED
+11-14 13:00:28.011   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{c2fea5b com.android.systemui.emulation.pixel_3a/10013} BLOCKED
+11-14 13:00:28.011   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{730b2f8 com.android.systemui.emulation.pixel_4a/10000} BLOCKED
+11-14 13:00:28.011   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{a13f3d1 com.android.systemui.emulation.pixel_6a/10042} BLOCKED
+11-14 13:00:28.013   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{36eae36 com.android.systemui.emulation.pixel_7a/10017} BLOCKED
+11-14 13:00:28.013   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{2f8d137 com.google.android.settings.intelligence/10118} BLOCKED
+11-14 13:00:28.013   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{d3ff01b com.google.android.projection.gearhead/10123} BLOCKED
+11-14 13:00:28.014   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{b3a06a4 com.google.android.uwb.resources/10184} BLOCKED
+11-14 13:00:28.014   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{f43a5b8 com.android.cts.ctsshim/10181} BLOCKED
+11-14 13:00:28.014   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{c92fc0d com.google.android.wifi.resources/10177} BLOCKED
+11-14 13:00:28.014   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{26f77c2 com.google.android.wifi.dialog/10178} BLOCKED
+11-14 13:00:28.014   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{1ff49d3 com.google.android.apps.wallpaper/10160} BLOCKED
+11-14 13:00:28.014   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{e62e910 com.google.android.odad/10121} BLOCKED
+11-14 13:00:28.014   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{5804c09 com.android.settings.auto_generated_rro_product__/10028} BLOCKED
+11-14 13:00:28.014   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{6c14e0e com.android.internal.systemui.navbar.gestural/10051} BLOCKED
+11-14 13:00:28.014   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{2eab02f com.android.bluetoothmidiservice/10106} BLOCKED
+11-14 13:00:28.014   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{2f5863c com.android.storagemanager.auto_generated_rro_product__/10026} BLOCKED
+11-14 13:00:28.014   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{fd89fc5 com.google.android.cellbroadcastreceiver/10189} BLOCKED
+11-14 13:00:28.014   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{7483d1a com.android.phone.auto_generated_rro_product__/10061} BLOCKED
+11-14 13:00:28.014   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{87c204b android.auto_generated_rro_product__/10069} BLOCKED
+11-14 13:00:28.014   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{3b2ca28 com.android.internal.systemui.navbar.gestural_narrow_back/10052} BLOCKED
+11-14 13:00:28.015   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{fa87341 com.google.android.inputmethod.latin/10142} BLOCKED
+11-14 13:00:28.015   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{31d10e6 android.auto_generated_rro_vendor__/10075} BLOCKED
+11-14 13:00:28.015   523  2018 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{66a7627 com.google.android.apps.restore/10120} BLOCKED
+11-14 13:00:28.021  2532  2532 W 990.ironjourney: Accessing hidden method Landroid/os/Trace;->isTagEnabled(J)Z (unsupported, reflection, allowed)
+11-14 13:00:28.021  2532  2532 W 990.ironjourney: Accessing hidden method Landroid/os/Trace;->traceBegin(JLjava/lang/String;)V (unsupported, reflection, allowed)
+11-14 13:00:28.021  2532  2532 W 990.ironjourney: Accessing hidden method Landroid/os/Trace;->traceEnd(J)V (unsupported, reflection, allowed)
+11-14 13:00:28.021  2532  2532 W 990.ironjourney: Accessing hidden method Landroid/os/Trace;->asyncTraceBegin(JLjava/lang/String;I)V (unsupported, reflection, allowed)
+11-14 13:00:28.021  2532  2532 W 990.ironjourney: Accessing hidden method Landroid/os/Trace;->asyncTraceEnd(JLjava/lang/String;I)V (unsupported, reflection, allowed)
+11-14 13:00:28.164  2542  2542 I SnapshotHandler: Unable to retrieve flag snapshot for com.google.android.tts#com.google.android.tts, using defaults.
+11-14 13:00:28.179  2542  2542 I GoogleTtsServicePeer: Creating Google TTS service, version googletts.google-speech-apk_20230123.02_p3.506463867
+11-14 13:00:28.314  2532  2766 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.wsqm1990.ironjourney/app_webview/variations_seed_new"
+11-14 13:00:28.314  2532  2766 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.wsqm1990.ironjourney/app_webview/variations_seed"
+11-14 13:00:28.349  2542  2780 I SP      : Registering ttsvoices.1842, url: null, constraints: *:*:*:*, flags: *, requested: 1842, current: -1
+11-14 13:00:28.465  2542  2780 I SP      : Successfully got manifest for ttsvoices-manifest: manifests:ttsvoices-1842
+11-14 13:00:28.488   523   551 I ActivityManager: Start proc 2748:com.android.chrome/u0a149 for service {com.android.chrome/org.chromium.chrome.browser.customtabs.CustomTabsConnectionService}
+11-14 13:00:28.512   523   523 D TextToSpeechManagerPerUserService: Connected successfully to TTS engine: com.google.android.tts
+11-14 13:00:28.512  1613  1643 I TextToSpeech: Connected to TTS engine
+11-14 13:00:28.532  1613  2838 I TextToSpeech: Setting up the connection to TTS engine...
+11-14 13:00:28.602   523   551 I ActivityManager: Start proc 2850:com.google.android.webview:webview_service/u0a134 for service {com.google.android.webview/org.chromium.android_webview.services.VariationsSeedServer}
+11-14 13:00:28.751  1090  1142 I Launcher.IconCache: Database bulk icon loading failed, using fallback bulk icon loading for: ComponentInfo{com.wsqm1990.ironjourney/com.wsqm1990.ironjourney.MainActivity}
+11-14 13:00:28.917  2532  2857 W chromium: [WARNING:dns_config_service_android.cc(115)] Failed to read DnsConfig.
+11-14 13:00:29.230   523   551 I ActivityManager: Start proc 2882:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0ai9000 for  {com.wsqm1990.ironjourney/org.chromium.content.app.SandboxedProcessService0:0}
+11-14 13:00:29.292  2542  2688 I SnapshotHandler: Unable to retrieve flag snapshot for com.google.android.libraries.consentverifier#com.google.android.tts, using defaults.
+11-14 13:00:29.301  1436  1584 W bwft    : Succeeded but not registered: com.google.android.tts#com.google.android.tts [CONTEXT service_id=51 ]
+11-14 13:00:29.425  2532  2532 D Capacitor: Starting BridgeActivity
+11-14 13:00:29.457  2532  2532 D Capacitor: Registering plugin instance: CapacitorCookies
+11-14 13:00:29.463  2532  2532 D Capacitor: Registering plugin instance: WebView
+11-14 13:00:29.468  2532  2532 D Capacitor: Registering plugin instance: CapacitorHttp
+11-14 13:00:29.474  2532  2532 D Capacitor: Registering plugin instance: SystemBars
+11-14 13:00:29.475  2532  2532 D Capacitor: Registering plugin instance: IronTimer
+11-14 13:00:29.480  2532  2532 D Capacitor: Registering plugin instance: App
+11-14 13:00:29.494  1436  1584 I HeterodyneSyncScheduler: Scheduling Phenotype for a PhenotypeSyncImmediately(6, com.google.android.libraries.search.audio.device#com.google.android.tts) one off with window [1, 2] in seconds [CONTEXT service_id=51 ]
+11-14 13:00:29.515  1436  1554 I HeterodyneSyncScheduler: Scheduling Phenotype for a PhenotypeSyncImmediately(6, com.google.android.libraries.search.device#com.google.android.tts) one off with window [1, 2] in seconds [CONTEXT service_id=51 ]
+11-14 13:00:29.530  2532  2532 W Capacitor: Unable to read file at path public/plugins
+11-14 13:00:29.539  2532  2532 D Capacitor: Loading app at https://localhost
+11-14 13:00:29.597  2882  2882 I cr_WebViewApkApp: Launched version=113.0.5672.136 minSdkVersion=29 isBundle=false processName=com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0
+11-14 13:00:29.616  1436  1554 W bwft    : Succeeded but not registered: com.google.android.apps.search.transcription.device#com.google.android.tts [CONTEXT service_id=51 ]
+11-14 13:00:29.626  1436  1554 W bwft    : Succeeded but not registered: com.google.android.apps.search.transcription.uidevice#com.google.android.tts [CONTEXT service_id=51 ]
+11-14 13:00:29.644  2532  2532 D Capacitor: App started
+11-14 13:00:29.644  1436  1554 W bwft    : Succeeded but not registered: com.google.android.apps.search.transcription.device#com.google.android.tts [CONTEXT service_id=51 ]
+11-14 13:00:29.648  1436  1584 I HeterodyneSyncScheduler: Scheduling Phenotype for a PhenotypeSyncImmediately(6, com.google.android.libraries.consentverifier#com.google.android.tts) one off with window [1, 2] in seconds [CONTEXT service_id=51 ]
+11-14 13:00:29.650  2532  2532 D Capacitor/AppPlugin: Firing change: true
+11-14 13:00:29.650  2532  2532 V Capacitor/AppPlugin: Notifying listeners for event appStateChange
+11-14 13:00:29.650  2532  2532 D Capacitor/AppPlugin: No listeners found for event appStateChange
+11-14 13:00:29.650  2532  2532 D Capacitor: App resumed
+11-14 13:00:29.651  1436  1554 W bwft    : Succeeded but not registered: com.google.android.apps.search.transcription.uidevice#com.google.android.tts [CONTEXT service_id=51 ]
+11-14 13:00:29.703  2532  2857 D Capacitor: Handling local request: https://localhost/
+11-14 13:00:29.753   523  2089 D CoreBackPreview: Window{a33cf0e u0 com.wsqm1990.ironjourney/com.wsqm1990.ironjourney.MainActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@bb3af3b, mPriority=0, mIsAnimationCallback=false}
+11-14 13:00:29.979   523   540 W ziparchive: Unable to open '/data/app/~~pHyCu0XtzewY-nvfSkIBCA==/com.wsqm1990.ironjourney-y9PPUXjC_jbiv5nZik5wwA==/base.dm': No such file or directory
+11-14 13:00:29.980   523   540 I ActivityTaskManager: Displayed com.wsqm1990.ironjourney/.MainActivity for user 0: +3s457ms
+11-14 13:00:30.010   523  2089 I ImeTracker: com.wsqm1990.ironjourney:94127473: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_UNSPECIFIED_WINDOW
+11-14 13:00:30.017  1613  1613 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.wsqm1990.ironjourney], userId:[0], reason:[package is added.].
+11-14 13:00:30.032   523  2089 I ImeTracker: com.wsqm1990.ironjourney:94127473: onCancelled at PHASE_SERVER_SHOULD_HIDE
+11-14 13:00:30.224  2532  2861 D Capacitor: Handling local request: https://localhost/fonts/fonts.css
+11-14 13:00:30.225  2532  2880 D Capacitor: Handling local request: https://localhost/capacitor.js
+11-14 13:00:30.228   523  2117 W InputManager-JNI: Input channel object '413d2b3 Splash Screen com.wsqm1990.ironjourney (client)' was disposed without first being removed with the input manager!
+11-14 13:00:30.232  1436  1584 W bwft    : Succeeded but not registered: com.google.android.apps.search.transcription.device#com.google.android.tts [CONTEXT service_id=51 ]
+11-14 13:00:30.339   523  2123 D CoreBackPreview: Window{413d2b3 u0 Splash Screen com.wsqm1990.ironjourney EXITING}: Setting back callback null
+11-14 13:00:30.403  1491  1491 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x12000000 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.wsqm1990.ironjourney fieldId=0 fieldName=null extras=null}, false)
+11-14 13:00:30.612  2532  2532 W Capacitor/Console: File: https://localhost/capacitor.js - Line 2 - Msg: Capacitor plugin "SystemBars" already registered. Cannot register plugins twice.
+11-14 13:00:30.625  2532  2532 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:00:30.627  2532  2532 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 123584148, pluginId: SystemBars, methodName: setStyle
+11-14 13:00:30.628  2532  2532 V Capacitor: callback: 123584148, pluginId: SystemBars, methodName: setStyle, methodData: {"style":"DEFAULT"}
+11-14 13:00:30.638  2532  2532 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:00:30.639  2532  2532 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 123584149, pluginId: IronTimer, methodName: addListener
+11-14 13:00:30.640  2532  2532 V Capacitor: callback: 123584149, pluginId: IronTimer, methodName: addListener, methodData: {"eventName":"timer"}
+11-14 13:00:30.644  2532  2532 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:00:30.644  2532  2532 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 123584150, pluginId: App, methodName: addListener
+11-14 13:00:30.644  2532  2532 V Capacitor: callback: 123584150, pluginId: App, methodName: addListener, methodData: {"eventName":"backButton"}
+11-14 13:00:30.645  2532  2532 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:00:30.646  2532  2532 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 123584151, pluginId: App, methodName: addListener
+11-14 13:00:30.646  2532  2532 V Capacitor: callback: 123584151, pluginId: App, methodName: addListener, methodData: {"eventName":"resume"}
+11-14 13:00:30.662  2532  2856 D Capacitor: Handling local request: https://localhost/fonts/f16.woff2
+11-14 13:00:30.674  2532  2856 D Capacitor: Handling local request: https://localhost/fonts/f4.woff2
+11-14 13:00:30.676  2532  2856 D Capacitor: Handling local request: https://localhost/fonts/f8.woff2
+11-14 13:00:30.679  2532  2858 D Capacitor: Handling local request: https://localhost/fonts/f12.woff2
+11-14 13:00:30.705  2532  2532 I Capacitor/Console: File:  - Line 333 - Msg: undefined
+11-14 13:00:30.729  2532  2856 D Capacitor: Handling local request: https://localhost/art/lpc/corpo/m/walk.png
+11-14 13:00:30.738  2532  2856 D Capacitor: Handling local request: https://localhost/art/lpc/cab/velho/walk.png
+11-14 13:00:30.741  2532  2856 D Capacitor: Handling local request: https://localhost/art/lpc/barba/lenhador/walk.png
+11-14 13:00:30.746  2532  2856 D Capacitor: Handling local request: https://localhost/art/lpc/camisa/m/walk.png
+11-14 13:00:30.750  2532  2856 D Capacitor: Handling local request: https://localhost/art/lpc/calca/m/walk.png
+11-14 13:00:30.764  2532  2856 D Capacitor: Handling local request: https://localhost/art/lpc/sapato/m/walk.png
+11-14 13:00:30.770  2532  2856 D Capacitor: Handling local request: https://localhost/art/lpc/manto/m/walk.png
+11-14 13:00:30.778  2532  2856 D Capacitor: Handling local request: https://localhost/art/lpc/chapeu-mago/walk.png
+11-14 13:00:30.780  2532  2856 D Capacitor: Handling local request: https://localhost/art/lpc/arma/cajado/walk.png
+11-14 13:00:30.785  2532  2856 D Capacitor: Handling local request: https://localhost/art/lpc/arma/cajado-tras/walk.png
+11-14 13:00:30.807  2532  2856 D Capacitor: Handling local request: https://localhost/fonts/f2.woff2
+11-14 13:00:30.810  2532  2856 D Capacitor: Handling local request: https://localhost/fonts/f6.woff2
+11-14 13:00:30.895  2532  2856 D Capacitor: Handling local request: https://localhost/favicon.ico
+11-14 13:00:31.083  1436  3140 W bwft    : Succeeded but not registered: com.google.android.apps.search.transcription.uidevice#com.google.android.tts [CONTEXT service_id=51 ]
+11-14 13:00:31.303  1742  2445 W chromium: [1114/130031.303390:WARNING:dns_config_service_android.cc(81)] Failed to read DnsConfig.
+11-14 13:00:31.796  2532  3047 W 990.ironjourney: Long monitor contention with owner ThreadPoolForeg (2857) at android.content.IContentProvider android.app.ActivityThread.acquireProvider(android.content.Context, java.lang.String, int, boolean)(ActivityThread.java:7330) waiters=0 in android.content.IContentProvider android.app.ActivityThread.acquireProvider(android.content.Context, java.lang.String, int, boolean) for 1.561s
+11-14 13:00:32.543  2542  2732 I VoiceDataManager: fetchBundledVoice en-us success path: /data/user_de/0/com.google.android.tts/files/superpacks/en-us/en-us-x-multi-r53
+11-14 13:00:32.770  1436  3111 W FontLog : No resolver, short-circuit {Noto Color Emoji Compat, wdth 100.0, wght 400, ital 0.0, bestEffort false} for com.wsqm1990.ironjourney to failure [CONTEXT service_id=132 ]
+11-14 13:00:32.880  1436  3111 W FontLog : No resolver, short-circuit {Noto Color Emoji Compat, wdth 100.0, wght 400, ital 0.0, bestEffort false} for com.wsqm1990.ironjourney to failure [CONTEXT service_id=132 ]
+11-14 13:00:33.110   523   550 D SystemServerTimingAsync: ssm.onUnlockedUser-0_com.android.server.texttospeech.TextToSpeechManagerService
+11-14 13:00:33.110   523   550 V SystemServerTimingAsync: ssm.onUnlockedUser-0_com.android.server.texttospeech.TextToSpeechManagerService took to complete: 0ms
+11-14 13:00:33.302   523   787 W JobServiceContext: Sending onNetworkChanged for a job that isn't started. JobStatus{d3fc770 #u0a134/110 com.google.android.webview/org.chromium.android_webview.nonembedded.AwComponentUpdateService u=0 s=10134 NET READY}
+11-14 13:00:33.302   523   787 W JobServiceContext: Sending onNetworkChanged for a job that isn't started. JobStatus{447cc9 #u0a134/83 com.google.android.webview/org.chromium.android_webview.services.AwVariationsSeedFetcher u=0 s=10134 NET CHARGING READY}
+11-14 13:00:33.555   523   551 I ActivityManager: Start proc 3426:com.google.android.webview:webview_apk/u0a134 for service {com.google.android.webview/org.chromium.android_webview.nonembedded.AwComponentUpdateService}
+11-14 13:00:33.633   523   574 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{94fb6b0 com.google.android.googlequicksearchbox/10132} BLOCKED
+11-14 13:00:33.633   523   574 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{b7322fa com.google.android.as/10125} BLOCKED
+11-14 13:00:33.633   523   574 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{cba9929 com.google.android.gm/10143} BLOCKED
+11-14 13:00:33.633   523   574 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{9759b76 com.google.android.devicelockcontroller/10173} BLOCKED
+11-14 13:00:33.633   523   574 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{4d3e4ae com.google.android.dialer/10128} BLOCKED
+11-14 13:00:33.633   523   574 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{a79924f com.google.android.contacts/10154} BLOCKED
+11-14 13:00:33.634   523   574 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{62a5a75 com.google.android.partnersetup/10124} BLOCKED
+11-14 13:00:33.634   523   574 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{fd89fc5 com.google.android.cellbroadcastreceiver/10189} BLOCKED
+11-14 13:00:33.634   523   574 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{fa87341 com.google.android.inputmethod.latin/10142} BLOCKED
+11-14 13:00:33.757   523  2018 D TextToSpeechManagerPerUserService: Unbinding TTS engine: com.google.android.tts. Reason: client disconnection request
+11-14 13:00:33.957   523   523 W TextToSpeechManagerPerUserService: Disconnected from TTS engine
+11-14 13:00:33.961  1613  3442 I TextToSpeech: Disconnected from TTS engine
+11-14 13:00:34.499  2542  2663 I SnapshotHandler: Unable to retrieve flag snapshot for com.google.android.libraries.performance.primes#com.google.android.tts, using defaults.
+11-14 13:00:34.742  3426  3534 W cr_AWNetworkFetcherTask: 	at org.chromium.android_webview.nonembedded.NetworkFetcherTask.download(chromium-TrichromeWebViewGoogle6432.apk-stable-567263637:48)
+11-14 13:00:34.858  1049  1049 D CarrierSvcBindHelper: onPackageModified: com.google.android.tts
+11-14 13:00:34.907  1049  1372 D ImsResolver: maybeAddedImsService, packageName: com.google.android.tts
+11-14 13:00:35.025  1613  1613 I AiAiEcho: AppFetcherImpl onPackageChanged com.wsqm1990.ironjourney.
+11-14 13:00:35.026  1613  3024 I AiAiEcho: AppIndexer Package:[com.wsqm1990.ironjourney] UserProfile:[0] Enabled:[true].
+11-14 13:00:35.026  1613  3024 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.wsqm1990.ironjourney], userId:[0], reason:[package is updated.].
+11-14 13:00:35.495  2532  3647 D ProfileInstaller: Installing profile for com.wsqm1990.ironjourney
+11-14 13:00:37.214  2532  2532 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:00:37.215  2532  2532 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 123584152, pluginId: IronTimer, methodName: fetchText
+11-14 13:00:37.215  2532  2532 V Capacitor: callback: 123584152, pluginId: IronTimer, methodName: fetchText, methodData: {"url":"https:\/\/github.com\/wsqm1990-collab\/iron-journey\/releases\/latest\/download\/version.json"}
+11-14 13:00:37.259  2532  3855 I CapacitorCookies: Getting cookies at: 'https://github.com/wsqm1990-collab/iron-journey/releases/latest/download/version.json'
+11-14 13:00:37.470  2532  3855 I CapacitorCookies: Setting cookie '_gh_sess=v%2B83mztd8loKl6hzO9qeTa%2BoEpWLYayt9blG%2BLLumXkcSDhcg30qq2KB9fxeLegbYgr7mru0FpwYvKPM7bnVXS8nd8u1Ta5xOGQrxk9fjIVM4hw3taH7WrRSr8SqTKFBB65Y2edq2dVy47%2BM8hoDD%2B%2BSzEMask0ix5k2YJUZJrbSTQpWFLfhOl1qEAvc9OCjtHipFN52gLlPMJ4JsVgMN697%2BPVaUsIqHulzSKhX6%2BWcWmN6JfvnFtMqlWS42JC3lKwFUZ40RYgAhm06fhtRww%3D%3D--a2E7xsAITNHvyKNl--wyOEMQO05QbYgbzEszjyzg%3D%3D; path=/; HttpOnly; secure; SameSite=Lax' at: 'https://github.com/wsqm1990-collab/iron-journey/releases/latest/download/version.json'
+11-14 13:00:37.478  2532  3855 I CapacitorCookies: Setting cookie '_gh_sess=v%2B83mztd8loKl6hzO9qeTa%2BoEpWLYayt9blG%2BLLumXkcSDhcg30qq2KB9fxeLegbYgr7mru0FpwYvKPM7bnVXS8nd8u1Ta5xOGQrxk9fjIVM4hw3taH7WrRSr8SqTKFBB65Y2edq2dVy47%2BM8hoDD%2B%2BSzEMask0ix5k2YJUZJrbSTQpWFLfhOl1qEAvc9OCjtHipFN52gLlPMJ4JsVgMN697%2BPVaUsIqHulzSKhX6%2BWcWmN6JfvnFtMqlWS42JC3lKwFUZ40RYgAhm06fhtRww%3D%3D--a2E7xsAITNHvyKNl--wyOEMQO05QbYgbzEszjyzg%3D%3D; path=/; HttpOnly; secure; SameSite=Lax' at: 'https://localhost'
+11-14 13:00:37.485  2532  3855 I CapacitorCookies: Setting cookie '_octo=GH1.1.1929744302.1794661237; expires=Sun, 14 Nov 2027 13:00:37 GMT; domain=.github.com; path=/; secure; SameSite=Lax' at: 'https://github.com/wsqm1990-collab/iron-journey/releases/latest/download/version.json'
+11-14 13:00:37.502  2532  3855 I CapacitorCookies: Setting cookie '_octo=GH1.1.1929744302.1794661237; expires=Sun, 14 Nov 2027 13:00:37 GMT; domain=.github.com; path=/; secure; SameSite=Lax' at: 'https://.github.com'
+11-14 13:00:37.506  2532  3855 I CapacitorCookies: Setting cookie 'logged_in=no; expires=Sun, 14 Nov 2027 13:00:37 GMT; domain=.github.com; path=/; HttpOnly; secure; SameSite=Lax' at: 'https://github.com/wsqm1990-collab/iron-journey/releases/latest/download/version.json'
+11-14 13:00:37.511  2532  3855 I CapacitorCookies: Setting cookie 'logged_in=no; expires=Sun, 14 Nov 2027 13:00:37 GMT; domain=.github.com; path=/; HttpOnly; secure; SameSite=Lax' at: 'https://.github.com'
+11-14 13:00:37.528  2532  3855 I CapacitorCookies: Getting cookies at: 'https://github.com/wsqm1990-collab/iron-journey/releases/download/v1.0.22/version.json'
+11-14 13:00:37.544   523  2110 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{d947b1a com.google.android.gm/10143} BLOCKED
+11-14 13:00:37.713  2532  3855 I CapacitorCookies: Getting cookies at: 'https://release-assets.githubusercontent.com/github-production-release-asset/1454748316/ecf92202-674d-4315-8a47-e7f81c909c8b?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-11-14T13%3A45%3A43Z&rscd=attachment%3B+filename%3Dversion.json&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-11-14T12%3A45%3A29Z&ske=2026-11-14T13%3A45%3A43Z&sks=b&skv=2018-11-09&sig=nUzQqtEqG3HFmqRCyfN7lZ2ziOibnylkbQHFG5Zx%2Bes%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc5NDY2MTUzNywibmJmIjoxNzk0NjYxMjM3LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.xja_k_qOrBtvcRDt_o4suzrirJ4iqLTxqsoRPlpVmAs&response-content-disposition=attachment%3B%20filename%3Dversion.json&response-content-type=application%2Foctet-stream'
+11-14 13:00:37.967  2532  2532 I Capacitor/Console: File:  - Line 333 - Msg: {"text":"{\"build\":22,\"zip\":\"https://github.com/wsqm1990-collab/IRON-JOURNEY/releases/download/v1.0.22/web.zip\",\"sha256\":\"64819ee8625cefbfc2fc002051b5b6277922321dc1697694e15a3b775a30f899\",\"minShell\":1,\"apk\":\"https://github.com/wsqm1990-collab/IRON-JOURNEY/releases/download/v1.0.22/IronJourney.apk\"}\n"}
+11-14 13:00:38.205  1516  3628 I BlockstoreStorage: Clearing Blockstore Data for package com.wsqm1990.ironjourney [CONTEXT service_id=258 ]
+11-14 13:00:38.271   523  3961 D SystemServerTimingAsync: ssm.onCompletedEventUser-0_{|Unlocked|}_com.android.server.texttospeech.TextToSpeechManagerService
+11-14 13:00:38.271   523  3961 V SystemServerTimingAsync: ssm.onCompletedEventUser-0_{|Unlocked|}_com.android.server.texttospeech.TextToSpeechManagerService took to complete: 0ms
+11-14 13:00:38.661   523  2117 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{74ecc50 com.google.android.settings.intelligence/10118} BLOCKED
+11-14 13:00:38.663   523  2126 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{4ad8e49 com.google.android.settings.intelligence/10118} BLOCKED
+11-14 13:00:38.675  1436  4039 I FontLog : Package com.wsqm1990.ironjourney has no metadata [CONTEXT service_id=132 ]
+11-14 13:00:38.919  1613  1613 I AiAiEcho: AppFetcherImpl onPackageChanged com.google.android.tts.
+11-14 13:00:38.920  1613  3025 I AiAiEcho: AppIndexer Package:[com.google.android.tts] UserProfile:[0] Enabled:[true].
+11-14 13:00:38.920  1613  3025 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.google.android.tts], userId:[0], reason:[package is updated.].
+11-14 13:00:40.279  1067  1086 V OnDeviceRecognitionPreferenceController: Recognition service not in the same package as the default on-device recognizer: com.google.android.tts/com.google.android.apps.speech.tts.googletts.service.GoogleTTSRecognitionService.
+11-14 13:00:43.782  2532  2856 D Capacitor: Handling local request: https://localhost/art/lpc/cab/m/walk.png
+11-14 13:00:43.784  2532  2857 D Capacitor: Handling local request: https://localhost/art/lpc/cabelo/plain/walk.png
+11-14 13:00:43.785  2532  2858 D Capacitor: Handling local request: https://localhost/art/lpc/arma/maca/walk.png
+11-14 13:00:43.786  2532  2861 D Capacitor: Handling local request: https://localhost/art/lpc/arma/maca-tras/walk.png
+11-14 13:00:43.794  2532  2880 D Capacitor: Handling local request: https://localhost/art/lpc/escudo/redondo/walk.png
+11-14 13:00:43.975   523   574 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{c8d60b com.google.android.googlequicksearchbox/10132} BLOCKED
+11-14 13:00:43.977   523   574 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{e3cace8 com.google.android.apps.messaging/10130} BLOCKED
+11-14 13:00:43.977   523   574 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{ff47f01 com.android.camera2/10145} BLOCKED
+11-14 13:00:43.977   523   574 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{59291a6 com.google.android.gm/10143} BLOCKED
+11-14 13:00:43.977   523   574 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{42cc7e7 com.google.android.devicelockcontroller/10173} BLOCKED
+11-14 13:00:43.977   523   574 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{fa3af94 com.google.android.rkpdapp/10185} BLOCKED
+11-14 13:00:43.978   523   574 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{8a90a3d com.google.android.contacts/10154} BLOCKED
+11-14 13:00:43.978   523   574 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{9462232 com.google.android.settings.intelligence/10118} BLOCKED
+11-14 13:00:43.978   523   574 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{33b5a3c com.google.android.projection.gearhead/10123} BLOCKED
+11-14 13:00:44.380  2882  3000 I chromium: [INFO:audio_latency.cc(179)] audioHardwareBufferSize = 4360
+11-14 13:00:44.450  2532  2878 D 990.ironjourney: PlayerBase::PlayerBase()
+11-14 13:00:44.456  2532  2532 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:00:44.467  2532  2532 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 123584153, pluginId: IronTimer, methodName: keepAwake
+11-14 13:00:44.467  2532  2532 V Capacitor: callback: 123584153, pluginId: IronTimer, methodName: keepAwake, methodData: {"on":true}
+11-14 13:00:44.692  2532  2532 I Capacitor/Console: File:  - Line 333 - Msg: undefined
+11-14 13:00:45.299  2532  2532 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:00:45.301  2532  2532 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 123584154, pluginId: IronTimer, methodName: start
+11-14 13:00:45.302  2532  2532 V Capacitor: callback: 123584154, pluginId: IronTimer, methodName: start, methodData: {"kind":"rest","id":"r1794661245299","title":"Rest · Chest-supported dumbbell row: set 2","mode":"voz","lang":"en-US","duck":true,"fresh":false,"ini":1794661245299,"pausa":0,"pausadoEm":0,"done":"Rest is over. Chest-supported dumbbell row: set 2.","segs":[{"s":150,"label":"Rest","say":"","strong":false}],"labels":{"next":"Next: {s} · {t}","last":"Chest-supported dumbbell row: set 2","paused":"Paused","pause":"Pause","resume":"Resume","skip":"Skip","stop":"Skip","channel":"Workout timer"}}
+11-14 13:00:45.304   523  2118 I ActivityManager: Background started FGS: Allowed [callingPackage: com.wsqm1990.ironjourney; callingUid: 10192; uidState: TOP ; uidBFSL: [BFSL]; intent: Intent { act=com.wsqm1990.ironjourney.START cmp=com.wsqm1990.ironjourney/.IronTimerService (has extras) }; code:PROC_STATE_TOP; tempAllowListReason:<null>; targetSdkVersion:36; callerTargetSdkVersion:36; startForegroundCount:0; bindFromPackage:null: isBindService:false]
+11-14 13:00:45.328  2532  2532 I TextToSpeech: Sucessfully bound to com.google.android.tts
+11-14 13:00:45.333  2532  2532 I IronTimer: start kind=rest id=r1794661245299 segs=1 fresh=false mode=voz
+11-14 13:00:45.351  2532  2532 I Capacitor/Console: File:  - Line 333 - Msg: undefined
+11-14 13:00:45.371   523  2018 D TextToSpeechManagerPerUserService: Trying to start connection to TTS engine: com.google.android.tts
+11-14 13:00:45.386  2542  2542 I GoogleTtsServicePeer: Creating Google TTS service, version googletts.google-speech-apk_20230123.02_p3.506463867
+11-14 13:00:45.427   523   523 D TextToSpeechManagerPerUserService: Connected successfully to TTS engine: com.google.android.tts
+11-14 13:00:45.431  2532  4500 I TextToSpeech: Connected to TTS engine
+11-14 13:00:45.479  2532  4535 I TextToSpeech: Setting up the connection to TTS engine...
+11-14 13:00:45.482  2532  2532 I IronTimer: tts init status=0
+11-14 13:00:46.204  2532  2532 I IronTimer: tts language en-US result=1
+11-14 13:00:46.805  2532  2532 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:00:46.806  2532  2532 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 123584155, pluginId: IronTimer, methodName: getState
+11-14 13:00:46.806  2532  2532 V Capacitor: callback: 123584155, pluginId: IronTimer, methodName: getState, methodData: {}
+11-14 13:00:46.808  2532  2532 I Capacitor/Console: File:  - Line 333 - Msg: {"type":"state","kind":"rest","id":"r1794661245299","ini":1794661245299,"pausa":0,"pausadoEm":0,"running":true,"ended":false}
+11-14 13:00:48.871   523  2127 I ImeTracker: com.wsqm1990.ironjourney:8c81ad7d: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_SAME_WINDOW_FOCUSED_WITHOUT_EDITOR
+11-14 13:00:48.875   523  2127 I ImeTracker: com.wsqm1990.ironjourney:8c81ad7d: onCancelled at PHASE_SERVER_SHOULD_HIDE
+11-14 13:00:48.892  1491  1491 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x12000000 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.wsqm1990.ironjourney fieldId=0 fieldName=null extras=null}, false)
+11-14 13:00:49.343  2532  2532 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:00:49.344  2532  2532 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 123584156, pluginId: IronTimer, methodName: stop
+11-14 13:00:49.344  2532  2532 V Capacitor: callback: 123584156, pluginId: IronTimer, methodName: stop, methodData: {"kind":"rest"}
+11-14 13:00:49.349  2532  2532 V Capacitor/IronTimerPlugin: Notifying listeners for event timer
+11-14 13:00:49.350  2532  2532 I IronTimer: finish complete=false kind=rest by=app
+11-14 13:00:49.356  2532  2532 I Capacitor/Console: File:  - Line 333 - Msg: undefined
+11-14 13:00:49.357  2532  2532 I Capacitor/Console: File:  - Line 333 - Msg: {"type":"stopped","kind":"rest","id":"r1794661245299","ini":1794661245299,"pausa":0,"pausadoEm":0,"running":false,"by":"app","endedAt":1794661249349}
+11-14 13:00:50.160  2532  2532 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:00:50.161  2532  2532 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 123584157, pluginId: IronTimer, methodName: getState
+11-14 13:00:50.161  2532  2532 V Capacitor: callback: 123584157, pluginId: IronTimer, methodName: getState, methodData: {}
+11-14 13:00:50.163  2532  2532 I Capacitor/Console: File:  - Line 333 - Msg: {"type":"state","kind":"rest","id":"r1794661245299","ini":1794661245299,"pausa":0,"pausadoEm":0,"running":false,"ended":true,"complete":false,"endedAt":1794661249349}
+11-14 13:00:50.680  2532  2532 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:00:50.682  2532  2532 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 123584158, pluginId: IronTimer, methodName: keepAwake
+11-14 13:00:50.685  2532  2532 V Capacitor: callback: 123584158, pluginId: IronTimer, methodName: keepAwake, methodData: {"on":false}
+11-14 13:00:50.728  2532  2532 I Capacitor/Console: File:  - Line 333 - Msg: undefined
+11-14 13:00:50.741  2532  2856 D Capacitor: Handling local request: https://localhost/art/lpc/corpo/m/slash.png
+11-14 13:00:50.742  2532  2857 D Capacitor: Handling local request: https://localhost/art/lpc/cab/m/slash.png
+11-14 13:00:50.743  2532  2858 D Capacitor: Handling local request: https://localhost/art/lpc/cabelo/plain/slash.png
+11-14 13:00:50.744  2532  2861 D Capacitor: Handling local request: https://localhost/art/lpc/camisa/m/slash.png
+11-14 13:00:50.745  2532  2858 D Capacitor: Handling local request: https://localhost/art/lpc/calca/m/slash.png
+11-14 13:00:50.751  2532  2902 D Capacitor: Handling local request: https://localhost/art/lpc/sapato/m/slash.png
+11-14 13:00:50.752  2532  2857 D Capacitor: Handling local request: https://localhost/art/lpc/arma/maca-tras/slash.png
+11-14 13:00:50.752  2532  2861 D Capacitor: Handling local request: https://localhost/art/lpc/escudo/redondo/slash.png
+11-14 13:00:50.753  2532  2902 D Capacitor: Handling local request: https://localhost/art/lpc/corpo/m/hurt.png
+11-14 13:00:50.755  2532  2902 D Capacitor: Handling local request: https://localhost/art/lpc/cab/goblin/walk.png
+11-14 13:00:50.757  2532  2856 D Capacitor: Handling local request: https://localhost/art/lpc/rosto/m/walk.png
+11-14 13:00:50.757  2532  2858 D Capacitor: Handling local request: https://localhost/art/lpc/cab/goblin/hurt.png
+11-14 13:00:50.757  2532  2880 D Capacitor: Handling local request: https://localhost/art/lpc/arma/maca/slash.png
+11-14 13:00:50.762  2532  2857 D Capacitor: Handling local request: https://localhost/art/lpc/couro/m/walk.png
+11-14 13:00:50.771  2532  2856 D Capacitor: Handling local request: https://localhost/art/lpc/couro/m/hurt.png
+11-14 13:00:50.773  2532  2880 D Capacitor: Handling local request: https://localhost/art/lpc/arma/adaga/walk.png
+11-14 13:00:50.773  2532  2861 D Capacitor: Handling local request: https://localhost/art/lpc/arma/adaga/hurt.png
+11-14 13:00:50.774  2532  2858 D Capacitor: Handling local request: https://localhost/art/lpc/arma/adaga-tras/walk.png
+11-14 13:00:52.230  2532  2532 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:00:52.231  2532  2532 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 123584159, pluginId: IronTimer, methodName: keepAwake
+11-14 13:00:52.232  2532  2532 V Capacitor: callback: 123584159, pluginId: IronTimer, methodName: keepAwake, methodData: {"on":true}
+11-14 13:00:52.233  2532  2532 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:00:52.234  2532  2532 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 123584160, pluginId: IronTimer, methodName: askNotif
+11-14 13:00:52.234  2532  2532 V Capacitor: callback: 123584160, pluginId: IronTimer, methodName: askNotif, methodData: {}
+11-14 13:00:52.235  2532  2532 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:00:52.239  2532  2532 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 123584161, pluginId: IronTimer, methodName: start
+11-14 13:00:52.243  2532  2532 V Capacitor: callback: 123584161, pluginId: IronTimer, methodName: start, methodData: {"kind":"hiit","id":"c1794661252228","title":"E2E HIIT","mode":"voz","lang":"en-US","duck":true,"fresh":true,"ini":1794661252228,"pausa":0,"pausadoEm":0,"intro":"Let's go. Warm-up, 8 seconds.","half":"Halfway.","done":"Workout complete. Great job!","segs":[{"s":8,"label":"Warm-up","say":"","strong":false,"round":""},{"s":8,"label":"Hard","say":"Round 1 of 2. Hard, 8 seconds.","strong":true,"round":"Round 1 of 2"},{"s":8,"label":"Recover","say":"Recover, 8 seconds.","strong":false,"round":"Round 1 of 2"},{"s":8,"label":"Hard","say":"Last round! Hard, 8 seconds.","strong":true,"round":"Round 2 of 2"},{"s":8,"label":"Cool-down","say":"Cool-down, 8 seconds.","strong":false,"round":""}],"labels":{"next":"Next: {s} · {t}","last":"Last part","paused":"Paused","pause":"Pause","resume":"Resume","skip":"Skip","stop":"Finish","channel":"Workout timer","doneTitle":"Done! Great work.","doneText":"Tap to log your cardio and collect your XP."}}
+11-14 13:00:52.249   523  1675 I ActivityManager: Background started FGS: Allowed [callingPackage: com.wsqm1990.ironjourney; callingUid: 10192; uidState: TOP ; uidBFSL: [BFSL]; intent: Intent { act=com.wsqm1990.ironjourney.START cmp=com.wsqm1990.ironjourney/.IronTimerService (has extras) }; code:PROC_STATE_TOP; tempAllowListReason:<null>; targetSdkVersion:36; callerTargetSdkVersion:36; startForegroundCount:1; bindFromPackage:null: isBindService:false]
+11-14 13:00:52.280  2532  2532 I IronTimer: start kind=hiit id=c1794661252228 segs=5 fresh=true mode=voz
+11-14 13:00:52.282  2532  2532 I Capacitor/Console: File:  - Line 333 - Msg: undefined
+11-14 13:00:52.284  2532  2532 I Capacitor/Console: File:  - Line 333 - Msg: {"granted":true}
+11-14 13:00:52.284  2532  2532 I Capacitor/Console: File:  - Line 333 - Msg: undefined
+11-14 13:00:52.589   523  2018 I MediaFocusControl: requestAudioFocus() from uid/pid 10192/2532 AA=USAGE_ASSISTANCE_NAVIGATION_GUIDANCE/CONTENT_TYPE_SPEECH clientId=android.media.AudioManager@448f83acom.wsqm1990.ironjourney.Speaker$1@58f8ceb callingPack=com.wsqm1990.ironjourney req=3 flags=0x0 sdk=36
+11-14 13:00:52.591  2532  2532 I IronTimer: speak result=0 text=Let's go. Warm-up, 8 seconds.
+11-14 13:00:52.967  1436  1584 I HeterodyneSyncScheduler: Scheduling Phenotype for a PhenotypeSyncImmediately(6, org.chromium.net.cronet) one off with window [1, 2] in seconds [CONTEXT service_id=51 ]
+11-14 13:00:54.752  2532  2532 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:00:54.755  2532  2532 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 123584162, pluginId: IronTimer, methodName: getState
+11-14 13:00:54.755  2532  2532 V Capacitor: callback: 123584162, pluginId: IronTimer, methodName: getState, methodData: {}
+11-14 13:00:54.757  2532  2532 I Capacitor/Console: File:  - Line 333 - Msg: {"type":"state","kind":"hiit","id":"c1794661252228","ini":1794661252228,"pausa":0,"pausadoEm":0,"running":true,"ended":false}
+11-14 13:00:54.960  2532  2532 V Capacitor/AppPlugin: Notifying listeners for event pause
+11-14 13:00:54.961  2532  2532 D Capacitor/AppPlugin: No listeners found for event pause
+11-14 13:00:54.961  2532  2532 D Capacitor: App paused
+11-14 13:00:55.188   523  2106 I MediaFocusControl: abandonAudioFocus() from uid/pid 10192/2532 clientId=android.media.AudioManager@448f83acom.wsqm1990.ironjourney.Speaker$1@58f8ceb
+11-14 13:00:55.692   523   574 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{ca633b9 com.google.android.apps.maps/10153} BLOCKED
+11-14 13:00:55.692   523   574 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{8c2066e com.google.android.contacts/10154} BLOCKED
+11-14 13:00:55.927   523   540 V WindowManager:     info={id=6 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{RemoteToken{a0deb95 Task{5eadca5 #1 type=home}}} m=TO_FRONT f=SHOW_WALLPAPER|MOVE_TO_TOP leash=Surface(name=Task=1)/@0x3738f5b sb=Rect(0, 0 - 320, 640) eb=Rect(0, 0 - 320, 640) d=0},{WCT{RemoteToken{3ad4c3f Task{1979202 #8 type=standard A=10192:com.wsqm1990.ironjourney}}} m=TO_BACK f=NONE leash=Surface(name=Task=8)/@0x47daee0 sb=Rect(0, 0 - 320, 640) eb=Rect(0, 0 - 320, 640) d=0},{null m=TO_FRONT f=IS_WALLPAPER leash=Surface(name=WallpaperWindowToken{937e233 token=android.os.Binder@4b6a397})/@0x98a4460 sb=Rect(0, 0 - 320, 640) eb=Rect(0, 0 - 320, 640) d=0}]}
+11-14 13:00:56.702  2532  2532 D Capacitor/AppPlugin: Firing change: false
+11-14 13:00:56.702  2532  2532 V Capacitor/AppPlugin: Notifying listeners for event appStateChange
+11-14 13:00:56.702  2532  2532 D Capacitor/AppPlugin: No listeners found for event appStateChange
+11-14 13:00:56.702  2532  2532 D Capacitor: App stopped
+11-14 13:00:56.703  2532  2532 D Capacitor: Saving instance state!
+11-14 13:00:59.198  4303  4871 I cr_CronetUrlRequestContext: destroyNativeStreamLocked org.chromium.net.impl.CronetBidirectionalStream@1ea9dcf
+11-14 13:01:00.349  2532  2532 I IronTimer: cue seg=1 strong=true mode=voz say=Round 1 of 2. Hard, 8 seconds.
+11-14 13:01:00.371  2532  4884 I IronTimer: tone notes=2
+11-14 13:01:00.800   523  2124 I MediaFocusControl: requestAudioFocus() from uid/pid 10192/2532 AA=USAGE_ASSISTANCE_NAVIGATION_GUIDANCE/CONTENT_TYPE_SPEECH clientId=android.media.AudioManager@448f83acom.wsqm1990.ironjourney.Speaker$1@58f8ceb callingPack=com.wsqm1990.ironjourney req=3 flags=0x0 sdk=36
+11-14 13:01:00.811  2532  2532 I IronTimer: speak result=0 text=Round 1 of 2. Hard, 8 seconds.
+11-14 13:01:02.083  2532  2532 D AudioManager: dispatching onAudioFocusChange(-3) to android.media.AudioManager@448f83acom.wsqm1990.ironjourney.Speaker$1@58f8ceb
+11-14 13:01:02.630  2532  2532 D AudioManager: dispatching onAudioFocusChange(1) to android.media.AudioManager@448f83acom.wsqm1990.ironjourney.Speaker$1@58f8ceb
+11-14 13:01:03.323   523  2117 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{fa52a10 com.google.android.settings.intelligence/10118} BLOCKED
+11-14 13:01:03.446  1067  1085 V OnDeviceRecognitionPreferenceController: Recognition service not in the same package as the default on-device recognizer: com.google.android.tts/com.google.android.apps.speech.tts.googletts.service.GoogleTTSRecognitionService.
+11-14 13:01:03.575   523   823 I MediaFocusControl: abandonAudioFocus() from uid/pid 10192/2532 clientId=android.media.AudioManager@448f83acom.wsqm1990.ironjourney.Speaker$1@58f8ceb
+11-14 13:01:04.313  1067  4493 V OnDeviceRecognitionPreferenceController: Recognition service not in the same package as the default on-device recognizer: com.google.android.tts/com.google.android.apps.speech.tts.googletts.service.GoogleTTSRecognitionService.
+11-14 13:01:04.845  2542  2542 I PhenotypeBackgroundRecv: Skipping com.google.android.libraries.search.audio.device#com.google.android.tts which doesn't use ProcessStable flags.
+11-14 13:01:04.879  2542  2542 I PhenotypeBackgroundRecv: Skipping com.google.android.libraries.search.device#com.google.android.tts which doesn't use ProcessStable flags.
+11-14 13:01:04.900  2542  2716 I PhenotypeBackgroundRecv: Successfully updated snapshot for com.google.android.libraries.consentverifier#com.google.android.tts
+11-14 13:01:04.955  2542  2725 I PhenotypeBackgroundRecv: Successfully updated snapshot for com.google.android.gms.clearcut_client#com.google.android.tts
+11-14 13:01:04.965  2542  2716 I PhenotypeBackgroundRecv: Successfully updated snapshot for com.google.android.tts#com.google.android.tts
+11-14 13:01:04.978  2542  2725 I PhenotypeBackgroundRecv: Successfully updated snapshot for com.google.android.libraries.performance.primes#com.google.android.tts
+11-14 13:01:04.979  2542  2542 I PhenotypeBackgroundRecv: Skipping com.google.android.gms.icing.mdd#com.google.android.tts which doesn't use ProcessStable flags.
+11-14 13:01:04.980  2542  2542 I PhenotypeBackgroundRecv: Skipping com.google.android.apps.search.transcription.device#com.google.android.tts which doesn't use ProcessStable flags.
+11-14 13:01:05.038  2542  2716 I PhenotypeBackgroundRecv: Successfully updated snapshot for com.google.android.libraries.consentverifier#com.google.android.tts
+11-14 13:01:05.053  2542  2716 I PhenotypeBackgroundRecv: Successfully updated snapshot for com.google.android.libraries.consentverifier#com.google.android.tts
+11-14 13:01:05.063  2542  2542 I PhenotypeBackgroundRecv: Skipping com.google.android.gms.icing.mdd#com.google.android.tts which doesn't use ProcessStable flags.
+11-14 13:01:07.228   523   574 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{ac3dd76 com.google.android.googlequicksearchbox/10132} BLOCKED
+11-14 13:01:07.229   523   574 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{2236f77 com.google.android.apps.messaging/10130} BLOCKED
+11-14 13:01:07.229   523   574 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{216e7e4 com.google.android.contacts/10154} BLOCKED
+11-14 13:01:08.409  2532  2532 I IronTimer: cue seg=2 strong=false mode=voz say=Recover, 8 seconds.
+11-14 13:01:08.439  2532  5166 I IronTimer: tone notes=1
+11-14 13:01:08.861   523  2107 I MediaFocusControl: requestAudioFocus() from uid/pid 10192/2532 AA=USAGE_ASSISTANCE_NAVIGATION_GUIDANCE/CONTENT_TYPE_SPEECH clientId=android.media.AudioManager@448f83acom.wsqm1990.ironjourney.Speaker$1@58f8ceb callingPack=com.wsqm1990.ironjourney req=3 flags=0x0 sdk=36
+11-14 13:01:08.869  2532  2532 I IronTimer: speak result=0 text=Recover, 8 seconds.
+11-14 13:01:10.577   523   957 I MediaFocusControl: abandonAudioFocus() from uid/pid 10192/2532 clientId=android.media.AudioManager@448f83acom.wsqm1990.ironjourney.Speaker$1@58f8ceb
+11-14 13:01:16.236  2532  2532 I IronTimer: cue seg=3 strong=true mode=voz say=Last round! Hard, 8 seconds.
+11-14 13:01:16.247  2532  5466 I IronTimer: tone notes=2
+11-14 13:01:16.686   523   536 I MediaFocusControl: requestAudioFocus() from uid/pid 10192/2532 AA=USAGE_ASSISTANCE_NAVIGATION_GUIDANCE/CONTENT_TYPE_SPEECH clientId=android.media.AudioManager@448f83acom.wsqm1990.ironjourney.Speaker$1@58f8ceb callingPack=com.wsqm1990.ironjourney req=3 flags=0x0 sdk=36
+11-14 13:01:16.687  2532  2532 I IronTimer: speak result=0 text=Last round! Hard, 8 seconds.
+11-14 13:01:17.340   523   574 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{5e2cd79 com.google.android.gm/10143} BLOCKED
+11-14 13:01:17.340   523   574 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{c28abe com.google.android.contacts/10154} BLOCKED
+11-14 13:01:19.214   523  2068 I MediaFocusControl: abandonAudioFocus() from uid/pid 10192/2532 clientId=android.media.AudioManager@448f83acom.wsqm1990.ironjourney.Speaker$1@58f8ceb
+11-14 13:01:24.255  2532  2532 I IronTimer: cue seg=4 strong=false mode=voz say=Cool-down, 8 seconds.
+11-14 13:01:24.269  2532  5545 I IronTimer: tone notes=1
+11-14 13:01:24.707   523  2127 I MediaFocusControl: requestAudioFocus() from uid/pid 10192/2532 AA=USAGE_ASSISTANCE_NAVIGATION_GUIDANCE/CONTENT_TYPE_SPEECH clientId=android.media.AudioManager@448f83acom.wsqm1990.ironjourney.Speaker$1@58f8ceb callingPack=com.wsqm1990.ironjourney req=3 flags=0x0 sdk=36
+11-14 13:01:24.707  2532  2532 I IronTimer: speak result=0 text=Cool-down, 8 seconds.
+11-14 13:01:25.628  2542  2716 I PhenotypeBackgroundRecv: Successfully updated snapshot for com.google.android.libraries.consentverifier#com.google.android.tts
+11-14 13:01:25.664  2542  2542 I PhenotypeBackgroundRecv: Skipping com.google.android.gms.icing.mdd#com.google.android.tts which doesn't use ProcessStable flags.
+11-14 13:01:26.173   523   574 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{6b1fa8a com.google.android.contacts/10154} BLOCKED
+11-14 13:01:26.704   523   603 I MediaFocusControl: abandonAudioFocus() from uid/pid 10192/2532 clientId=android.media.AudioManager@448f83acom.wsqm1990.ironjourney.Speaker$1@58f8ceb
+11-14 13:01:28.137   523   574 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{58955ba com.google.android.as/10125} BLOCKED
+11-14 13:01:28.531  2542  2716 I PhenotypeBackgroundRecv: Successfully updated snapshot for com.google.android.libraries.consentverifier#com.google.android.tts
+11-14 13:01:28.543  2542  2542 I PhenotypeBackgroundRecv: Skipping com.google.android.gms.icing.mdd#com.google.android.tts which doesn't use ProcessStable flags.
+11-14 13:01:32.145   523   574 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{a7d257c com.google.android.contacts/10154} BLOCKED
+11-14 13:01:32.236  2532  2532 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:01:32.238  2532  2532 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 123584163, pluginId: IronTimer, methodName: keepAwake
+11-14 13:01:32.238  2532  2532 V Capacitor: callback: 123584163, pluginId: IronTimer, methodName: keepAwake, methodData: {"on":false}
+11-14 13:01:32.240  2532  2532 I Capacitor/Console: File:  - Line 333 - Msg: undefined
+11-14 13:01:32.310  2532  2532 V Capacitor/IronTimerPlugin: Notifying listeners for event timer
+11-14 13:01:32.312  2532  2532 I IronTimer: finish complete=true kind=hiit by=app
+11-14 13:01:32.321  2532  2532 I Capacitor/Console: File:  - Line 333 - Msg: {"type":"done","kind":"hiit","id":"c1794661252228","ini":1794661252228,"pausa":0,"pausadoEm":0,"running":false,"by":"app","endedAt":1794661292307}
+11-14 13:01:32.351  2532  5708 I IronTimer: tone notes=3
+11-14 13:01:33.009   523   905 I MediaFocusControl: requestAudioFocus() from uid/pid 10192/2532 AA=USAGE_ASSISTANCE_NAVIGATION_GUIDANCE/CONTENT_TYPE_SPEECH clientId=android.media.AudioManager@448f83acom.wsqm1990.ironjourney.Speaker$1@58f8ceb callingPack=com.wsqm1990.ironjourney req=3 flags=0x0 sdk=36
+11-14 13:01:33.012  2532  2532 I IronTimer: speak result=0 text=Workout complete. Great job!
+11-14 13:01:35.104   523  2125 I MediaFocusControl: abandonAudioFocus() from uid/pid 10192/2532 clientId=android.media.AudioManager@448f83acom.wsqm1990.ironjourney.Speaker$1@58f8ceb
+11-14 13:01:36.237  2532  2532 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:01:36.238  2532  2532 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 123584164, pluginId: IronTimer, methodName: ack
+11-14 13:01:36.238  2532  2532 V Capacitor: callback: 123584164, pluginId: IronTimer, methodName: ack, methodData: {}
+11-14 13:01:36.240  2532  2532 I Capacitor/Console: File:  - Line 333 - Msg: undefined
+11-14 13:01:37.844   523  2125 I ActivityTaskManager: START u0 {flg=0x10000000 cmp=com.wsqm1990.ironjourney/.MainActivity} with LAUNCH_SINGLE_TASK from uid 2000 (BAL_ALLOW_PERMISSION) result code=2
+11-14 13:01:37.846   836   854 V WindowManagerShell: Transition requested: android.os.BinderProxy@592fa33 TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=8 displayId=0 isRunning=true baseIntent=Intent { flg=0x10000000 cmp=com.wsqm1990.ironjourney/.MainActivity } baseActivity=ComponentInfo{com.wsqm1990.ironjourney/com.wsqm1990.ironjourney.MainActivity} topActivity=ComponentInfo{com.wsqm1990.ironjourney/com.wsqm1990.ironjourney.MainActivity} origActivity=null realActivity=ComponentInfo{com.wsqm1990.ironjourney/com.wsqm1990.ironjourney.MainActivity} numActivities=1 lastActiveTime=62078 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{android.window.IWindowContainerToken$Stub$Proxy@e4241f0} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=null topActivityInfo=ActivityInfo{1ed6369 com.wsqm1990.ironjourney.MainActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=true isVisible=false isVisibleRequested=false isSleeping=false topActivityInSizeCompat=false topActivityEligibleForLetterboxEducation= false topActivityLetterboxed= false isFromDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 locusId=null displayAreaFeatureId=1 cameraCompatControlState=hidden}, remoteTransition = null, displayChange = null }
+11-14 13:01:37.847   836   854 D WindowManagerShell: onActivityRestartAttempt: ComponentInfo{com.wsqm1990.ironjourney/com.wsqm1990.ironjourney.MainActivity}
+11-14 13:01:37.856  2532  2532 D Capacitor: App restarted
+11-14 13:01:37.857  2532  2532 D Capacitor: App started
+11-14 13:01:37.858  2532  2532 D Capacitor/AppPlugin: Firing change: true
+11-14 13:01:37.858  2532  2532 V Capacitor/AppPlugin: Notifying listeners for event appStateChange
+11-14 13:01:37.858  2532  2532 D Capacitor/AppPlugin: No listeners found for event appStateChange
+11-14 13:01:37.858  2532  2532 V Capacitor/AppPlugin: Notifying listeners for event resume
+11-14 13:01:37.861  2532  2532 D Capacitor: App resumed
+11-14 13:01:37.865  2532  2532 I Capacitor/Console: File:  - Line 333 - Msg: undefined
+11-14 13:01:37.875   523   540 V WindowManager: Sent Transition #7 createdAt=11-14 13:01:37.836 via request=TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=8 displayId=0 isRunning=true baseIntent=Intent { flg=0x10000000 cmp=com.wsqm1990.ironjourney/.MainActivity } baseActivity=ComponentInfo{com.wsqm1990.ironjourney/com.wsqm1990.ironjourney.MainActivity} topActivity=ComponentInfo{com.wsqm1990.ironjourney/com.wsqm1990.ironjourney.MainActivity} origActivity=null realActivity=ComponentInfo{com.wsqm1990.ironjourney/com.wsqm1990.ironjourney.MainActivity} numActivities=1 lastActiveTime=62078 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{RemoteToken{3ad4c3f Task{1979202 #8 type=standard A=10192:com.wsqm1990.ironjourney}}} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=null topActivityInfo=ActivityInfo{f9a9465 com.wsqm1990.ironjourney.MainActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=true isVisible=false isVisibleRequested=false isSleeping=false topActivityInSizeCompat=false topActivityEligibleForLetterboxEducation= false topActivityLetterboxed= false isFromDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 locusId=null displayAreaFeatureId=1 cameraCompatControlState=hidden}, remoteTransition = null, displayChange = null }
+11-14 13:01:37.876   523   540 V WindowManager:     info={id=7 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{RemoteToken{3ad4c3f Task{1979202 #8 type=standard A=10192:com.wsqm1990.ironjourney}}} m=TO_FRONT f=MOVE_TO_TOP leash=Surface(name=Task=8)/@0x47daee0 sb=Rect(0, 0 - 320, 640) eb=Rect(0, 0 - 320, 640) d=0},{WCT{RemoteToken{a0deb95 Task{5eadca5 #1 type=home}}} m=TO_BACK f=SHOW_WALLPAPER leash=Surface(name=Task=1)/@0x3738f5b sb=Rect(0, 0 - 320, 640) eb=Rect(0, 0 - 320, 640) d=0}]}
+11-14 13:01:37.902   523   540 W ziparchive: Unable to open '/data/app/~~pHyCu0XtzewY-nvfSkIBCA==/com.wsqm1990.ironjourney-y9PPUXjC_jbiv5nZik5wwA==/base.dm': No such file or directory
+11-14 13:01:37.955   523  2018 I ImeTracker: com.wsqm1990.ironjourney:62f33e2c: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_UNSPECIFIED_WINDOW
+11-14 13:01:37.955   523  2018 I ImeTracker: com.wsqm1990.ironjourney:62f33e2c: onCancelled at PHASE_SERVER_SHOULD_HIDE
+11-14 13:01:37.963  1491  1491 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x12000000 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.wsqm1990.ironjourney fieldId=0 fieldName=null extras=null}, false)
+11-14 13:01:41.759  2532  2532 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:01:41.760  2532  2532 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 123584165, pluginId: IronTimer, methodName: notifStatus
+11-14 13:01:41.760  2532  2532 V Capacitor: callback: 123584165, pluginId: IronTimer, methodName: notifStatus, methodData: {}
+11-14 13:01:41.760  2532  2532 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:01:41.760  2532  2532 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 123584166, pluginId: IronTimer, methodName: batteryStatus
+11-14 13:01:41.761  2532  2532 V Capacitor: callback: 123584166, pluginId: IronTimer, methodName: batteryStatus, methodData: {}
+11-14 13:01:41.769  2532  2532 I Capacitor/Console: File:  - Line 333 - Msg: {"granted":true}
+11-14 13:01:41.770  2532  2532 I Capacitor/Console: File:  - Line 333 - Msg: {"ignoring":false,"maker":"Google"}
+11-14 13:01:42.159   523   574 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{a59d775 com.google.android.contacts/10154} BLOCKED
+11-14 13:01:42.734  2532  2532 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:01:42.736  2532  2532 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 123584167, pluginId: SystemBars, methodName: setStyle
+11-14 13:01:42.736  2532  2532 V Capacitor: callback: 123584167, pluginId: SystemBars, methodName: setStyle, methodData: {"style":"DARK"}
+11-14 13:01:42.738  2532  2532 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:01:42.740  2532  2532 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 123584168, pluginId: IronTimer, methodName: notifStatus
+11-14 13:01:42.740  2532  2532 V Capacitor: callback: 123584168, pluginId: IronTimer, methodName: notifStatus, methodData: {}
+11-14 13:01:42.740  2532  2532 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:01:42.741  2532  2532 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 123584169, pluginId: IronTimer, methodName: batteryStatus
+11-14 13:01:42.741  2532  2532 V Capacitor: callback: 123584169, pluginId: IronTimer, methodName: batteryStatus, methodData: {}
+11-14 13:01:42.742  2532  2532 I Capacitor/Console: File:  - Line 333 - Msg: undefined
+11-14 13:01:42.744  2532  2532 I Capacitor/Console: File:  - Line 333 - Msg: {"granted":true}
+11-14 13:01:42.744  2532  2532 I Capacitor/Console: File:  - Line 333 - Msg: {"ignoring":false,"maker":"Google"}
+11-14 13:01:43.221   523   574 I AppsFilter: interaction: PackageSetting{38c388d com.wsqm1990.ironjourney/10192} -> PackageSetting{6911eb8 com.google.android.googlequicksearchbox/10132} BLOCKED
+11-14 13:01:43.386  2532  2532 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:01:43.390  2532  2532 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 123584170, pluginId: SystemBars, methodName: setStyle
+11-14 13:01:43.390  2532  2532 V Capacitor: callback: 123584170, pluginId: SystemBars, methodName: setStyle, methodData: {"style":"DEFAULT"}
+11-14 13:01:43.394  2532  2532 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:01:43.394  2532  2532 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 123584171, pluginId: IronTimer, methodName: notifStatus
+11-14 13:01:43.395  2532  2532 V Capacitor: callback: 123584171, pluginId: IronTimer, methodName: notifStatus, methodData: {}
+11-14 13:01:43.396  2532  2532 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:01:43.396  2532  2532 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 123584172, pluginId: IronTimer, methodName: batteryStatus
+11-14 13:01:43.397  2532  2532 V Capacitor: callback: 123584172, pluginId: IronTimer, methodName: batteryStatus, methodData: {}
+11-14 13:01:43.398  2532  2532 I Capacitor/Console: File:  - Line 333 - Msg: undefined
+11-14 13:01:43.408  2532  2532 I Capacitor/Console: File:  - Line 333 - Msg: {"granted":true}
+11-14 13:01:43.409  2532  2532 I Capacitor/Console: File:  - Line 333 - Msg: {"ignoring":false,"maker":"Google"}
+11-14 13:01:46.081  2532  2532 V Capacitor/AppPlugin: Notifying listeners for event backButton
+11-14 13:01:46.083  2532  2532 I Capacitor/Console: File:  - Line 333 - Msg: {"canGoBack":false}
+11-14 13:01:47.664  2532  2532 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:01:47.665  2532  2532 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 123584173, pluginId: IronTimer, methodName: notifStatus
+11-14 13:01:47.665  2532  2532 V Capacitor: callback: 123584173, pluginId: IronTimer, methodName: notifStatus, methodData: {}
+11-14 13:01:47.665  2532  2532 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:01:47.666  2532  2532 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 123584174, pluginId: IronTimer, methodName: batteryStatus
+11-14 13:01:47.666  2532  2532 V Capacitor: callback: 123584174, pluginId: IronTimer, methodName: batteryStatus, methodData: {}
+11-14 13:01:47.668  2532  2532 I Capacitor/Console: File:  - Line 333 - Msg: {"granted":true}
+11-14 13:01:47.668  2532  2532 I Capacitor/Console: File:  - Line 333 - Msg: {"ignoring":false,"maker":"Google"}
+11-14 13:01:48.948  5823  5823 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+11-14 13:01:48.961  5823  5823 I AndroidRuntime: Using default boot image
+11-14 13:01:48.961  5823  5823 I AndroidRuntime: Leaving lock profiling enabled
+11-14 13:01:49.052  5823  5823 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+11-14 13:01:49.099  5823  5823 D AndroidRuntime: Calling main entry com.android.commands.uiautomator.Launcher
+11-14 13:01:50.164  5823  5823 D AndroidRuntime: Shutting down VM
+11-14 13:01:51.024  2532  2532 W 990.ironjourney: Accessing hidden method Landroid/view/MotionEvent;->getEventTimeNano()J (unsupported, reflection, allowed)
+11-14 13:01:52.976  2532  2532 V Capacitor/AppPlugin: Notifying listeners for event backButton
+11-14 13:01:52.977  2532  2532 I Capacitor/Console: File:  - Line 333 - Msg: {"canGoBack":false}
+11-14 13:01:53.484  2532  2532 W Capacitor/Console: File: https://localhost/capacitor.js - Line 2 - Msg: Capacitor plugin "WebView" already registered. Cannot register plugins twice.
+11-14 13:01:53.485  2532  2532 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:01:53.486  2532  2532 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 123584175, pluginId: WebView, methodName: setServerBasePath
+11-14 13:01:53.486  2532  2532 V Capacitor: callback: 123584175, pluginId: WebView, methodName: setServerBasePath, methodData: {"path":"\/data\/user\/0\/com.wsqm1990.ironjourney\/files\/bundles\/100023"}
+11-14 13:01:53.491  2532  2856 D Capacitor: Handling local request: https://localhost/
+11-14 13:01:53.492  2532  2532 I Capacitor/Console: File:  - Line 333 - Msg: undefined
+11-14 13:01:53.510  2532  2856 D Capacitor: Handling local request: https://localhost/fonts/fonts.css
+11-14 13:01:53.510  2532  2858 D Capacitor: Handling local request: https://localhost/capacitor.js
+11-14 13:01:53.551  2532  2532 W Capacitor/Console: File: https://localhost/capacitor.js - Line 2 - Msg: Capacitor plugin "SystemBars" already registered. Cannot register plugins twice.
+11-14 13:01:53.552  2532  2532 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:01:53.553  2532  2532 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 33504817, pluginId: SystemBars, methodName: setStyle
+11-14 13:01:53.553  2532  2532 V Capacitor: callback: 33504817, pluginId: SystemBars, methodName: setStyle, methodData: {"style":"DEFAULT"}
+11-14 13:01:53.553  2532  2532 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:01:53.554  2532  2532 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 33504818, pluginId: IronTimer, methodName: addListener
+11-14 13:01:53.554  2532  2532 V Capacitor: callback: 33504818, pluginId: IronTimer, methodName: addListener, methodData: {"eventName":"timer"}
+11-14 13:01:53.554  2532  2532 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:01:53.555  2532  2532 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 33504819, pluginId: App, methodName: addListener
+11-14 13:01:53.555  2532  2532 V Capacitor: callback: 33504819, pluginId: App, methodName: addListener, methodData: {"eventName":"backButton"}
+11-14 13:01:53.555  2532  2532 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:01:53.555  2532  2532 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 33504820, pluginId: App, methodName: addListener
+11-14 13:01:53.556  2532  2532 V Capacitor: callback: 33504820, pluginId: App, methodName: addListener, methodData: {"eventName":"resume"}
+11-14 13:01:53.558  2532  2856 D Capacitor: Handling local request: https://localhost/fonts/f16.woff2
+11-14 13:01:53.559  2532  2857 D Capacitor: Handling local request: https://localhost/fonts/f4.woff2
+11-14 13:01:53.560  2532  2856 D Capacitor: Handling local request: https://localhost/fonts/f8.woff2
+11-14 13:01:53.560  2532  2858 D Capacitor: Handling local request: https://localhost/fonts/f12.woff2
+11-14 13:01:53.566  2532  2856 D Capacitor: Handling local request: https://localhost/art/lpc/corpo/m/walk.png
+11-14 13:01:53.569  2532  2856 D Capacitor: Handling local request: https://localhost/art/lpc/cab/velho/walk.png
+11-14 13:01:53.570  2532  2857 D Capacitor: Handling local request: https://localhost/art/lpc/barba/lenhador/walk.png
+11-14 13:01:53.573  2532  2856 D Capacitor: Handling local request: https://localhost/art/lpc/camisa/m/walk.png
+11-14 13:01:53.574  2532  2858 D Capacitor: Handling local request: https://localhost/art/lpc/calca/m/walk.png
+11-14 13:01:53.576  2532  2856 D Capacitor: Handling local request: https://localhost/art/lpc/sapato/m/walk.png
+11-14 13:01:53.577  2532  2857 D Capacitor: Handling local request: https://localhost/art/lpc/manto/m/walk.png
+11-14 13:01:53.581  2532  2856 D Capacitor: Handling local request: https://localhost/art/lpc/chapeu-mago/walk.png
+11-14 13:01:53.583  2532  2856 D Capacitor: Handling local request: https://localhost/art/lpc/arma/cajado/walk.png
+11-14 13:01:53.586  2532  2856 D Capacitor: Handling local request: https://localhost/art/lpc/arma/cajado-tras/walk.png
+11-14 13:01:53.587  2532  2857 D Capacitor: Handling local request: https://localhost/art/lpc/cab/m/walk.png
+11-14 13:01:53.589  2532  2856 D Capacitor: Handling local request: https://localhost/art/lpc/cabelo/plain/walk.png
+11-14 13:01:53.592  2532  2856 D Capacitor: Handling local request: https://localhost/art/lpc/arma/maca/walk.png
+11-14 13:01:53.592  2532  2857 D Capacitor: Handling local request: https://localhost/art/lpc/arma/maca-tras/walk.png
+11-14 13:01:53.594  2532  2856 D Capacitor: Handling local request: https://localhost/art/lpc/escudo/redondo/walk.png
+11-14 13:01:53.597  2532  2532 I Capacitor/Console: File:  - Line 333 - Msg: undefined
+11-14 13:01:53.606  2532  2857 D Capacitor: Handling local request: https://localhost/fonts/f6.woff2
+11-14 13:01:53.606  2532  2858 D Capacitor: Handling local request: https://localhost/fonts/f2.woff2
+11-14 13:01:56.095  2532  2532 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:01:56.097  2532  2532 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 33504821, pluginId: IronTimer, methodName: keepBundle
+11-14 13:01:56.097  2532  2532 V Capacitor: callback: 33504821, pluginId: IronTimer, methodName: keepBundle, methodData: {"path":"\/data\/user\/0\/com.wsqm1990.ironjourney\/files\/bundles\/100023"}
+11-14 13:01:56.097  2532  2532 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:01:56.098  2532  2532 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 33504822, pluginId: IronTimer, methodName: cleanBundles
+11-14 13:01:56.098  2532  2532 V Capacitor: callback: 33504822, pluginId: IronTimer, methodName: cleanBundles, methodData: {"keep":["100023","100023"]}
+11-14 13:01:56.099  2532  2532 I Capacitor/Console: File:  - Line 333 - Msg: undefined
+11-14 13:01:56.101  2532  2532 I Capacitor/Console: File:  - Line 333 - Msg: undefined
+11-14 13:02:00.096  2532  2532 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:02:00.096  2532  2532 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 33504823, pluginId: IronTimer, methodName: fetchText
+11-14 13:02:00.096  2532  2532 V Capacitor: callback: 33504823, pluginId: IronTimer, methodName: fetchText, methodData: {"url":"https:\/\/github.com\/wsqm1990-collab\/iron-journey\/releases\/latest\/download\/version.json"}
+11-14 13:02:00.099  2532  5870 I CapacitorCookies: Getting cookies at: 'https://github.com/wsqm1990-collab/iron-journey/releases/latest/download/version.json'
+11-14 13:02:00.102  2532  5870 I CapacitorCookies: Getting cookies at: 'https://github.com/wsqm1990-collab/iron-journey/releases/latest/download/version.json'
+11-14 13:02:00.178  2532  5870 I CapacitorCookies: Getting cookies at: 'https://github.com/wsqm1990-collab/iron-journey/releases/download/v1.0.22/version.json'
+11-14 13:02:00.201  2532  5870 I CapacitorCookies: Getting cookies at: 'https://release-assets.githubusercontent.com/github-production-release-asset/1454748316/ecf92202-674d-4315-8a47-e7f81c909c8b?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-11-14T13%3A45%3A43Z&rscd=attachment%3B+filename%3Dversion.json&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-11-14T12%3A45%3A29Z&ske=2026-11-14T13%3A45%3A43Z&sks=b&skv=2018-11-09&sig=nUzQqtEqG3HFmqRCyfN7lZ2ziOibnylkbQHFG5Zx%2Bes%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc5NDY2MTUzNywibmJmIjoxNzk0NjYxMjM3LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.xja_k_qOrBtvcRDt_o4suzrirJ4iqLTxqsoRPlpVmAs&response-content-disposition=attachment%3B%20filename%3Dversion.json&response-content-type=application%2Foctet-stream'
+11-14 13:02:00.213  2532  2532 I Capacitor/Console: File:  - Line 333 - Msg: {"text":"{\"build\":22,\"zip\":\"https://github.com/wsqm1990-collab/IRON-JOURNEY/releases/download/v1.0.22/web.zip\",\"sha256\":\"64819ee8625cefbfc2fc002051b5b6277922321dc1697694e15a3b775a30f899\",\"minShell\":1,\"apk\":\"https://github.com/wsqm1990-collab/IRON-JOURNEY/releases/download/v1.0.22/IronJourney.apk\"}\n"}
+11-14 13:02:04.591   523  2124 I ActivityManager: Force stopping com.wsqm1990.ironjourney appid=10192 user=0: from pid 5876
+11-14 13:02:04.592   523  2124 I ActivityManager: Killing 2532:com.wsqm1990.ironjourney/u0a192 (adj 0): stop com.wsqm1990.ironjourney due to from pid 5876
+11-14 13:02:04.597   523  2124 I ActivityManager: Killing 2882:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0a192i0 (adj 0): isolated not needed
+11-14 13:02:04.598   523  2124 W ActivityTaskManager: Force removing ActivityRecord{fbe174d u0 com.wsqm1990.ironjourney/.MainActivity t8 f}}: app died, no saved state
+11-14 13:02:04.599   836   854 V WindowManagerShell: Transition requested: android.os.BinderProxy@ee92129 TransitionRequestInfo { type = CLOSE, triggerTask = TaskInfo{userId=0 taskId=8 displayId=0 isRunning=false baseIntent=Intent { flg=0x10000000 cmp=com.wsqm1990.ironjourney/.MainActivity } baseActivity=null topActivity=null origActivity=null realActivity=ComponentInfo{com.wsqm1990.ironjourney/com.wsqm1990.ironjourney.MainActivity} numActivities=0 lastActiveTime=104977 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{android.window.IWindowContainerToken$Stub$Proxy@13ccae} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=null topActivityInfo=null launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=true isVisible=true isVisibleRequested=true isSleeping=false topActivityInSizeCompat=false topActivityEligibleForLetterboxEducation= false topActivityLetterboxed= false isFromDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 locusId=null displayAreaFeatureId=1 cameraCompatControlState=hidden}, remoteTransition = null, displayChange = null }
+11-14 13:02:04.618   523  2123 I ImeTracker: com.wsqm1990.ironjourney:113a713e: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_REMOVE_CLIENT
+11-14 13:02:04.619   523  2123 I ImeTracker: com.wsqm1990.ironjourney:113a713e: onCancelled at PHASE_SERVER_SHOULD_HIDE
+11-14 13:02:04.619   523   597 D TextToSpeechManagerPerUserService: Unbinding TTS engine: com.google.android.tts. Reason: client process death is reported
+11-14 13:02:04.621   523  1986 I WindowManager: WIN DEATH: Window{a33cf0e u0 com.wsqm1990.ironjourney/com.wsqm1990.ironjourney.MainActivity}
+11-14 13:02:04.621   523  1986 W InputManager-JNI: Input channel object 'a33cf0e com.wsqm1990.ironjourney/com.wsqm1990.ironjourney.MainActivity (client)' was disposed without first being removed with the input manager!
+11-14 13:02:04.622  1049  1049 D CarrierSvcBindHelper: onHandleForceStop: [com.wsqm1990.ironjourney]
+11-14 13:02:04.625   523   905 V ActivityManager: Got obituary of 2532:com.wsqm1990.ironjourney
+11-14 13:02:04.628   523   523 W TextToSpeechManagerPerUserService: Disconnected from TTS engine
+11-14 13:02:04.636   523   544 W WindowManager: Failed to deliver inset control state change to w=Window{a33cf0e u0 com.wsqm1990.ironjourney/com.wsqm1990.ironjourney.MainActivity EXITING}
+11-14 13:02:04.650   523   523 I TextToSpeechManagerPerUserService: Failed running callback method: android.os.DeadObjectException
+11-14 13:02:04.709   523   540 V WindowManager: Sent Transition #8 createdAt=11-14 13:02:04.598 via request=TransitionRequestInfo { type = CLOSE, triggerTask = TaskInfo{userId=0 taskId=8 displayId=0 isRunning=false baseIntent=Intent { flg=0x10000000 cmp=com.wsqm1990.ironjourney/.MainActivity } baseActivity=null topActivity=null origActivity=null realActivity=ComponentInfo{com.wsqm1990.ironjourney/com.wsqm1990.ironjourney.MainActivity} numActivities=0 lastActiveTime=104977 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{RemoteToken{3ad4c3f Task{1979202 #8 type=standard A=10192:com.wsqm1990.ironjourney}}} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=null topActivityInfo=null launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=true isVisible=true isVisibleRequested=true isSleeping=false topActivityInSizeCompat=false topActivityEligibleForLetterboxEducation= false topActivityLetterboxed= false isFromDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 locusId=null displayAreaFeatureId=1 cameraCompatControlState=hidden}, remoteTransition = null, displayChange = null }
+11-14 13:02:04.710   523   540 V WindowManager:     info={id=8 t=CLOSE f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{RemoteToken{3ad4c3f Task{1979202 #8 type=standard A=10192:com.wsqm1990.ironjourney}}} m=CLOSE f=NONE leash=Surface(name=Task=8)/@0x47daee0 sb=Rect(0, 0 - 320, 640) eb=Rect(0, 0 - 320, 640) d=0},{WCT{RemoteToken{a0deb95 Task{5eadca5 #1 type=home}}} m=TO_FRONT f=SHOW_WALLPAPER leash=Surface(name=Task=1)/@0x3738f5b sb=Rect(0, 0 - 320, 640) eb=Rect(0, 0 - 320, 640) d=0},{null m=TO_FRONT f=IS_WALLPAPER leash=Surface(name=WallpaperWindowToken{937e233 token=android.os.Binder@4b6a397})/@0x98a4460 sb=Rect(0, 0 - 320, 640) eb=Rect(0, 0 - 320, 640) d=0}]}
+11-14 13:02:04.717   523  2124 W WindowManager: Exception thrown during dispatchAppVisibility Window{a33cf0e u0 com.wsqm1990.ironjourney/com.wsqm1990.ironjourney.MainActivity EXITING}
+11-14 13:02:05.651   523  2124 I ActivityTaskManager: START u0 {flg=0x10000000 cmp=com.wsqm1990.ironjourney/.MainActivity} with LAUNCH_SINGLE_TASK from uid 2000 (BAL_ALLOW_PERMISSION) result code=0
+11-14 13:02:05.652   836   854 V WindowManagerShell: Transition requested: android.os.BinderProxy@bcc3ef8 TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=9 displayId=0 isRunning=true baseIntent=Intent { flg=0x10000000 cmp=com.wsqm1990.ironjourney/.MainActivity } baseActivity=ComponentInfo{com.wsqm1990.ironjourney/com.wsqm1990.ironjourney.MainActivity} topActivity=ComponentInfo{com.wsqm1990.ironjourney/com.wsqm1990.ironjourney.MainActivity} origActivity=null realActivity=ComponentInfo{com.wsqm1990.ironjourney/com.wsqm1990.ironjourney.MainActivity} numActivities=1 lastActiveTime=132779 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{android.window.IWindowContainerToken$Stub$Proxy@cf68fd1} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=null topActivityInfo=ActivityInfo{1731a36 com.wsqm1990.ironjourney.MainActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=false isVisible=false isVisibleRequested=false isSleeping=false topActivityInSizeCompat=false topActivityEligibleForLetterboxEducation= false topActivityLetterboxed= false isFromDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 locusId=null displayAreaFeatureId=1 cameraCompatControlState=hidden}, remoteTransition = null, displayChange = null }
+11-14 13:02:05.667   523   551 I ActivityManager: Start proc 5893:com.wsqm1990.ironjourney/u0a192 for next-top-activity {com.wsqm1990.ironjourney/com.wsqm1990.ironjourney.MainActivity}
+11-14 13:02:05.679   523  2124 D CoreBackPreview: Window{2fe0b6f u0 Splash Screen com.wsqm1990.ironjourney}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@b2d8d05, mPriority=0, mIsAnimationCallback=false}
+11-14 13:02:05.704  5893  5893 I 990.ironjourney: Late-enabling -Xcheck:jni
+11-14 13:02:05.705   523   540 V WindowManager: Sent Transition #9 createdAt=11-14 13:02:05.645 via request=TransitionRequestInfo { type = OPEN, triggerTask = TaskInfo{userId=0 taskId=9 displayId=0 isRunning=true baseIntent=Intent { flg=0x10000000 cmp=com.wsqm1990.ironjourney/.MainActivity } baseActivity=ComponentInfo{com.wsqm1990.ironjourney/com.wsqm1990.ironjourney.MainActivity} topActivity=ComponentInfo{com.wsqm1990.ironjourney/com.wsqm1990.ironjourney.MainActivity} origActivity=null realActivity=ComponentInfo{com.wsqm1990.ironjourney/com.wsqm1990.ironjourney.MainActivity} numActivities=1 lastActiveTime=132779 supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{RemoteToken{e539926 Task{2beb402 #9 type=standard A=10192:com.wsqm1990.ironjourney}}} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=null topActivityInfo=ActivityInfo{ba5f967 com.wsqm1990.ironjourney.MainActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=false isVisible=false isVisibleRequested=false isSleeping=false topActivityInSizeCompat=false topActivityEligibleForLetterboxEducation= false topActivityLetterboxed= false isFromDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 locusId=null displayAreaFeatureId=1 cameraCompatControlState=hidden}, remoteTransition = null, displayChange = null }
+11-14 13:02:05.705   523   540 V WindowManager:     info={id=9 t=OPEN f=0x0 trk=0 r=[0@Point(0, 0)] c=[{WCT{RemoteToken{e539926 Task{2beb402 #9 type=standard A=10192:com.wsqm1990.ironjourney}}} m=OPEN f=NONE leash=Surface(name=Task=9)/@0xa3ac15a sb=Rect(0, 0 - 320, 640) eb=Rect(0, 0 - 320, 640) d=0},{WCT{RemoteToken{a0deb95 Task{5eadca5 #1 type=home}}} m=TO_BACK f=SHOW_WALLPAPER leash=Surface(name=Task=1)/@0x3738f5b sb=Rect(0, 0 - 320, 640) eb=Rect(0, 0 - 320, 640) d=0}]}
+11-14 13:02:05.724  5893  5893 I 990.ironjourney: Using CollectorTypeCC GC.
+11-14 13:02:05.725  5893  5893 W 990.ironjourney: Unexpected CPU variant for x86: x86_64.
+11-14 13:02:05.725  5893  5893 W 990.ironjourney: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, tremont, kabylake, default
+11-14 13:02:05.764  5893  5893 W ziparchive: Unable to open '/data/app/~~pHyCu0XtzewY-nvfSkIBCA==/com.wsqm1990.ironjourney-y9PPUXjC_jbiv5nZik5wwA==/base.dm': No such file or directory
+11-14 13:02:05.764  5893  5893 W ziparchive: Unable to open '/data/app/~~pHyCu0XtzewY-nvfSkIBCA==/com.wsqm1990.ironjourney-y9PPUXjC_jbiv5nZik5wwA==/base.dm': No such file or directory
+11-14 13:02:05.823  5893  5893 D nativeloader: Configuring clns-6 for other apk /data/app/~~pHyCu0XtzewY-nvfSkIBCA==/com.wsqm1990.ironjourney-y9PPUXjC_jbiv5nZik5wwA==/base.apk. target_sdk_version=36, uses_libraries=, library_path=/data/app/~~pHyCu0XtzewY-nvfSkIBCA==/com.wsqm1990.ironjourney-y9PPUXjC_jbiv5nZik5wwA==/lib/x86_64, permitted_path=/data:/mnt/expand:/data/user/0/com.wsqm1990.ironjourney
+11-14 13:02:05.830  5893  5893 V GraphicsEnvironment: ANGLE GameManagerService for com.wsqm1990.ironjourney: false
+11-14 13:02:05.830  5893  5893 V GraphicsEnvironment: com.wsqm1990.ironjourney is not listed in per-application setting
+11-14 13:02:05.876  5893  5893 W 990.ironjourney: Accessing hidden method Landroid/view/ViewGroup;->makeOptionalFitsSystemWindows()V (unsupported, reflection, allowed)
+11-14 13:02:05.884  5893  5893 W 990.ironjourney: Entry not found
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{5fd3a42 com.android.cts.priv.ctsshim/10180} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{59e1a53 com.android.internal.display.cutout.emulation.corner/10025} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{f88af90 com.android.internal.display.cutout.emulation.double/10048} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{6911eb8 com.google.android.googlequicksearchbox/10132} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{5a8b88e com.google.android.onetimeinitializer/10126} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{ce608af com.google.android.ext.shared/10100} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{af134bc com.android.internal.systemui.navbar.gestural_wide_back/10007} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{c2cec45 com.android.virtualmachine.res/10188} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{17bcf9a com.google.android.federatedcompute/10186} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{61480cb com.android.managedprovisioning.auto_generated_rro_product__/10024} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{dfae0a8 com.android.carrierconfig.auto_generated_rro_vendor__/10078} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{e3507c1 com.android.systemui.emulation.pixel_3_xl/10034} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{5374b66 com.android.systemui.emulation.pixel_4_xl/10059} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{8685ea7 com.android.systemui.emulation.pixel_fold/10009} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{d715f54 com.android.simappdialog.auto_generated_rro_product__/10030} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{3495efd com.android.htmlviewer/10115} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{5dcb7f2 com.google.android.health.connect.backuprestore/10183} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{6323e43 com.android.systemui.auto_generated_rro_product__/10031} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{2236f77 com.google.android.apps.messaging/10130} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{451edf9 com.google.android.soundpicker/10136} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{4fa613e com.google.android.marvin.talkbackoverlay/10077} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{c307b9f com.google.android.configupdater/10129} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{24944ec com.android.internal.emulation.pixel_3a_xl/10044} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{6ba70b5 com.android.internal.emulation.pixel_6_pro/10018} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{cb7534a com.android.internal.emulation.pixel_7_pro/10004} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{aab32bb com.android.internal.emulation.pixel_8_pro/10058} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{bfbc3d8 com.android.internal.emulation.pixel_3a/10053} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{ee6331 com.android.internal.emulation.pixel_4a/10011} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{9f5a16 com.android.internal.emulation.pixel_6a/10023} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{4503f97 com.android.internal.emulation.pixel_7a/10033} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{f554584 com.google.android.overlay.googlewebview/10049} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{a95016d com.google.android.hotspot2.osulogin/10179} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{f2f01a2 com.android.simappdialog/10111} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{ecf3e33 com.android.internal.display.cutout.emulation.hole/10073} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{1a335f0 com.android.internal.display.cutout.emulation.tall/10065} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{48d4769 com.android.internal.systemui.navbar.threebutton/10068} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{ff47f01 com.android.camera2/10145} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{1358a8f com.android.systemui.auto_generated_rro_vendor__/10076} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{d9dc11c com.google.android.deskclock/10152} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{4a9f125 com.android.internal.systemui.navbar.twobutton/10020} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{58955ba com.google.android.as/10125} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{5e2cd79 com.google.android.gm/10143} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{f53d308 com.android.internal.systemui.navbar.gestural_extra_wide_back/10045} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{12d7aa1 com.android.systemui.emulation.pixel_3/10015} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{54074c6 com.android.systemui.emulation.pixel_4/10037} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{72a3c87 com.android.systemui.emulation.pixel_5/10071} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{2d717b4 com.android.systemui.emulation.pixel_6/10074} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{8061fdd com.android.systemui.emulation.pixel_7/10072} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{1a7fb20 com.android.systemui.emulation.pixel_8/10070} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{dc9dcd9 com.android.nfc.auto_generated_rro_product__/10027} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{913569e com.android.printspooler/10103} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{dd4357f com.android.emergency.auto_generated_rro_product__/10041} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{ae1a94c com.google.android.connectivity.resources.goldfish.overlay/10079} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{726d95 com.android.dreams.basic/10104} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{45a3eaa com.google.android.networkstack.tethering.emulator/10022} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{b00aa9b com.android.providers.settings.auto_generated_rro_product__/10002} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{2260e38 com.google.android.as.oss/10122} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{9d94e11 com.android.traceur.auto_generated_rro_product__/10005} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{42cc7e7 com.google.android.devicelockcontroller/10173} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{4d3e4ae com.google.android.dialer/10128} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{149d5e4 com.android.internal.emulation.pixel_3/10046} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{df3ba4d com.android.internal.emulation.pixel_4/10060} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{817f902 com.android.internal.emulation.pixel_5/10012} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{690a34e com.android.internal.emulation.pixel_6/10038} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{9ab7c6f com.android.internal.emulation.pixel_7/10067} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{ac7fd7c com.android.internal.emulation.pixel_8/10039} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{4ae605 com.google.android.captiveportallogin/10113} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{ed7a65a com.android.musicfx/10088} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{d557568 com.google.android.apps.docs/10155} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{ca633b9 com.google.android.apps.maps/10153} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{d98dd81 com.google.android.modulemetadata/10147} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{59ce26 com.google.android.markup/10135} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{a708a67 com.android.providers.settings.auto_generated_rro_vendor__/10080} BLOCKED
+11-14 13:02:05.887   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{fa3af94 com.google.android.rkpdapp/10185} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{a59d775 com.google.android.contacts/10154} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{284a6b2 com.android.server.telecom.auto_generated_rro_product__/10032} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{cf16603 com.google.android.overlay.googleconfig/10055} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{92f8980 com.android.chrome/10149} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{e22bbb9 com.android.bips.auto_generated_rro_product__/10035} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{4127bfe com.google.android.apps.customization.pixel/10144} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{21a5f5f com.google.android.tag/10082} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{c3bdac com.google.android.overlay.permissioncontroller/10003} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{62a5a75 com.google.android.partnersetup/10124} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{3165a0a com.google.android.apps.wallpaper.nexus/10141} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{daf927b com.google.android.apps.nexuslauncher/10169} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{8850898 com.google.android.nearby.halfsheet/10172} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{6d328f1 com.android.theme.font.notoserifsource/10066} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{9c80cd6 com.google.android.safetycenter.resources/10175} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{19adb57 com.android.internal.display.cutout.emulation.waterfall/10040} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{a0e1644 com.android.internal.systemui.navbar.transparent/10029} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{f60632d com.google.android.connectivity.resources/10171} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{c102062 com.android.providers.contacts.auto_generated_rro_product__/10019} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{a87d5f3 com.google.android.feedback/10162} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{bf852b0 com.google.android.printservice.recommendation/10110} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{60d0529 com.google.android.apps.photos/10140} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{5579b58 com.google.android.calendar/10148} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{e84c175 com.google.android.documentsui/10098} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{a3fde4f com.android.systemui.emulation.pixel_3a_xl/10021} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{307e9dc com.android.systemui.emulation.pixel_6_pro/10063} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{fc7cae5 com.android.systemui.emulation.pixel_7_pro/10054} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{a0159ba com.android.systemui.emulation.pixel_8_pro/10001} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{bc6106b com.google.mainline.telemetry/10151} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{a17c7c8 com.android.carrierconfig.auto_generated_rro_product__/10064} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{7af3061 com.android.providers.partnerbookmarks/10101} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{25b5786 com.android.wallpaper.livepicker/10089} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{d334847 com.android.providers.telephony.auto_generated_rro_product__/10062} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{cc59874 com.android.phone.auto_generated_rro_vendor__/10081} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{24d719d com.google.mainline.adservices/10137} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{56612 com.android.imsserviceentitlement/10117} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{b5221e3 com.google.android.healthconnect.controller/10182} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{ddc7e0 com.android.internal.emulation.pixel_2_xl/10016} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{8948a99 com.android.internal.emulation.pixel_3_xl/10056} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{4cfd15e com.android.internal.emulation.pixel_4_xl/10047} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{afaf93f com.android.internal.emulation.pixel_fold/10006} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{a87820c com.android.bookmarkprovider/10114} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{69a3755 com.google.android.overlay.pixelconfigcommon/10014} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{d43a56a com.android.systemui.accessibility.accessibilitymenu.auto_generated_rro_product__/10050} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{c2fea5b com.android.systemui.emulation.pixel_3a/10013} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{730b2f8 com.android.systemui.emulation.pixel_4a/10000} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{a13f3d1 com.android.systemui.emulation.pixel_6a/10042} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{36eae36 com.android.systemui.emulation.pixel_7a/10017} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{fa52a10 com.google.android.settings.intelligence/10118} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{33b5a3c com.google.android.projection.gearhead/10123} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{b3a06a4 com.google.android.uwb.resources/10184} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{f43a5b8 com.android.cts.ctsshim/10181} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{c92fc0d com.google.android.wifi.resources/10177} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{26f77c2 com.google.android.wifi.dialog/10178} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{1ff49d3 com.google.android.apps.wallpaper/10160} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{e62e910 com.google.android.odad/10121} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{5804c09 com.android.settings.auto_generated_rro_product__/10028} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{6c14e0e com.android.internal.systemui.navbar.gestural/10051} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{2eab02f com.android.bluetoothmidiservice/10106} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{2f5863c com.android.storagemanager.auto_generated_rro_product__/10026} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{fd89fc5 com.google.android.cellbroadcastreceiver/10189} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{7483d1a com.android.phone.auto_generated_rro_product__/10061} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{87c204b android.auto_generated_rro_product__/10069} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{3b2ca28 com.android.internal.systemui.navbar.gestural_narrow_back/10052} BLOCKED
+11-14 13:02:05.888   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{fa87341 com.google.android.inputmethod.latin/10142} BLOCKED
+11-14 13:02:05.889   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{31d10e6 android.auto_generated_rro_vendor__/10075} BLOCKED
+11-14 13:02:05.889   523  1710 I AppsFilter: interaction: PackageSetting{7fb60ac com.wsqm1990.ironjourney/10192} -> PackageSetting{66a7627 com.google.android.apps.restore/10120} BLOCKED
+11-14 13:02:05.903  5893  5893 W 990.ironjourney: Accessing hidden method Landroid/os/Trace;->isTagEnabled(J)Z (unsupported, reflection, allowed)
+11-14 13:02:05.903  5893  5893 W 990.ironjourney: Accessing hidden method Landroid/os/Trace;->traceBegin(JLjava/lang/String;)V (unsupported, reflection, allowed)
+11-14 13:02:05.903  5893  5893 W 990.ironjourney: Accessing hidden method Landroid/os/Trace;->traceEnd(J)V (unsupported, reflection, allowed)
+11-14 13:02:05.903  5893  5893 W 990.ironjourney: Accessing hidden method Landroid/os/Trace;->asyncTraceBegin(JLjava/lang/String;I)V (unsupported, reflection, allowed)
+11-14 13:02:05.903  5893  5893 W 990.ironjourney: Accessing hidden method Landroid/os/Trace;->asyncTraceEnd(JLjava/lang/String;I)V (unsupported, reflection, allowed)
+11-14 13:02:05.911  5893  5917 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.wsqm1990.ironjourney/app_webview/variations_seed_new"
+11-14 13:02:05.911  5893  5917 I cr_VariationsUtils: Failed reading seed file "/data/user/0/com.wsqm1990.ironjourney/app_webview/variations_seed"
+11-14 13:02:05.949  5893  5926 W chromium: [WARNING:dns_config_service_android.cc(115)] Failed to read DnsConfig.
+11-14 13:02:05.950   523   551 I ActivityManager: Start proc 5923:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0i1 for  {com.wsqm1990.ironjourney/org.chromium.content.app.SandboxedProcessService0:0}
+11-14 13:02:05.965  5893  5924 E chromium: [ERROR:simple_file_enumerator.cc(21)] opendir /data/user/0/com.wsqm1990.ironjourney/cache/WebView/Default/HTTP Cache/Code Cache/wasm: No such file or directory (2)
+11-14 13:02:05.965  5893  5924 E chromium: [ERROR:simple_index_file.cc(614)] Could not reconstruct index from disk
+11-14 13:02:05.965  5893  5924 E chromium: [ERROR:simple_file_enumerator.cc(21)] opendir /data/user/0/com.wsqm1990.ironjourney/cache/WebView/Default/HTTP Cache/Code Cache/js: No such file or directory (2)
+11-14 13:02:05.965  5893  5924 E chromium: [ERROR:simple_index_file.cc(614)] Could not reconstruct index from disk
+11-14 13:02:05.968  5923  5923 I cr_WebViewApkApp: Launched version=113.0.5672.136 minSdkVersion=29 isBundle=false processName=com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0
+11-14 13:02:06.012  5893  5893 D Capacitor: Starting BridgeActivity
+11-14 13:02:06.023  5893  5893 D Capacitor: Registering plugin instance: CapacitorCookies
+11-14 13:02:06.025  5893  5893 D Capacitor: Registering plugin instance: WebView
+11-14 13:02:06.027  5893  5893 D Capacitor: Registering plugin instance: CapacitorHttp
+11-14 13:02:06.028  5893  5893 D Capacitor: Registering plugin instance: SystemBars
+11-14 13:02:06.030  5893  5893 D Capacitor: Registering plugin instance: IronTimer
+11-14 13:02:06.032  5893  5893 D Capacitor: Registering plugin instance: App
+11-14 13:02:06.052  5893  5893 W Capacitor: Unable to read file at path public/plugins
+11-14 13:02:06.054  5893  5893 D Capacitor: Loading app at https://localhost
+11-14 13:02:06.071  5893  5893 I IronTimer: using kept bundle /data/user/0/com.wsqm1990.ironjourney/files/bundles/100023
+11-14 13:02:06.081  5893  5893 D Capacitor: App started
+11-14 13:02:06.087  5893  5893 D Capacitor/AppPlugin: Firing change: true
+11-14 13:02:06.087  5893  5893 V Capacitor/AppPlugin: Notifying listeners for event appStateChange
+11-14 13:02:06.088  5893  5893 D Capacitor/AppPlugin: No listeners found for event appStateChange
+11-14 13:02:06.088  5893  5893 D Capacitor: App resumed
+11-14 13:02:06.115  5893  5925 D Capacitor: Handling local request: https://localhost/
+11-14 13:02:06.152   523  1710 D CoreBackPreview: Window{391010f u0 com.wsqm1990.ironjourney/com.wsqm1990.ironjourney.MainActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@b81b71e, mPriority=0, mIsAnimationCallback=false}
+11-14 13:02:06.177  5893  5922 D Capacitor: Handling local request: https://localhost/fonts/fonts.css
+11-14 13:02:06.182  5893  5924 D Capacitor: Handling local request: https://localhost/capacitor.js
+11-14 13:02:06.283   523   540 W ziparchive: Unable to open '/data/app/~~pHyCu0XtzewY-nvfSkIBCA==/com.wsqm1990.ironjourney-y9PPUXjC_jbiv5nZik5wwA==/base.dm': No such file or directory
+11-14 13:02:06.284   523   540 I ActivityTaskManager: Displayed com.wsqm1990.ironjourney/.MainActivity for user 0: +638ms
+11-14 13:02:06.302   523  1710 D CoreBackPreview: Window{2fe0b6f u0 Splash Screen com.wsqm1990.ironjourney EXITING}: Setting back callback null
+11-14 13:02:06.302   523  1710 W InputManager-JNI: Input channel object '2fe0b6f Splash Screen com.wsqm1990.ironjourney (client)' was disposed without first being removed with the input manager!
+11-14 13:02:06.317  5893  5922 D Capacitor: Handling local request: https://localhost/
+11-14 13:02:06.324   523  2124 I ImeTracker: com.wsqm1990.ironjourney:a7d4f9ce: onRequestHide at ORIGIN_SERVER_HIDE_INPUT reason HIDE_UNSPECIFIED_WINDOW
+11-14 13:02:06.325   523  2124 I ImeTracker: com.wsqm1990.ironjourney:a7d4f9ce: onCancelled at PHASE_SERVER_SHOULD_HIDE
+11-14 13:02:06.331  1491  1491 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1877 onStartInput(EditorInfo{inputType=0x0(NULL) imeOptions=0x12000000 privateImeOptions=null actionName=UNSPECIFIED actionLabel=null actionId=0 initialSelStart=-1 initialSelEnd=-1 initialCapsMode=0x0 hintText=null label=null packageName=com.wsqm1990.ironjourney fieldId=0 fieldName=null extras=null}, false)
+11-14 13:02:06.413  5893  5924 D Capacitor: Handling local request: https://localhost/fonts/fonts.css
+11-14 13:02:06.413  5893  5924 D Capacitor: Handling local request: https://localhost/capacitor.js
+11-14 13:02:06.446  5893  5893 W Capacitor/Console: File: https://localhost/capacitor.js - Line 2 - Msg: Capacitor plugin "SystemBars" already registered. Cannot register plugins twice.
+11-14 13:02:06.447  5893  5893 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:02:06.449  5893  5893 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 38351141, pluginId: SystemBars, methodName: setStyle
+11-14 13:02:06.449  5893  5893 V Capacitor: callback: 38351141, pluginId: SystemBars, methodName: setStyle, methodData: {"style":"DEFAULT"}
+11-14 13:02:06.451  5893  5893 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:02:06.451  5893  5893 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 38351142, pluginId: IronTimer, methodName: addListener
+11-14 13:02:06.451  5893  5893 V Capacitor: callback: 38351142, pluginId: IronTimer, methodName: addListener, methodData: {"eventName":"timer"}
+11-14 13:02:06.452  5893  5893 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:02:06.452  5893  5893 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 38351143, pluginId: App, methodName: addListener
+11-14 13:02:06.452  5893  5893 V Capacitor: callback: 38351143, pluginId: App, methodName: addListener, methodData: {"eventName":"backButton"}
+11-14 13:02:06.453  5893  5893 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:02:06.453  5893  5893 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 38351144, pluginId: App, methodName: addListener
+11-14 13:02:06.453  5893  5893 V Capacitor: callback: 38351144, pluginId: App, methodName: addListener, methodData: {"eventName":"resume"}
+11-14 13:02:06.454  5893  5922 D Capacitor: Handling local request: https://localhost/fonts/f16.woff2
+11-14 13:02:06.456  5893  5922 D Capacitor: Handling local request: https://localhost/fonts/f4.woff2
+11-14 13:02:06.463  5893  5922 D Capacitor: Handling local request: https://localhost/fonts/f8.woff2
+11-14 13:02:06.464  5893  5925 D Capacitor: Handling local request: https://localhost/fonts/f12.woff2
+11-14 13:02:06.466  5893  5942 D Capacitor: Handling local request: https://localhost/art/lpc/barba/lenhador/walk.png
+11-14 13:02:06.467  5893  5942 D Capacitor: Handling local request: https://localhost/art/lpc/camisa/m/walk.png
+11-14 13:02:06.467  5893  5942 D Capacitor: Handling local request: https://localhost/art/lpc/calca/m/walk.png
+11-14 13:02:06.470  5893  5942 D Capacitor: Handling local request: https://localhost/art/lpc/chapeu-mago/walk.png
+11-14 13:02:06.470  5893  5924 D Capacitor: Handling local request: https://localhost/art/lpc/manto/m/walk.png
+11-14 13:02:06.471  5893  5924 D Capacitor: Handling local request: https://localhost/art/lpc/arma/cajado-tras/walk.png
+11-14 13:02:06.472  5893  5924 D Capacitor: Handling local request: https://localhost/art/lpc/cab/m/walk.png
+11-14 13:02:06.472  5893  5924 D Capacitor: Handling local request: https://localhost/art/lpc/cabelo/plain/walk.png
+11-14 13:02:06.473  5893  5924 D Capacitor: Handling local request: https://localhost/art/lpc/arma/maca/walk.png
+11-14 13:02:06.475  5893  5926 D Capacitor: Handling local request: https://localhost/art/lpc/corpo/m/walk.png
+11-14 13:02:06.476  5893  5926 D Capacitor: Handling local request: https://localhost/art/lpc/escudo/redondo/walk.png
+11-14 13:02:06.477  5893  5925 D Capacitor: Handling local request: https://localhost/art/lpc/sapato/m/walk.png
+11-14 13:02:06.477  5893  5893 I Capacitor/Console: File:  - Line 333 - Msg: undefined
+11-14 13:02:06.478  5893  5926 D Capacitor: Handling local request: https://localhost/fonts/f6.woff2
+11-14 13:02:06.485  5893  5942 D Capacitor: Handling local request: https://localhost/art/lpc/arma/maca-tras/walk.png
+11-14 13:02:06.486  5893  5922 D Capacitor: Handling local request: https://localhost/art/lpc/arma/cajado/walk.png
+11-14 13:02:06.486  5893  5939 D Capacitor: Handling local request: https://localhost/art/lpc/cab/velho/walk.png
+11-14 13:02:06.487  5893  5925 D Capacitor: Handling local request: https://localhost/fonts/f2.woff2
+11-14 13:02:07.326  5893  5922 D Capacitor: Handling local request: https://localhost/favicon.ico
+11-14 13:02:11.377  5893  5998 D ProfileInstaller: Installing profile for com.wsqm1990.ironjourney
+11-14 13:02:12.429  5893  5893 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:02:12.431  5893  5893 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 38351145, pluginId: IronTimer, methodName: fetchText
+11-14 13:02:12.431  5893  5893 V Capacitor: callback: 38351145, pluginId: IronTimer, methodName: fetchText, methodData: {"url":"https:\/\/github.com\/wsqm1990-collab\/iron-journey\/releases\/latest\/download\/version.json"}
+11-14 13:02:12.434  5893  6005 I CapacitorCookies: Getting cookies at: 'https://github.com/wsqm1990-collab/iron-journey/releases/latest/download/version.json'
+11-14 13:02:12.516  5893  6005 I CapacitorCookies: Setting cookie '_gh_sess=yPgsbzyBAVEmg2nGzlkjUS8xhhyf4VRbp4aWAfHQOoUA%2FhspclxpRE3XmLSswOxH1WFIYMTiV4jJNpQZ%2BGON9KJnZms0D0SlS69w0vHvSG%2F5KI9JB%2BQHDiP0HotnG8DypV7g6uDmfSwo7pV1UwCzi08jd2Bdk%2FdVEU9m2MB18s7UXcRhdC2NkOpUNBF7%2F1x%2FqJiiOn4EwX7%2FpOh2H8UqMfWUUImEfpYnYNZBqYYUHSMlCiRM7W82FvKf995lkK2aZlF%2FVKV4u43FWKcf%2FVha2A%3D%3D--GCYiCOdCRy0ABCRu--2MSnDp0XKvlAEIljZlBoEg%3D%3D; path=/; HttpOnly; secure; SameSite=Lax' at: 'https://github.com/wsqm1990-collab/iron-journey/releases/latest/download/version.json'
+11-14 13:02:12.519  5893  6005 I CapacitorCookies: Setting cookie '_gh_sess=yPgsbzyBAVEmg2nGzlkjUS8xhhyf4VRbp4aWAfHQOoUA%2FhspclxpRE3XmLSswOxH1WFIYMTiV4jJNpQZ%2BGON9KJnZms0D0SlS69w0vHvSG%2F5KI9JB%2BQHDiP0HotnG8DypV7g6uDmfSwo7pV1UwCzi08jd2Bdk%2FdVEU9m2MB18s7UXcRhdC2NkOpUNBF7%2F1x%2FqJiiOn4EwX7%2FpOh2H8UqMfWUUImEfpYnYNZBqYYUHSMlCiRM7W82FvKf995lkK2aZlF%2FVKV4u43FWKcf%2FVha2A%3D%3D--GCYiCOdCRy0ABCRu--2MSnDp0XKvlAEIljZlBoEg%3D%3D; path=/; HttpOnly; secure; SameSite=Lax' at: 'https://localhost'
+11-14 13:02:12.522  5893  6005 I CapacitorCookies: Getting cookies at: 'https://github.com/wsqm1990-collab/iron-journey/releases/download/v1.0.22/version.json'
+11-14 13:02:12.545  5893  6005 I CapacitorCookies: Getting cookies at: 'https://release-assets.githubusercontent.com/github-production-release-asset/1454748316/ecf92202-674d-4315-8a47-e7f81c909c8b?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-11-14T13%3A45%3A43Z&rscd=attachment%3B+filename%3Dversion.json&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-11-14T12%3A45%3A29Z&ske=2026-11-14T13%3A45%3A43Z&sks=b&skv=2018-11-09&sig=nUzQqtEqG3HFmqRCyfN7lZ2ziOibnylkbQHFG5Zx%2Bes%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc5NDY2MTUzNywibmJmIjoxNzk0NjYxMjM3LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.xja_k_qOrBtvcRDt_o4suzrirJ4iqLTxqsoRPlpVmAs&response-content-disposition=attachment%3B%20filename%3Dversion.json&response-content-type=application%2Foctet-stream'
+11-14 13:02:12.595  5893  5893 I Capacitor/Console: File:  - Line 333 - Msg: {"text":"{\"build\":22,\"zip\":\"https://github.com/wsqm1990-collab/IRON-JOURNEY/releases/download/v1.0.22/web.zip\",\"sha256\":\"64819ee8625cefbfc2fc002051b5b6277922321dc1697694e15a3b775a30f899\",\"minShell\":1,\"apk\":\"https://github.com/wsqm1990-collab/IRON-JOURNEY/releases/download/v1.0.22/IronJourney.apk\"}\n"}
+11-14 13:02:12.597  5893  5893 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:02:12.598  5893  5893 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 38351146, pluginId: IronTimer, methodName: fetchBundle
+11-14 13:02:12.598  5893  5893 V Capacitor: callback: 38351146, pluginId: IronTimer, methodName: fetchBundle, methodData: {"url":"https:\/\/github.com\/wsqm1990-collab\/IRON-JOURNEY\/releases\/download\/v1.0.22\/web.zip","build":"net-test","sha256":"64819ee8625cefbfc2fc002051b5b6277922321dc1697694e15a3b775a30f899"}
+11-14 13:02:12.600  5893  6014 I CapacitorCookies: Getting cookies at: 'https://github.com/wsqm1990-collab/IRON-JOURNEY/releases/download/v1.0.22/web.zip'
+11-14 13:02:12.771  5893  6014 I CapacitorCookies: Getting cookies at: 'https://release-assets.githubusercontent.com/github-production-release-asset/1454748316/ab2e366f-9bb4-430f-9940-5674c067e3ef?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-11-14T13%3A45%3A55Z&rscd=attachment%3B+filename%3Dweb.zip&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-11-14T12%3A45%3A06Z&ske=2026-11-14T13%3A45%3A55Z&sks=b&skv=2018-11-09&sig=3jsEvAhj0zFL%2BBrymJJ3iMYfw0fB16u9TJLf7JfIJ%2BU%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc5NDY2MTYzMiwibmJmIjoxNzk0NjYxMzMyLCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.X1NRwWdM48YtT1eESKliXd4U5oBHBB1-dnKw01dRHMU&response-content-disposition=attachment%3B%20filename%3Dweb.zip&response-content-type=application%2Foctet-stream'
+11-14 13:02:12.959  5893  5893 I Capacitor/Console: File:  - Line 349 - Msg: [object Object]
+11-14 13:02:12.960  5893  5893 V Capacitor/Plugin: To native (Capacitor plugin): callbackId: 38351147, pluginId: IronTimer, methodName: fetchText
+11-14 13:02:12.960  5893  5893 V Capacitor: callback: 38351147, pluginId: IronTimer, methodName: fetchText, methodData: {"url":"https:\/\/github.com\/wsqm1990-collab\/iron-journey\/releases\/latest\/download\/version.json"}
+11-14 13:02:12.962  5893  6015 I CapacitorCookies: Getting cookies at: 'https://github.com/wsqm1990-collab/iron-journey/releases/latest/download/version.json'
+11-14 13:02:12.980  5893  6015 I CapacitorCookies: Getting cookies at: 'https://github.com/wsqm1990-collab/iron-journey/releases/download/v1.0.22/version.json'
+11-14 13:02:13.006  5893  6015 I CapacitorCookies: Getting cookies at: 'https://release-assets.githubusercontent.com/github-production-release-asset/1454748316/ecf92202-674d-4315-8a47-e7f81c909c8b?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-11-14T13%3A45%3A43Z&rscd=attachment%3B+filename%3Dversion.json&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-11-14T12%3A45%3A29Z&ske=2026-11-14T13%3A45%3A43Z&sks=b&skv=2018-11-09&sig=nUzQqtEqG3HFmqRCyfN7lZ2ziOibnylkbQHFG5Zx%2Bes%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc5NDY2MTUzNywibmJmIjoxNzk0NjYxMjM3LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.xja_k_qOrBtvcRDt_o4suzrirJ4iqLTxqsoRPlpVmAs&response-content-disposition=attachment%3B%20filename%3Dversion.json&response-content-type=application%2Foctet-stream'
+11-14 13:02:13.016  5893  5893 I Capacitor/Console: File:  - Line 333 - Msg: {"text":"{\"build\":22,\"zip\":\"https://github.com/wsqm1990-collab/IRON-JOURNEY/releases/download/v1.0.22/web.zip\",\"sha256\":\"64819ee8625cefbfc2fc002051b5b6277922321dc1697694e15a3b775a30f899\",\"minShell\":1,\"apk\":\"https://github.com/wsqm1990-collab/IRON-JOURNEY/releases/download/v1.0.22/IronJourney.apk\"}\n"}
+11-14 13:02:13.137  5893  6014 I IronTimer: bundle ready net-test
+11-14 13:02:13.138  5893  5893 I Capacitor/Console: File:  - Line 333 - Msg: {"path":"/data/user/0/com.wsqm1990.ironjourney/files/bundles/net-test"}

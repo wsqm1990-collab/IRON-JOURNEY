@@ -1,0 +1,39 @@
+1 services found:
+  Service #0:
+    priority=100 preferredOrder=0 match=0x108000 specificIndex=-1 isDefault=true
+    ServiceInfo:
+      name=com.google.android.apps.speech.tts.googletts.service.GoogleTtsService
+      packageName=com.google.android.tts
+      labelRes=0x7f14002a nonLocalizedLabel=null icon=0x0 banner=0x0
+      enabled=true exported=true directBootAware=true
+      permission=null
+      flags=0x0
+      ApplicationInfo:
+        name=com.google.android.apps.speech.tts.googletts.GoogleTTSRoot_Application
+        packageName=com.google.android.tts
+        labelRes=0x7f14002a nonLocalizedLabel=null icon=0x7f110001 banner=0x0
+        className=com.google.android.apps.speech.tts.googletts.GoogleTTSRoot_Application
+        processName=com.google.android.tts
+        taskAffinity=null
+        uid=10146 flags=0x24cbbe45 privateFlags=0x8c081100 theme=0x7f150225
+        requiresSmallestWidthDp=0 compatibleWidthLimitDp=0 largestWidthLimitDp=0
+        sourceDir=/product/app/GoogleTTS/GoogleTTS.apk
+        resourceDirs=[/product/overlay/NavigationBarModeGestural/NavigationBarModeGesturalOverlay.apk]
+        overlayPaths=[/product/overlay/NavigationBarModeGestural/NavigationBarModeGesturalOverlay.apk, /data/resource-cache/com.android.systemui-neutral-Fq9P.frro, /data/resource-cache/com.android.systemui-accent-tu0a.frro, /data/resource-cache/com.android.systemui-dynamic-gJnk.frro]
+        seinfo=default:targetSdkVersion=33
+        seinfoUser=:complete
+        dataDir=/data/user/0/com.google.android.tts
+        deviceProtectedDataDir=/data/user_de/0/com.google.android.tts
+        credentialProtectedDataDir=/data/user/0/com.google.android.tts
+        sharedLibraryFiles=[/system_ext/framework/androidx.window.extensions.jar, /system_ext/framework/androidx.window.sidecar.jar]
+        enabled=true minSdkVersion=26 targetSdkVersion=33 versionCode=210411863 targetSandboxVersion=1
+        supportsRtl=true
+        fullBackupContent=@xml/2132213763
+        dataExtractionRules=@xml/2132213764
+        crossProfile=false
+        HiddenApiEnforcementPolicy=2
+        usesNonSdkApi=false
+        allowsPlaybackCapture=true
+        nativeHeapZeroInitialized=0
+        enableOnBackInvokedCallback=false
+        createTimestamp=31114

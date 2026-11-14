@@ -1,0 +1,23 @@
+PASS app opens to the welcome screen
+PASS native bridge is on
+PASS page fills the screen without sideways scroll
+PASS profile saved, gym screen shown
+PASS built-in plan created without an AI key
+PASS rest timer runs on the phone
+PASS closing the rest bar stops the phone timer
+PASS HIIT timeline handed to the phone
+PASS voice/beep cues fired while another app was in front
+PASS workout finished by itself in the background
+PASS text-to-speech spoke
+PASS back in the app, the cardio log opens to save the session
+PASS settings show the background permissions
+PASS Android back button goes to Today instead of closing
+PASS focused field is not hidden by the keyboard
+PASS update: app switched to the new version
+PASS update: new version confirmed itself
+PASS update: app starts again after a restart
+PASS update: still on the new version after restarting
+PASS update: data kept after the update
+PASS update: downloads the latest published version
+PASS no uncaught JavaScript errors
+PASS no console errors (plugin refusals are logged here)

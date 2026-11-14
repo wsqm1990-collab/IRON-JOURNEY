@@ -1,0 +1,22 @@
+--------- beginning of main
+11-14 13:00:45.333  2532  2532 I IronTimer: start kind=rest id=r1794661245299 segs=1 fresh=false mode=voz
+11-14 13:00:45.482  2532  2532 I IronTimer: tts init status=0
+11-14 13:00:46.204  2532  2532 I IronTimer: tts language en-US result=1
+11-14 13:00:49.350  2532  2532 I IronTimer: finish complete=false kind=rest by=app
+11-14 13:00:52.280  2532  2532 I IronTimer: start kind=hiit id=c1794661252228 segs=5 fresh=true mode=voz
+11-14 13:00:52.591  2532  2532 I IronTimer: speak result=0 text=Let's go. Warm-up, 8 seconds.
+11-14 13:01:00.349  2532  2532 I IronTimer: cue seg=1 strong=true mode=voz say=Round 1 of 2. Hard, 8 seconds.
+11-14 13:01:00.371  2532  4884 I IronTimer: tone notes=2
+11-14 13:01:00.811  2532  2532 I IronTimer: speak result=0 text=Round 1 of 2. Hard, 8 seconds.
+11-14 13:01:08.409  2532  2532 I IronTimer: cue seg=2 strong=false mode=voz say=Recover, 8 seconds.
+11-14 13:01:08.439  2532  5166 I IronTimer: tone notes=1
+11-14 13:01:08.869  2532  2532 I IronTimer: speak result=0 text=Recover, 8 seconds.
+11-14 13:01:16.236  2532  2532 I IronTimer: cue seg=3 strong=true mode=voz say=Last round! Hard, 8 seconds.
+11-14 13:01:16.247  2532  5466 I IronTimer: tone notes=2
+11-14 13:01:16.687  2532  2532 I IronTimer: speak result=0 text=Last round! Hard, 8 seconds.
+11-14 13:01:24.255  2532  2532 I IronTimer: cue seg=4 strong=false mode=voz say=Cool-down, 8 seconds.
+11-14 13:01:24.269  2532  5545 I IronTimer: tone notes=1
+11-14 13:01:24.707  2532  2532 I IronTimer: speak result=0 text=Cool-down, 8 seconds.
+11-14 13:01:32.312  2532  2532 I IronTimer: finish complete=true kind=hiit by=app
+11-14 13:01:32.351  2532  5708 I IronTimer: tone notes=3
+11-14 13:01:33.012  2532  2532 I IronTimer: speak result=0 text=Workout complete. Great job!

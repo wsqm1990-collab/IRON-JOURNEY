@@ -1,0 +1,212 @@
+[
+ {
+  "name": "app opens to the welcome screen",
+  "ok": true,
+  "fatal": true,
+  "info": null
+ },
+ {
+  "name": "native bridge is on",
+  "ok": true,
+  "fatal": true,
+  "info": {
+   "build": 23,
+   "ua": "Mozilla/5.0 (Linux; Android 14; sdk_gphone64_x86_64 Build/UE1A.230829.050; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/113.0.5672.136 Mobile Safari/537.36"
+  }
+ },
+ {
+  "name": "page fills the screen without sideways scroll",
+  "ok": true,
+  "fatal": true,
+  "info": [
+   320,
+   320
+  ]
+ },
+ {
+  "name": "profile saved, gym screen shown",
+  "ok": true,
+  "fatal": true,
+  "info": null
+ },
+ {
+  "name": "built-in plan created without an AI key",
+  "ok": true,
+  "fatal": true,
+  "info": {
+   "nome": "Upper / Lower · Build muscle",
+   "dias": 4,
+   "exs": [
+    6,
+    6,
+    6,
+    6
+   ]
+  }
+ },
+ {
+  "name": "rest timer runs on the phone",
+  "ok": true,
+  "fatal": true,
+  "info": {
+   "type": "state",
+   "kind": "rest",
+   "id": "r1794661245299",
+   "ini": 1794661245299,
+   "pausa": 0,
+   "pausadoEm": 0,
+   "running": true,
+   "ended": false
+  }
+ },
+ {
+  "name": "closing the rest bar stops the phone timer",
+  "ok": true,
+  "fatal": true,
+  "info": {
+   "type": "state",
+   "kind": "rest",
+   "id": "r1794661245299",
+   "ini": 1794661245299,
+   "pausa": 0,
+   "pausadoEm": 0,
+   "running": false,
+   "ended": true,
+   "complete": false,
+   "endedAt": 1794661249349
+  }
+ },
+ {
+  "name": "HIIT timeline handed to the phone",
+  "ok": true,
+  "fatal": true,
+  "info": {
+   "type": "state",
+   "kind": "hiit",
+   "id": "c1794661252228",
+   "ini": 1794661252228,
+   "pausa": 0,
+   "pausadoEm": 0,
+   "running": true,
+   "ended": false
+  }
+ },
+ {
+  "name": "voice/beep cues fired while another app was in front",
+  "ok": true,
+  "fatal": true,
+  "info": [
+   "cue seg=1",
+   "cue seg=2",
+   "cue seg=3",
+   "cue seg=4"
+  ]
+ },
+ {
+  "name": "workout finished by itself in the background",
+  "ok": true,
+  "fatal": true,
+  "info": null
+ },
+ {
+  "name": "text-to-speech spoke",
+  "ok": true,
+  "fatal": false,
+  "info": [
+   "tts init status=0",
+   "speak result=0",
+   "speak result=0",
+   "speak result=0",
+   "speak result=0",
+   "speak result=0"
+  ]
+ },
+ {
+  "name": "back in the app, the cardio log opens to save the session",
+  "ok": true,
+  "fatal": true,
+  "info": null
+ },
+ {
+  "name": "settings show the background permissions",
+  "ok": true,
+  "fatal": true,
+  "info": null
+ },
+ {
+  "name": "Android back button goes to Today instead of closing",
+  "ok": true,
+  "fatal": true,
+  "info": {
+   "antes": {
+    "tab": "cardio",
+    "teclado": false
+   },
+   "depois": [
+    "hoje",
+    "visible"
+   ]
+  }
+ },
+ {
+  "name": "focused field is not hidden by the keyboard",
+  "ok": true,
+  "fatal": false,
+  "info": {
+   "top": 314.625,
+   "bottom": 363.8125,
+   "vh": 616,
+   "ih": 616
+  }
+ },
+ {
+  "name": "update: app switched to the new version",
+  "ok": true,
+  "fatal": false,
+  "info": 100023
+ },
+ {
+  "name": "update: new version confirmed itself",
+  "ok": true,
+  "fatal": false,
+  "info": null
+ },
+ {
+  "name": "update: app starts again after a restart",
+  "ok": true,
+  "fatal": false,
+  "info": null
+ },
+ {
+  "name": "update: still on the new version after restarting",
+  "ok": true,
+  "fatal": false,
+  "info": 100023
+ },
+ {
+  "name": "update: data kept after the update",
+  "ok": true,
+  "fatal": false,
+  "info": null
+ },
+ {
+  "name": "update: downloads the latest published version",
+  "ok": true,
+  "fatal": false,
+  "info": {
+   "path": "/data/user/0/com.wsqm1990.ironjourney/files/bundles/net-test"
+  }
+ },
+ {
+  "name": "no uncaught JavaScript errors",
+  "ok": true,
+  "fatal": true,
+  "info": []
+ },
+ {
+  "name": "no console errors (plugin refusals are logged here)",
+  "ok": true,
+  "fatal": false,
+  "info": []
+ }
+]

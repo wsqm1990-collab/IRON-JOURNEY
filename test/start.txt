@@ -1,0 +1,7 @@
+Starting: Intent { cmp=com.wsqm1990.ironjourney/.MainActivity }
+Status: ok
+LaunchState: COLD
+Activity: com.wsqm1990.ironjourney/.MainActivity
+TotalTime: 3457
+WaitTime: 3541
+Complete
