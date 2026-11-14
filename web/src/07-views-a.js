@@ -239,10 +239,80 @@ function viewGym() {
     <button class="btn big block" data-a="gymSalvar">${t('gym_save')} <span class="num">(${g.itens.size})</span></button>
   </section>`;
 }
+/* ---------- the weights you have: at the gym and at home ---------- */
+Object.assign(STR, {
+  pw_btn: ['Weights and plates (gym and home)', 'Pesos e anilhas (academia e casa)', 'Pesos y discos (gimnasio y casa)'],
+  pw_e: ['Weights and plates', 'Pesos e anilhas', 'Pesos y discos'], pw_q: ['The weights you have', 'Os pesos que você tem', 'Los pesos que tienes'],
+  pw_note: ['The app only suggests weights that really exist: the plates per side, which dumbbell, where the pin goes.', 'O app só sugere pesos que existem de verdade: as anilhas de cada lado, qual halter, onde vai o pino.', 'La app solo sugiere pesos que existen de verdad: los discos de cada lado, qué mancuerna, dónde va el pasador.'],
+  pw_gym: ['At the gym', 'Na academia', 'En el gimnasio'], pw_home: ['At home', 'Em casa', 'En casa'], pw_save: ['Save', 'Salvar', 'Guardar'], pw_saved: ['Weights saved', 'Pesos salvos', 'Pesos guardados'],
+  pw_home_note: ['Mark only what you have at home. With nothing marked, the app asks you to use the weight you have.', 'Marque só o que você tem em casa. Sem nada marcado, o app pede para você usar o peso que tiver.', 'Marca solo lo que tienes en casa. Sin nada marcado, la app te pide usar el peso que tengas.'],
+  pw_db_pairs: ['Dumbbells (the pairs you have, weight of each one)', 'Halteres (os pares que você tem, peso de cada um)', 'Mancuernas (los pares que tienes, peso de cada una)'],
+  pw_db_adj: ['Adjustable dumbbell: up to how much per hand?', 'Halter ajustável: até quanto por mão?', 'Mancuerna ajustable: ¿hasta cuánto por mano?'], pw_none: ['I don\'t have', 'Não tenho', 'No tengo'],
+  pw_upto: ['up to {n} kg', 'até {n} kg', 'hasta {n} kg'], pw_adj_step: ['It goes up', 'Ele sobe', 'Sube'],
+  pw_kb: ['Kettlebells', 'Kettlebells', 'Kettlebells'], pw_bar_home: ['Barbell at home', 'Barra em casa', 'Barra en casa'], pw_plates_home: ['Plates at home', 'Anilhas em casa', 'Discos en casa'],
+  pw_backpack: ['Backpack: up to how many kg can it take?', 'Mochila: até quantos kg dá para colocar?', 'Mochila: ¿hasta cuántos kg aguanta?'],
+  pw_home_summary: ['Home weights: {x}', 'Pesos de casa: {x}', 'Pesos de casa: {x}'], pw_home_none: ['Mark the weights you have at home', 'Marque os pesos que você tem em casa', 'Marca los pesos que tienes en casa'],
+  pw_edit: ['change', 'mudar', 'cambiar'],
+});
+const HALTERES_CASA = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32];
+const KETTLES_CASA = [4, 6, 8, 10, 12, 14, 16, 18, 20, 24, 28, 32];
+const ANILHAS_CASA = [20, 15, 10, 5, 2.5, 2, 1.25, 1, 0.5];
+function casaPesosHTML(C) {
+  const chip = (lista, v, k) => `<button class="chip num" data-a="casaPeso" data-k="${k}" data-v="${v}" aria-pressed="${(C[k] || []).includes(v)}">${fmtKg(v)} kg</button>`;
+  const seg = (k, vals, fmt) => `<div class="seg wrap">${vals.map(v => `<button data-a="casaPesoSet" data-k="${k}" data-v="${v}" aria-pressed="${C[k] === v}">${fmt(v)}</button>`).join('')}</div>`;
+  return `<div class="equip-group stack">
+    <p class="small muted">${t('pw_home_note')}</p>
+    <p class="eyebrow">${t('pw_db_pairs')}</p><div class="chips">${HALTERES_CASA.map(v => chip(C.halteres, v, 'halteres')).join('')}</div>
+    <p class="eyebrow">${t('pw_db_adj')}</p>${seg('ajustavel', [0, 10, 15, 20, 25, 30, 40], v => (v ? t('pw_upto', { n: v }) : t('pw_none')))}
+    ${C.ajustavel ? `<p class="eyebrow">${t('pw_adj_step')}</p>${seg('ajustPasso', [1, 2, 2.5], v => t('gw_every', { n: fmtKg(v) }))}` : ''}
+    <p class="eyebrow">${t('pw_kb')}</p><div class="chips">${KETTLES_CASA.map(v => chip(C.kettlebells, v, 'kettlebells')).join('')}</div>
+    <p class="eyebrow">${t('pw_bar_home')}</p>${seg('barra', [0, 5, 10, 15, 20], v => (v ? fmtKg(v) + ' kg' : t('pw_none')))}
+    ${C.barra ? `<p class="eyebrow">${t('pw_plates_home')}</p><div class="chips">${ANILHAS_CASA.map(v => chip(C.anilhas, v, 'anilhas')).join('')}</div>` : ''}
+    <p class="eyebrow">${t('pw_backpack')}</p>${seg('mochila', [5, 10, 15, 20, 25], v => fmtKg(v) + ' kg')}
+  </div>`;
+}
+/* "dumbbells 4-10 kg · kettlebell 12 kg" for the home sheet */
+function resumoPesosCasa() {
+  const C = pesosCasa(), partes = [];
+  const h = pesosCasaCalc().halterLista;
+  if (h.length) partes.push(L3(nomeCasaEquip('halteres', true)) + ' ' + (h.length > 1 ? fmtKg(h[0]) + '–' + fmtKg(h[h.length - 1]) : fmtKg(h[0])) + ' kg');
+  if ((C.kettlebells || []).length) partes.push('kettlebell ' + C.kettlebells.map(fmtKg).join(', ') + ' kg');
+  if (C.barra) partes.push(L3(nomeCasaEquip('barra', true)) + ' ' + fmtKg(C.barra) + ' kg');
+  return partes.join(' · ');
+}
+function viewPesos() {
+  const g = S.gymDraft;
+  return `<section class="screen">
+    <div class="row between"><p class="eyebrow">${t('pw_e')}</p><button class="btn quiet small" data-a="pesosSair">${t('cancel')}</button></div>
+    <h1 class="h-display h2">${t('pw_q')}</h1>
+    <p class="muted">${t('pw_note')}</p>
+    <div class="seg"><button data-a="pesosAba" data-v="academia" aria-pressed="${g.aba !== 'casa'}">${t('pw_gym')}</button><button data-a="pesosAba" data-v="casa" aria-pressed="${g.aba === 'casa'}">${t('pw_home')}</button></div>
+    ${g.aba === 'casa' ? casaPesosHTML(g.casa) : pesosHTML(g)}
+    <button class="btn big block" data-a="pesosSalvar">${t('pw_save')}</button>
+  </section>`;
+}
+function abrirPesos(aba) {
+  S.gymDraft = { itens: new Set((S.gym && S.gym.itens) || []), outros: (S.gym && S.gym.outros) || '', pesos: JSON.parse(JSON.stringify(pesosGym())), casa: JSON.parse(JSON.stringify(pesosCasa())), aba: aba || 'academia' };
+  closeSheet(); S.sub = 'pesos'; render(); window.scrollTo(0, 0);
+}
+async function salvarPesos() {
+  const g = S.gymDraft;
+  const body = { ...(S.gym || { itens: [], outros: '' }), pesos: g.pesos, casa: g.casa, atualizadoEm: Date.now() };
+  try { await save('academia/principal', body, t('pw_saved')); } catch { return; }
+  S.gym = body;
+  sairPesos();
+}
+/* back where the person came from: the plan, or the "different workout today" questions with their answers */
+function sairPesos() {
+  S.gymDraft = null; S.sub = null;
+  const volta = S.casaVolta; S.casaVolta = null;
+  if (volta) { S.tab = 'hoje'; render(); abrirCasa(volta); return; }
+  S.tab = 'plano'; render(); window.scrollTo(0, 0);
+}
 async function salvarGym() {
   const g = S.gymDraft;
   if (g.itens.size < 3) { toast(t('gym_min')); return; }
-  const body = { itens: [...g.itens], outros: g.outros.trim().slice(0, 300), pesos: g.pesos || pesosGym(), atualizadoEm: Date.now() };
+  const body = { itens: [...g.itens], outros: g.outros.trim().slice(0, 300), pesos: g.pesos || pesosGym(), ...(S.gym && S.gym.casa ? { casa: S.gym.casa } : {}), atualizadoEm: Date.now() };
   try { await save('academia/principal', body, t('gym_saved')); } catch { return; }
   S.gym = body; S.gymDraft = null; S.sub = null; S.tab = 'plano';
   render();
@@ -391,7 +461,7 @@ async function pedirExplicacao() {
 const fmtDesc = s => (s >= 60 ? (Math.round(s / 6) / 10).toLocaleString(LOC()) + ' min' : s + ' s');
 function viewPlano() {
   const pid = S.me, pr = progresso(pid), p = perfil(pid);
-  const acoes = `<div class="stack"><button class="btn ghost block" data-a="editarPerfil">${t('edit_profile')}</button><button class="btn ghost block" data-a="editarGym">${t('gym_equipment')}</button></div>`;
+  const acoes = `<div class="stack"><button class="btn ghost block" data-a="editarPerfil">${t('edit_profile')}</button><button class="btn ghost block" data-a="editarGym">${t('gym_equipment')}</button><button class="btn ghost block" data-a="editarPesos">${t('pw_btn')}</button></div>`;
   const focos = (p.foco || []).map(id => label4(FOCOS, id)).join(', ').toLowerCase();
   const lims = [...(p.limites || []).map(id => label4(LIMITES, id)), p.limitesTxt].filter(Boolean).join('; ');
   const resumoPerfil = `<div class="card pad stack"><div class="row between"><h2 class="h3">${esc(p.nome)}</h2><span class="pill">${esc(nomeNivel(p.nivel))}</span></div>

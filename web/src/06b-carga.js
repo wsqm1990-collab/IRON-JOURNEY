@@ -5,6 +5,18 @@
 const PESOS_PADRAO = { anilhas: [20, 15, 10, 5, 2.5, 1.25], barra: 20, barraW: 10, smith: 15, halterMax: 40, halterPasso: 2, maquina: 5, polia: 5 };
 const ANILHAS_OPC = [25, 20, 15, 10, 5, 4, 3, 2.5, 2, 1.25, 1, 0.5];
 const pesosGym = () => ({ ...PESOS_PADRAO, ...((S.gym && S.gym.pesos) || {}) });
+/* the weights at home: pairs of dumbbells, an adjustable dumbbell, kettlebells, a barbell with plates, the backpack */
+const CASA_PADRAO = { halteres: [], ajustavel: 0, ajustPasso: 2, kettlebells: [], barra: 0, anilhas: [], mochila: 15 };
+const pesosCasa = () => ({ ...CASA_PADRAO, ...((S.gym && S.gym.casa) || {}) });
+function pesosCasaCalc() {
+  const C = pesosCasa(), h = new Set(C.halteres || []);
+  if (C.ajustavel > 0) for (let k = C.ajustPasso; k <= C.ajustavel + 1e-9; k += C.ajustPasso) h.add(Math.round(k * 10) / 10);
+  return { ...PESOS_PADRAO, anilhas: C.anilhas || [], barra: C.barra || 0, barraW: C.barra || 0, smith: 0, halterLista: [...h].sort((a, b) => a - b),
+    kettles: [...(C.kettlebells || [])].sort((a, b) => a - b), mochila: C.mochila || 15, casa: true };
+}
+/* which weights count right now: home while working out at home (or while building a home session), else the gym's */
+let PESOS_CTX = null;
+const pesosAtivos = () => ((PESOS_CTX ? PESOS_CTX === 'casa' : !!(S.live && S.live.casa)) ? pesosCasaCalc() : pesosGym());
 
 /* how the weight is made: plates on a bar, plates on a machine (both sides or one), dumbbells, a pin */
 const CARGA2 = ['leg_press', 'hack', 'pendulo', 'pant_leg'];
@@ -22,7 +34,7 @@ function tipoCarga(ex) {
 }
 function barraDe(ex, P) {
   if (/smith/.test(ex.id)) return P.smith;
-  if (BARRA_W.includes(ex.id) && equipSet(S.gym).has('barra_w')) return P.barraW;
+  if (BARRA_W.includes(ex.id) && (P.casa || equipSet(S.gym).has('barra_w'))) return P.barraW;
   return P.barra;
 }
 
@@ -63,7 +75,7 @@ function listaHalteres(P) {
 const arredPasso = (kg, passo, dir) => (dir < 0 ? Math.floor(kg / passo + 1e-9) : dir > 0 ? Math.ceil(kg / passo - 1e-9) : Math.round(kg / passo)) * passo;
 /* nearest weight you can actually load (dir -1 = not above, +1 = not below) */
 function arredondar(ex, kg, dir = 0) {
-  const P = pesosGym(), tipo = tipoCarga(ex);
+  const P = pesosAtivos(), tipo = tipoCarga(ex);
   if (kg == null || !Number.isFinite(kg)) return null;
   if (tipo === 'barra' || tipo === 'carga2') {
     const bar = tipo === 'barra' ? barraDe(ex, P) : 0;
@@ -72,21 +84,28 @@ function arredondar(ex, kg, dir = 0) {
   }
   if (tipo === 'carga1') return ladoPossivel(kg, P.anilhas, dir);
   if (tipo === 'halter' || tipo === 'halter1') {
-    const L = listaHalteres(P);
+    const L = P.halterLista ? P.halterLista : listaHalteres(P);
+    if (!L.length) return Math.max(1, Math.round(kg * 2) / 2);
     const abaixo = L.filter(k => k <= kg + 1e-9), acima = L.filter(k => k >= kg - 1e-9);
     if (dir < 0) return abaixo.length ? abaixo[abaixo.length - 1] : L[0];
     if (dir > 0) return acima.length ? acima[0] : L[L.length - 1];
     return L.reduce((m, k) => (Math.abs(k - kg) < Math.abs(m - kg) ? k : m), L[0]);
   }
   if (tipo === 'maquina' || tipo === 'polia') { const passo = tipo === 'polia' ? P.polia : P.maquina; return Math.max(passo, arredPasso(kg, passo, dir)); }
-  if (tipo === 'mochila') return Math.max(1, arredPasso(kg, 1, dir));
-  if (tipo === 'kettle') return Math.max(4, arredPasso(kg, 2, dir));
+  if (tipo === 'mochila') return clamp(arredPasso(kg, 1, dir), 1, P.mochila || 25);
+  if (tipo === 'kettle') {
+    const L = P.kettles || [];
+    if (!L.length) return Math.max(4, arredPasso(kg, 2, dir));
+    if (dir < 0) return [...L].reverse().find(k => k <= kg + 1e-9) || L[0];
+    if (dir > 0) return L.find(k => k >= kg - 1e-9) || L[L.length - 1];
+    return L.reduce((m, k) => (Math.abs(k - kg) < Math.abs(m - kg) ? k : m), L[0]);
+  }
   return Math.round(kg * 2) / 2;
 }
 /* "20 + 10 + 2.5 each side" and friends */
 function comoMontar(ex, kg) {
   if (kg == null) return '';
-  const P = pesosGym(), tipo = tipoCarga(ex), f = fmtKg;
+  const P = pesosAtivos(), tipo = tipoCarga(ex), f = fmtKg;
   if (tipo === 'barra' || tipo === 'carga2') {
     const bar = tipo === 'barra' ? barraDe(ex, P) : 0, lado = Math.max(0, (kg - bar) / 2), pl = placasDoLado(lado, P.anilhas);
     const barTxt = tipo === 'barra' ? t(/smith/.test(ex.id) ? 'mt_smith' : BARRA_W.includes(ex.id) && bar === P.barraW ? 'mt_barw' : 'mt_bar', { b: f(bar) }) : '';
@@ -107,7 +126,7 @@ function comoMontar(ex, kg) {
 const COR_PLACA = { 25: 'k25', 20: 'k20', 15: 'k15', 10: 'k10', 5: 'k5' };
 function montarHTML(ex, kg) {
   if (kg == null) return '';
-  const P = pesosGym(), tipo = tipoCarga(ex);
+  const P = pesosAtivos(), tipo = tipoCarga(ex);
   if (!['barra', 'carga2', 'carga1'].includes(tipo)) return esc(comoMontar(ex, kg));
   const bar = tipo === 'barra' ? barraDe(ex, P) : 0, lado = tipo === 'carga1' ? kg : Math.max(0, (kg - bar) / 2), pl = placasDoLado(lado, P.anilhas);
   if (!pl.length) return esc(comoMontar(ex, kg));
@@ -132,6 +151,8 @@ const RAZAO = {
   stiff: 1.1, stiff_unilateral: 0.35, terra: 1.5, mesa_flexora: 0.5, cadeira_flexora: 0.6,
   hip_thrust: 1.4, hip_thrust_smith: 1.3, hip_thrust_maq: 1.3, coice_polia: 0.2, gluteo_maquina: 0.5, abdutora: 0.8, coice_caneleira: 0.05, agach_sumo: 0.5, adutora: 0.8,
   pant_pe: 1.3, pant_sentado: 0.9, pant_leg: 1.8, pant_smith: 1.1, abd_polia: 0.6,
+  /* home versions (dumbbells per hand; backpack and kettlebell in total) */
+  supino_chao: 0.34, remada_halteres: 0.28, remada_mochila: 0.45, rosca_mochila: 0.3, agach_mochila: 0.3, kb_swing: 0.3,
 };
 const INFERIOR = ['quadriceps', 'posteriores', 'gluteos', 'adutores', 'panturrilhas'];
 function e1Inicial(ex, p) {
@@ -145,6 +166,11 @@ function e1Inicial(ex, p) {
 
 /* the plan for one exercise today: weight and exact reps for every set, test-set rules */
 function planoCarga(pid, item, alv, sug, casa = false) {
+  const antes = PESOS_CTX;
+  PESOS_CTX = casa ? 'casa' : 'gym';
+  try { return planoCargaEm(pid, item, alv, sug, casa); } finally { PESOS_CTX = antes; }
+}
+function planoCargaEm(pid, item, alv, sug, casa) {
   const ex = exInfo(item.id, item.nome), tipo = tipoCarga(ex), p = perfil(pid) || {};
   const rir = alv.deload ? Math.max(alv.rir, 3) : alv.rir;
   const meio = Math.round((alv.rmin + alv.rmax) / 2);
@@ -223,7 +249,7 @@ function recalibrar(x, j) {
 function aquecimento(ex, kg) {
   const tipo = tipoCarga(ex);
   if (!kg || ex.tipo !== 'C' || !['barra', 'carga2', 'maquina', 'halter'].includes(tipo)) return [];
-  const P = pesosGym(), bar = tipo === 'barra' ? barraDe(ex, P) : 0;
+  const P = pesosAtivos(), bar = tipo === 'barra' ? barraDe(ex, P) : 0;
   const passos = tipo === 'barra' ? [[0.5, 8], [0.7, 4], [0.85, 2]] : [[0.5, 10], [0.75, 5]];
   const out = [];
   if (tipo === 'barra' && kg >= bar * 2) out.push({ kg: bar, reps: 10 });

@@ -353,7 +353,7 @@ public class IronTimerPlugin extends Plugin {
             r.put("versionName", pi.versionName);
             r.put("versionCode", Build.VERSION.SDK_INT >= 28 ? pi.getLongVersionCode() : (long) pi.versionCode);
         } catch (Exception ignored) { }
-        r.put("shell", 1);
+        r.put("shell", 2); /* 2: locked in portrait */
         r.put("sdk", Build.VERSION.SDK_INT);
         r.put("maker", Build.MANUFACTURER);
         r.put("model", Build.MODEL);

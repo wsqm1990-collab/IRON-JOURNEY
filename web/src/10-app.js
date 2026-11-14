@@ -1,7 +1,17 @@
 Object.assign(STR, {
   discard_q: ['Discard this workout?', 'Descartar este treino?', '¿Descartar este entrenamiento?'], discard_text: ['The sets you logged today will be deleted. The plan stays where it was.', 'As séries registradas hoje serão apagadas. O plano continua no mesmo ponto.', 'Las series registradas hoy se borrarán. El plan sigue en el mismo punto.'],
   keep_training: ['Keep training', 'Continuar treinando', 'Seguir entrenando'],
+  apk_portrait: ['Install the new version of the app so it always stays upright (your data stays).', 'Instale a versão nova do app para ele ficar sempre na vertical (seus dados continuam).', 'Instala la versión nueva de la app para que quede siempre en vertical (tus datos se quedan).'],
+  install: ['Install', 'Instalar', 'Instalar'], not_now: ['Not now', 'Agora não', 'Ahora no'],
 });
+/* the native shell this web bundle hopes for (2: locked upright); older shells keep working, they just get a gentle nudge */
+const SHELL_IDEAL = 2;
+async function verShell() {
+  try { if (screen.orientation && screen.orientation.lock) screen.orientation.lock('portrait').catch(() => {}); } catch { /* not supported here */ }
+  if (!Nat.on) return;
+  const info = await Nat.safe('info');
+  if (info && (info.shell || 1) < SHELL_IDEAL && (LS.get('ij_apk_depois') || 0) < Date.now()) { S.apkSugerido = true; render(); }
+}
 /* ---------- rendering ---------- */
 function viewLoading() {
   return `<section class="screen"><div class="loader">${lbarHTML()}<p class="h3">${t('loading')}</p>
@@ -10,6 +20,7 @@ function viewLoading() {
 function banners() {
   if (!S.ready) return '';
   if (S.precisaApk) return `<div class="banner row between" style="gap:12px"><span>${t('need_apk')}</span><button class="btn small" data-a="apkNovo">${t('get_apk')}</button></div>`;
+  if (S.apkSugerido && !S.live) return `<div class="banner stack" style="gap:8px"><span>${t('apk_portrait')}</span><div class="row" style="gap:8px"><button class="btn small" data-a="apkNovo">${t('install')}</button><button class="btn quiet small" data-a="apkDepois">${t('not_now')}</button></div></div>`;
   if (S.mode === 'local' && !Nat.on) return `<div class="banner">${t('local_mode')}</div>`;
   if (!S.canWrite) return `<div class="banner">${t('read_only')}</div>`;
   return '';
@@ -21,6 +32,7 @@ function render() {
   if (!S.ready) html = viewLoading();
   else if (S.sub === 'wizard' && S.wizard) html = viewWizard();
   else if (S.sub === 'gym') html = viewGym();
+  else if (S.sub === 'pesos' && S.gymDraft) html = viewPesos();
   else if (!S.me || !S.perfis[S.me]) html = viewWelcome();
   else switch (S.tab) {
     case 'plano': html = viewPlano(); break;
@@ -47,6 +59,7 @@ function aoFicarPronto() {
   if (!LS.get('td_lang') && p && p.lang) setLang(p.lang);
   retomarPlayerSalvo();
   lpcPreparar();
+  verShell();
   setTimeout(() => { window.__ijOk = true; confirmarVersao(); setTimeout(() => checarAtualizacao(true), 4000); }, 2500);
 }
 
@@ -105,6 +118,7 @@ const ACT = {
   backupAplicar: () => aplicarBackup(),
   svcSel: el => { LS.set('ij_svc', el.dataset.v || null); render(); },
   apkNovo: () => { if (Nat.on) Nat.safe('openApp', { url: APK_URL }); else window.open(APK_URL, '_blank'); },
+  apkDepois: () => { LS.set('ij_apk_depois', Date.now() + 3 * 86400000); S.apkSugerido = false; render(); },
   novoPerfil: () => { closeSheet(); novoWizard(null); render(); window.scrollTo(0, 0); },
   editarPerfil: () => { novoWizard(S.me); render(); window.scrollTo(0, 0); },
   wzSet: el => { S.wizard.d[el.dataset.k] = el.dataset.num ? Number(el.dataset.v) : el.dataset.v; render(); },
@@ -128,6 +142,17 @@ const ACT = {
   gymSalvar: () => salvarGym(),
   pesoAnilha: el => { const p = S.gymDraft.pesos, v = Number(el.dataset.v), k = p.anilhas.indexOf(v); if (k >= 0) { if (p.anilhas.length > 1) p.anilhas.splice(k, 1); } else p.anilhas.push(v); p.anilhas.sort((a, b) => b - a); render(); },
   pesoSet: el => { S.gymDraft.pesos[el.dataset.k] = Number(el.dataset.v); render(); },
+  editarPesos: () => abrirPesos('academia'),
+  pesosAba: el => { S.gymDraft.aba = el.dataset.v; render(); },
+  casaPeso: el => {
+    const C = S.gymDraft.casa, k = el.dataset.k, v = Number(el.dataset.v), l = C[k] = C[k] || [], i = l.indexOf(v);
+    if (i >= 0) l.splice(i, 1); else l.push(v);
+    l.sort((a, b) => (k === 'anilhas' ? b - a : a - b)); render();
+  },
+  casaPesoSet: el => { S.gymDraft.casa[el.dataset.k] = Number(el.dataset.v); render(); },
+  pesosSalvar: () => salvarPesos(),
+  pesosSair: () => sairPesos(),
+  casaPesos: () => { S.casaVolta = S.casa ? { ...S.casa, carregando: false, ctl: null } : null; abrirPesos('casa'); },
   gymSair: () => { S.gymDraft = null; S.sub = null; render(); },
   tab: el => { closeSheet(); S.tab = TABS_OK.includes(el.dataset.tab) ? el.dataset.tab : 'hoje'; LS.set('td_tab', S.tab); S.sub = null; render(); window.scrollTo(0, 0); if (S.tab === 'coach') rolarChat(); },
   jsub: el => { S.jsub = el.dataset.v; render(); },

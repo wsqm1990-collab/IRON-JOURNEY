@@ -57,6 +57,9 @@ m = m.replace('<application', `${perms}\n${queries}\n\n    <application`);
 must(m.includes('</application>'), 'find </application>');
 m = m.replace('</application>', `    <service\n            android:name=".IronTimerService"\n            android:exported="false"\n            android:foregroundServiceType="mediaPlayback" />\n    </application>`);
 if (!m.includes('windowSoftInputMode')) m = m.replace(/(<activity\b[^>]*android:name="\.?MainActivity")/, '$1\n            android:windowSoftInputMode="adjustResize"');
+/* the app is made for the phone held upright: keep it in portrait */
+if (!m.includes('screenOrientation')) m = m.replace(/(<activity\b[^>]*android:name="\.?MainActivity")/, '$1\n            android:screenOrientation="portrait"');
+must(m.includes('android:screenOrientation="portrait"'), 'lock MainActivity in portrait');
 write(mf, m);
 console.log('AndroidManifest.xml:\n' + m);
 

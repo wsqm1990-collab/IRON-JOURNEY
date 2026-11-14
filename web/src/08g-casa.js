@@ -87,6 +87,7 @@ const CASA_EQUIP = [
   ['mochila', ['Backpack with weight (books, bottles)', 'Mochila com peso (livros, garrafas)', 'Mochila con peso (libros, botellas)'], ['Backpack', 'Mochila', 'Mochila']],
   ['halteres', ['Dumbbells', 'Halteres', 'Mancuernas'], ['Dumbbells', 'Halteres', 'Mancuernas']],
   ['kettlebell', ['Kettlebell', 'Kettlebell', 'Kettlebell'], ['Kettlebell', 'Kettlebell', 'Kettlebell']],
+  ['barra', ['Barbell and plates', 'Barra e anilhas', 'Barra y discos'], ['Barbell', 'Barra', 'Barra']],
   ['elastico', ['Resistance bands', 'Elásticos', 'Bandas elásticas'], ['Bands', 'Elásticos', 'Bandas']],
   ['barra_fixa', ['Pull-up bar', 'Barra fixa', 'Barra de dominadas'], ['Pull-up bar', 'Barra fixa', 'Barra']],
 ];
@@ -109,18 +110,18 @@ function padraoDe(id) {
 const CASA_OPCOES = {
   emp_h: [['supino_chao', 2, 'halteres'], ['flexao_declinada', 3, 'cadeira'], ['flexao', 2, ''], ['flexao_inclinada', 1, 'cadeira|mesa']],
   peito_iso: [['flexao', 2, ''], ['flexao_inclinada', 1, 'cadeira|mesa']],
-  emp_v: [['desenv_halteres', 2, 'halteres'], ['flexao_pike', 2, '']],
-  puxar_v: [['barra_fixa', 3, 'barra_fixa'], ['puxada_elastico', 1, 'elastico'], ['remada_invertida', 2, 'mesa'], ['barra_supinada', 3, 'barra_fixa'], ['remada_halteres', 2, 'halteres'], ['remada_mochila', 2, 'mochila'], ['ytw', 1, ''], ['superman', 1, '']],
-  puxar_h: [['remada_invertida', 2, 'mesa'], ['serrote', 2, 'halteres+cadeira'], ['remada_halteres', 2, 'halteres'], ['remada_mochila', 2, 'mochila'], ['remada_elastico', 1, 'elastico'], ['ytw', 1, ''], ['superman', 1, '']],
+  emp_v: [['desenv_halteres', 2, 'halteres'], ['desenv_barra', 2, 'barra'], ['flexao_pike', 2, '']],
+  puxar_v: [['barra_fixa', 3, 'barra_fixa'], ['puxada_elastico', 1, 'elastico'], ['remada_invertida', 2, 'mesa'], ['barra_supinada', 3, 'barra_fixa'], ['remada_halteres', 2, 'halteres'], ['remada_curvada', 2, 'barra'], ['remada_mochila', 2, 'mochila'], ['ytw', 1, ''], ['superman', 1, '']],
+  puxar_h: [['remada_invertida', 2, 'mesa'], ['serrote', 2, 'halteres+cadeira'], ['remada_halteres', 2, 'halteres'], ['remada_curvada', 2, 'barra'], ['remada_mochila', 2, 'mochila'], ['remada_elastico', 1, 'elastico'], ['ytw', 1, ''], ['superman', 1, '']],
   ombro_lat: [['elev_lateral', 2, 'halteres'], ['elev_lateral_elastico', 1, 'elastico'], ['ytw', 1, '']],
   ombro_post: [['face_pull_elastico', 1, 'elastico'], ['crucifixo_inverso_h', 2, 'halteres'], ['ytw', 1, '']],
-  biceps: [['rosca_alternada', 2, 'halteres'], ['rosca_martelo', 2, 'halteres'], ['rosca_elastico', 1, 'elastico'], ['rosca_mochila', 2, 'mochila'], ['barra_supinada', 3, 'barra_fixa'], ['rosca_toalha', 1, '']],
+  biceps: [['rosca_alternada', 2, 'halteres'], ['rosca_barra', 2, 'barra'], ['rosca_martelo', 2, 'halteres'], ['rosca_elastico', 1, 'elastico'], ['rosca_mochila', 2, 'mochila'], ['barra_supinada', 3, 'barra_fixa'], ['rosca_toalha', 1, '']],
   triceps: [['triceps_frances', 2, 'halteres'], ['mergulho_cadeira', 2, 'cadeira'], ['flexao_diamante', 3, '']],
   mergulho: [['mergulho_cadeira', 2, 'cadeira'], ['flexao_diamante', 3, ''], ['flexao', 2, '']],
   agachar: [['goblet', 2, 'halteres|kettlebell'], ['agach_mochila', 2, 'mochila'], ['agach_livre', 1, ''], ['agach_salto', 3, '']],
   uni: [['bulgaro_cadeira', 3, 'cadeira'], ['afundo_reverso', 2, ''], ['afundo_lateral', 2, '']],
   quad_iso: [['sissy', 3, ''], ['agach_parede', 1, '']],
-  quadril: [['kb_swing', 2, 'kettlebell'], ['stiff_unilateral', 2, 'halteres'], ['stiff_corpo', 1, ''], ['superman', 1, '']],
+  quadril: [['kb_swing', 2, 'kettlebell'], ['stiff', 2, 'barra'], ['stiff_unilateral', 2, 'halteres'], ['terra', 3, 'barra'], ['stiff_corpo', 1, ''], ['superman', 1, '']],
   flexora: [['flexora_toalha', 2, ''], ['ponte_unilateral', 1, '']],
   gluteo: [['ponte_unilateral', 2, ''], ['kb_swing', 2, 'kettlebell'], ['ponte_gluteo', 1, '']],
   abdutor: [['abducao_elastico', 1, 'elastico'], ['afundo_lateral', 2, ''], ['ponte_gluteo', 1, '']],
@@ -149,7 +150,7 @@ function opcoesCasa(equip, p = perfil()) {
 /* a plan exercise that already works at home (push-ups, plank, or dumbbell moves when there are dumbbells) stays as it is */
 function ficaIgual(id, set) {
   const ex = EX[id];
-  if (!ex || ex.grupo === 'cardio' || ['b', 'm', 'p'].includes(ex.carga)) return false;
+  if (!ex || ex.grupo === 'cardio' || ['m', 'p'].includes(ex.carga) || (ex.carga === 'b' && !set.has('barra'))) return false;
   const casa = ex.req.filter(alt => alt.every(e => set.has(e)));
   if (!casa.length) return false;
   return !usaCarga(ex) || casa.some(alt => alt.length > 0);
@@ -519,9 +520,9 @@ function seguirGrupo(L, i) {
 }
 
 /* ---------- the sheet: the questions it always asks ---------- */
-function abrirCasa() {
+function abrirCasa(prev) {
   const A = casaHoje(S.me);
-  S.casa = A ? { onde: A.onde, equip: (A.equip || []).slice(), objetivo: A.objetivo, tipo: A.tipo, musc: (A.musc || []).slice(), tempo: A.tempo, pedido: A.pedido || '' }
+  S.casa = prev ? { ...prev } : A ? { onde: A.onde, equip: (A.equip || []).slice(), objetivo: A.objetivo, tipo: A.tipo, musc: (A.musc || []).slice(), tempo: A.tempo, pedido: A.pedido || '' }
     : { onde: null, equip: null, objetivo: null, tipo: null, musc: [], tempo: null, pedido: '' };
   Object.assign(S.casa, { carregando: false, ctl: null });
   openSheet(t('dif_title'), casaHTML(), () => { if (S.casa && S.casa.ctl) S.casa.ctl.abort(); S.casa = null; });
@@ -540,7 +541,8 @@ function casaHTML() {
     ${q('place', 1, t('dif_q_place'))}
     <div class="seg"><button data-a="casaOnde" data-v="academia" aria-pressed="${c.onde === 'academia'}">${t('dif_gym')}</button><button data-a="casaOnde" data-v="casa" aria-pressed="${casa}">${t('dif_home')}</button></div>
     ${casa ? `<p class="eyebrow" id="q-equip">${esc(t('home_have'))}</p>
-    <div class="chips">${chip(Array.isArray(c.equip) && !c.equip.length, t('home_body_only'), 'casaNada', '')}${CASA_EQUIP.map(([id, n]) => chip((c.equip || []).includes(id), L3(n), 'casaEquip', id)).join('')}</div>` : ''}
+    <div class="chips">${chip(Array.isArray(c.equip) && !c.equip.length, t('home_body_only'), 'casaNada', '')}${CASA_EQUIP.map(([id, n]) => chip((c.equip || []).includes(id), L3(n), 'casaEquip', id)).join('')}</div>
+    <div class="row between" style="gap:8px"><span class="xs muted">${esc(resumoPesosCasa() ? t('pw_home_summary', { x: resumoPesosCasa() }) : t('pw_home_none'))}</span><button class="btn quiet small" data-a="casaPesos">${t('pw_edit')}</button></div>` : ''}
     ${q('goal', 2, t('dif_q_goal'))}
     <div class="chips">${GOALS.map(g => chip(c.objetivo === g, t('dif_goal_' + g), 'casaObjetivo', g)).join('')}</div>
     ${c.objetivo ? `<p class="xs muted">${esc(t('dif_goal_' + c.objetivo + '_d'))}</p>` : ''}
