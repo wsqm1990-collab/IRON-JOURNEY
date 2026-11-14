@@ -147,7 +147,7 @@ function viewWelcome() {
 /* ---------- profile wizard ---------- */
 const WZ_PASSOS = 9;
 function novoWizard(edit) {
-  const padrao = { nome: '', objetivo: '', foco: [], nivel: '', dias: 4, minutos: 60, sexo: '', idade: '', peso: '', altura: '', limites: [], limitesTxt: '', gosta: '', evita: '', cardioVezes: 2, cardioModos: [], cardioQuando: 'tanto' };
+  const padrao = { nome: '', objetivo: '', foco: [], nivel: '', dias: 4, minutos: 60, sexo: '', idade: '', peso: '', altura: '', cintura: '', pescoco: '', quadril: '', limites: [], limitesTxt: '', gosta: '', evita: '', cardioVezes: 2, cardioModos: [], cardioQuando: 'tanto' };
   S.wizard = { step: 0, d: edit ? { ...padrao, ...clone(S.perfis[edit]) } : padrao, edit: edit || null };
   S.sub = 'wizard';
 }
@@ -170,7 +170,9 @@ function viewWizard() {
         <label class="f" for="wz-idade">${t('wz_age')}<input class="inp num" id="wz-idade" data-in="wz" data-k="idade" inputmode="numeric" maxlength="3" value="${esc(d.idade)}" placeholder="${t('ph_years')}"></label>
         <label class="f" for="wz-peso">${t('wz_weight')}<input class="inp num" id="wz-peso" data-in="wz" data-k="peso" inputmode="decimal" maxlength="5" value="${esc(d.peso)}" placeholder="kg"></label>
         <label class="f" for="wz-altura">${t('wz_height')}<input class="inp num" id="wz-altura" data-in="wz" data-k="altura" inputmode="numeric" maxlength="3" value="${esc(d.altura)}" placeholder="cm"></label>
-      </div>`); break;
+      </div>
+      ${medidasCamposHTML(d, 'wz')}
+      <div class="card pad" id="wz-comp">${composicaoHTML(d)}</div>`); break;
     case 6: html = q(t('wz_care_e'), t('wz_care_q'), `<p class="small muted">${t('wz_care_note')}</p>${chipsMulti('limites', LIMITES, d.limites)}
       <label class="f" for="wz-lim">${t('wz_care_more')}<textarea class="inp" id="wz-lim" data-in="wz" data-k="limitesTxt" maxlength="300" placeholder="${t('wz_care_ph')}">${esc(d.limitesTxt)}</textarea></label>`); break;
     case 7: html = q(t('wz_cardio_e'), t('wz_cardio_q'), `<p class="small muted">${t('wz_cardio_times')}</p>${segBtns('cardioVezes', [0, 1, 2, 3, 4, 5], d.cardioVezes)}
@@ -196,6 +198,7 @@ function wzValida() {
 async function salvarPerfil() {
   const w = S.wizard, d = w.d, pid = w.edit || uid('p'), atual = S.perfis[pid] || {};
   const body = { ...atual, ...d, nome: d.nome.trim().slice(0, 30), lang: LANG(), atualizadoEm: Date.now(), criadoEm: atual.criadoEm || Date.now() };
+  body.medidas = novaMedida(atual, body);
   try { await save('perfis/' + pid, body, w.edit ? t('profile_saved') : ''); } catch { return; }
   if (!S.perfis[pid]) { S.perfis[pid] = body; S.ordem.push(pid); } else S.perfis[pid] = body;
   S.wizard = null;

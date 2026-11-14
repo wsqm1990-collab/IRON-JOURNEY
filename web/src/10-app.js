@@ -151,6 +151,8 @@ const ACT = {
   },
   casaPesoSet: el => { S.gymDraft.casa[el.dataset.k] = Number(el.dataset.v); render(); },
   pesosSalvar: () => salvarPesos(),
+  medidasAbrir: () => abrirMedidas(),
+  medidasSalvar: () => salvarMedidas(),
   pesosSair: () => sairPesos(),
   casaPesos: () => { S.casaVolta = S.casa ? { ...S.casa, carregando: false, ctl: null } : null; abrirPesos('casa'); },
   gymSair: () => { S.gymDraft = null; S.sub = null; render(); },
@@ -254,7 +256,11 @@ const ACT = {
   forcarAbrir: () => { if (S.forceReady) S.forceReady(); },
 };
 const INP = {
-  wz: el => { S.wizard.d[el.dataset.k] = el.value; },
+  wz: el => {
+    S.wizard.d[el.dataset.k] = el.value;
+    if (['sexo', 'idade', 'peso', 'altura', 'cintura', 'pescoco', 'quadril'].includes(el.dataset.k)) atualizaComposicao('#wz-comp', S.wizard.d);
+  },
+  medida: el => { if (!S.medidas) return; S.medidas[el.dataset.k] = el.value; atualizaComposicao('#bc-res', { ...(perfil() || {}), ...S.medidas }); },
   gymOutros: el => { S.gymDraft.outros = el.value; },
   casaPedido: el => { if (S.casa) S.casa.pedido = el.value.slice(0, 300); },
   kg: el => {

@@ -27,7 +27,7 @@ function barrasCardio(pid) {
 }
 function viewStats(sub) {
   const pid = S.me, ss = sessoesDe(pid), cs = cardioDe(pid);
-  if (!ss.length && !cs.length) return `<section class="screen">${sub}<p class="eyebrow">${t('stats_e')}</p><h1 class="h-display h2">${t('stats_empty_h')}</h1><p class="muted">${t('stats_empty')}</p></section>`;
+  if (!ss.length && !cs.length) return `<section class="screen">${sub}<p class="eyebrow">${t('stats_e')}</p><h1 class="h-display h2">${t('stats_empty_h')}</h1><p class="muted">${t('stats_empty')}</p>${corpoCard(pid)}</section>`;
   const sem = weekKey(Date.now()), porEx = {};
   ss.slice().reverse().forEach(s => (s.exs || []).forEach(x => {
     const m = melhorDe(x); if (!m.top) return;
@@ -56,6 +56,7 @@ function viewStats(sub) {
     ${sub}
     <p class="eyebrow">${t('stats_e')}</p><h1 class="h-display h2">${t('stats_h')}</h1>
     <div class="stats"><div class="stat"><b class="num">${ss.length}</b><span>${t('st_workouts')}</span></div><div class="stat"><b class="num">${naSemana}</b><span>${t('sessions_this_week')}</span></div><div class="stat"><b class="num">${prs.length}</b><span>${t('st_records')}</span></div></div>
+    ${corpoCard(pid)}
     ${lista.length ? `<div class="card pad"><div class="row between"><h2 class="h3">${t('exercises')}</h2><span class="xs muted">${t('est_strength')}</span></div>${lista.map(linhaEx).join('')}</div>` : ''}
     ${prs.length ? `<div class="card pad stack"><h2 class="h3">${t('latest_records')}</h2>${prs.slice(-6).reverse().map(r => `<div class="row"><span class="pill pr">${t('record')}</span><span class="small">${esc(exInfo(r.exId, r.nomeX).nome)}: ${r.carga && r.kg ? fmtKg(r.kg) + ' kg × ' : ''}${r.reps} <span class="muted">· ${esc(fmtDate(r.inicio))}</span></span></div>`).join('')}</div>` : ''}
     <div class="card pad stack"><div class="row between"><h2 class="h3">${t('cardio')}</h2><span class="xs muted">${t('min_per_week')}</span></div>

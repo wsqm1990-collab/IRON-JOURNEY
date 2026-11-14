@@ -41,6 +41,8 @@ function ctxPerfil(p) {
   const sexo = { f: 'female', m: 'male' }[p.sexo];
   const corpo = [sexo, p.idade && p.idade + ' years old', p.peso && p.peso + ' kg', p.altura && p.altura + ' cm'].filter(Boolean).join(', ');
   if (corpo) l.push('Body: ' + corpo);
+  const comp = typeof ctxCorpo === 'function' ? ctxCorpo(p) : '';
+  if (comp) l.push(comp);
   l.push('Pain or injuries: ' + (limitesEn(p) || 'none reported'));
   if (p.gosta) l.push('Likes: ' + p.gosta);
   if (p.evita) l.push('Prefers to avoid: ' + p.evita);

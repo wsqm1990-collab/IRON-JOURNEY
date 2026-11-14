@@ -150,4 +150,9 @@ img.px.ico{width:22px;height:auto;vertical-align:-5px;margin-right:4px}
 .casa-eb{color:var(--accent);display:flex;align-items:center;gap:6px}.casa-eb svg{width:16px;height:16px;flex:none}
 .casa-tags{display:flex;flex-wrap:wrap;gap:6px}
 .casa-acts{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 8px}
+.pill.bad{background:var(--danger-soft);border-color:transparent;color:var(--danger)}
+/* body composition */
+.bc-big{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}.bc-big b{font-family:var(--f-cond);font-size:34px;line-height:1}
+.bc-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:var(--t-sm)}.bc-row b{font-size:17px}
+.bc-how{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--surface)}.bc-how summary{cursor:pointer;font-weight:700;font-size:var(--t-sm)}.bc-how p{margin:8px 0 0}
 </style>
