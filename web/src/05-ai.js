@@ -70,7 +70,9 @@ function ajusteEn(s) {
   const a = s.ajuste || (s.casa ? { onde: 'casa', modo: 'mesmos' } : null);
   if (!a) return '';
   const onde = a.onde === 'casa' ? 'at home (' + (((s.casa && s.casa.equip) || []).join(', ') || 'body weight only') + ')' : 'at the gym';
-  return ` [one-day change, plan unchanged: ${onde}${a.modo === 'leve' ? ', lighter day' : a.modo === 'foco' ? ', other focus: ' + (a.foco || []).join(', ') : ''}]`;
+  const musc = (a.musc || (a.modo === 'foco' ? a.foco : null) || []).join(', ');
+  const obj = a.objetivo || (a.modo === 'leve' ? 'leve' : '');
+  return ` [one-day change, plan unchanged: ${onde}${obj ? ', goal ' + obj : ''}${a.tipo && a.tipo !== 'tradicional' ? ', ' + a.tipo : ''}${musc ? ', muscles: ' + musc : ''}]`;
 }
 function linhaSessao(s) {
   const exs = (s.exs || []).filter(x => (x.sets || []).some(z => z.ok)).map(x => {

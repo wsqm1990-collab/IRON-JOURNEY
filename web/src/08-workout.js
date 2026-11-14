@@ -54,7 +54,8 @@ function exCard(x, i) {
   const ult = textoUltima(x.sug);
   return `<article class="card ex${done ? ' done' : ''}${x.pulado ? ' skip' : ''}" id="ex-${i}">
     <div class="ex-top">${miniFigura(x.id) ? `<button class="fig mini" data-a="guia" data-id="${esc(x.id)}" data-nome="${esc(x.nome || '')}" aria-label="${esc(t('how_to') + ': ' + ex.nome)}">${miniFigura(x.id)}</button>` : ''}<div class="nm"><h2 class="h3">${esc(ex.nome)}</h2>${x.trocadoDe ? `<p class="xs muted">${esc(t('replaced_x', { x: exInfo(x.trocadoDe, x.trocadoDe).nome }))}</p>` : ''}</div>${done ? `<span class="pill ok">${t('done_pill')}</span>` : ''}</div>
-    <div class="target"><span class="pill num">${a.series} × ${faixa(a)} ${un}</span><span class="pill">RIR ${a.rir}</span><span class="pill">${t('rest_x', { x: fmtDesc(a.desc) })}</span></div>
+    <div class="target">${x.bloco ? `<span class="pill acc">${esc(rotuloGrupo(x))}</span>` : ''}<span class="pill num">${a.series} × ${faixa(a)} ${un}</span><span class="pill">RIR ${a.rir}</span><span class="pill">${x.bloco && S.live && !(posGrupo(S.live.exs, i) || {}).ultimo ? esc(t('dif_no_rest')) : t('rest_x', { x: fmtDesc(a.desc) })}</span></div>
+    ${x.bloco ? comoGrupoHTML(x) : ''}
     ${sugHTML(x)}
     ${ult ? `<p class="xs muted num">${esc(t('last_time', { x: ult }))}</p>` : ''}
     ${x.dica ? `<p class="tip">${esc(x.dica)}</p>` : ''}
@@ -234,7 +235,7 @@ async function aplicarTroca(novoId) {
     const restantes = x.sets.filter(z => !z.ok).length || x.sets.length;
     const item = { id: novoId, reps: [x.alvo.rmin, x.alvo.rmax] }, alv = { ...x.alvo, series: restantes }, casa = !!L.casa;
     const sug = sugestao(S.me, item, alv, casa), pc = planoCarga(S.me, item, alv, sug, casa);
-    const novoX = { id: novoId, nome: novo.nome, grupo: novo.grupo, alvo: x.alvo, sug, dica: '', trocadoDe: x.id,
+    const novoX = { id: novoId, nome: novo.nome, grupo: novo.grupo, alvo: x.alvo, sug, dica: '', trocadoDe: x.id, ...(x.bloco ? { bloco: x.bloco } : {}),
       carga: { tipo: pc.tipo, rir: pc.rir, teste: pc.teste, primeira: !!pc.primeira, e1: pc.e1, ...(casa && pc.tipo ? { fixo: true } : {}) },
       sets: pc.sets.map(z => ({ kg: z.kg, alvo: z.alvo, reps: null, ok: false })) };
     if (x.aquec && !casa && !x.sets.some(z => z.ok)) { const aq = aquecimento(exInfo(novoId), novoX.sets[0] && novoX.sets[0].kg); if (aq.length) novoX.aquec = aq; }

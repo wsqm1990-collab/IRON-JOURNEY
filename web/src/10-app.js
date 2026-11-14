@@ -73,6 +73,7 @@ function marcarSerie(i, j) {
   z.ok = true;
   recalibrar(x, j);
   saveLiveSoon(); refreshEx(i);
+  if (x.bloco && seguirGrupo(L, i)) return;
   const exFeito = x.sets.every(s => s.ok);
   const prox = L.exs.slice(i + 1).find(e => !e.pulado && e.sets.some(s => !s.ok));
   const c = contagem(L);
@@ -141,18 +142,25 @@ const ACT = {
   casaNada: () => { if (!S.casa) return; S.casa.equip = []; sheetBody(casaHTML()); },
   casaEquip: el => {
     const c = S.casa; if (!c) return;
-    const set = new Set(c.equip), v = el.dataset.v;
+    const set = new Set(c.equip || []), v = el.dataset.v;
     if (set.has(v)) set.delete(v); else set.add(v);
-    c.equip = CASA_EQUIP.map(e => e[0]).filter(id => set.has(id)); sheetBody(casaHTML());
+    c.equip = set.size ? CASA_EQUIP.map(e => e[0]).filter(id => set.has(id)) : null; sheetBody(casaHTML());
   },
   casaTempo: el => { if (!S.casa) return; S.casa.tempo = Number(el.dataset.v); sheetBody(casaHTML()); },
   casaOnde: el => { if (!S.casa) return; S.casa.onde = el.dataset.v === 'casa' ? 'casa' : 'academia'; sheetBody(casaHTML()); },
-  casaModo: el => { if (!S.casa) return; S.casa.modo = el.dataset.v; sheetBody(casaHTML()); },
-  casaFoco: el => {
+  casaObjetivo: el => { if (!S.casa) return; S.casa.objetivo = el.dataset.v; sheetBody(casaHTML()); },
+  casaTipo: el => { if (!S.casa) return; S.casa.tipo = el.dataset.v; sheetBody(casaHTML()); },
+  /* "today's plan" and "full body" stand alone; the muscle groups can be combined */
+  casaMusc: el => {
     const c = S.casa; if (!c) return;
-    const set = new Set(c.foco), v = el.dataset.v;
-    if (set.has(v)) set.delete(v); else set.add(v);
-    c.foco = FOCOS.map(f => f[0]).filter(id => set.has(id)); sheetBody(casaHTML());
+    const v = el.dataset.v;
+    if (v === 'plano' || v === 'corpo') c.musc = c.musc.includes(v) ? [] : [v];
+    else {
+      const set = new Set(c.musc.filter(m => m !== 'plano' && m !== 'corpo'));
+      if (set.has(v)) set.delete(v); else set.add(v);
+      c.musc = FOCOS.map(f => f[0]).filter(id => set.has(id));
+    }
+    sheetBody(casaHTML());
   },
   casaGerar: () => gerarCasa(),
   casaComecar: () => iniciarTreinoCasa(),
