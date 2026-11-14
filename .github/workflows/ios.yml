@@ -1,0 +1,215 @@
+name: iPhone app
+
+# The iPhone version, built on a Mac with the app page of the latest release. Every run tests it on
+# an iPhone simulator (screenshots and results go to the ci-results-ios branch). When the Apple keys
+# are set as repository secrets, the build also goes to TestFlight: after changes to the iPhone code,
+# when started by hand, and once a month (TestFlight builds expire after 90 days). The app page
+# itself updates on the phone by itself, like on Android, so ordinary releases need no new build.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'native/ios-src/**'
+      - 'native/configure-ios.mjs'
+      - 'native/ci/ios-*'
+      - '.github/workflows/ios.yml'
+  workflow_run:
+    workflows: [Android app]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      upload:
+        description: Send this build to TestFlight
+        type: boolean
+        default: true
+  schedule:
+    - cron: '23 13 1 * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ios
+  cancel-in-progress: false
+
+jobs:
+  iphone:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: macos-26
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: The app page from the latest release
+        id: web
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p ios-out rel
+          gh release download --repo "${{ github.repository }}" --pattern web.zip --pattern version.json --dir rel
+          N=$(python3 -c 'import json; print(json.load(open("rel/version.json"))["build"])')
+          echo "version=1.0.$N" >> "$GITHUB_OUTPUT"
+          echo "build=$N.${{ github.run_number }}" >> "$GITHUB_OUTPUT"
+          echo "web page of release 1.0.$N, iPhone build $N.${{ github.run_number }}"
+
+      - name: Create the iPhone project
+        working-directory: native
+        run: |
+          set -o pipefail
+          npm install --no-audit --no-fund 2>&1 | tail -n 20 | tee ../ios-out/npm.log
+          rm -rf www && mkdir www && unzip -q ../rel/web.zip -d www
+          npx cap add ios 2>&1 | tee ../ios-out/cap-add.log
+          npx cap sync ios 2>&1 | tee ../ios-out/cap-sync.log
+          node configure-ios.mjs 2>&1 | tee ../ios-out/configure.log
+
+      - name: Build for the iPhone simulator
+        working-directory: native/ios/App
+        run: |
+          set -o pipefail
+          xcodebuild -version | tee ../../../ios-out/xcode.txt
+          if ! xcodebuild -project App.xcodeproj -scheme App -configuration Debug -sdk iphonesimulator \
+              -destination 'generic/platform=iOS Simulator' -derivedDataPath ../../../ios-dd \
+              MARKETING_VERSION=${{ steps.web.outputs.version }} CURRENT_PROJECT_VERSION=${{ steps.web.outputs.build }} \
+              SWIFT_ACTIVE_COMPILATION_CONDITIONS='DEBUG IJ_SELFTEST' CODE_SIGNING_ALLOWED=NO \
+              build > ../../../ios-out/xcodebuild-sim.log 2>&1; then
+            grep -E "error:|BUILD FAILED" ../../../ios-out/xcodebuild-sim.log | head -n 80
+            tail -n 40 ../../../ios-out/xcodebuild-sim.log
+            exit 1
+          fi
+          grep -E "warning: .*(Iron|MainViewController)" ../../../ios-out/xcodebuild-sim.log | sort -u | head -n 40 || true
+          tail -n 3 ../../../ios-out/xcodebuild-sim.log
+
+      - name: Test on an iPhone simulator
+        run: bash native/ci/ios-sim-test.sh ios-dd/Build/Products/Debug-iphonesimulator/App.app ios-out
+
+      - name: Apple keys and what to do with this build
+        id: keys
+        if: always()
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+          IJ_KEY_PASS: ${{ secrets.IJ_KEY_PASS }}
+        run: |
+          if [ -n "$ASC_KEY_ID" ] && [ -n "$ASC_ISSUER_ID" ] && [ -n "$ASC_KEY_P8" ] && [ -n "$IJ_KEY_PASS" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::No Apple keys yet (secrets ASC_KEY_ID, ASC_ISSUER_ID, ASC_KEY_P8), so nothing goes to TestFlight."
+          fi
+          case "${{ github.event_name }}" in
+            push|schedule) U=true ;;
+            workflow_dispatch) U="${{ inputs.upload }}" ;;
+            *) U=false ;;
+          esac
+          echo "upload=$U" >> "$GITHUB_OUTPUT"
+
+      - name: Apple signing (through the App Store Connect API)
+        id: sign
+        if: success() && steps.keys.outputs.ready == 'true' && steps.keys.outputs.upload == 'true'
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          IJ_KEY_PASS: ${{ secrets.IJ_KEY_PASS }}
+        run: |
+          set -euo pipefail
+          python3 -m venv "$RUNNER_TEMP/venv"
+          "$RUNNER_TEMP/venv/bin/pip" install --quiet --disable-pip-version-check cryptography
+          "$RUNNER_TEMP/venv/bin/python" native/ci/ios-signing.py "$RUNNER_TEMP/sign" 2>&1 | tee ios-out/signing.log
+          cat "$RUNNER_TEMP/sign/out.env" >> "$GITHUB_OUTPUT"
+
+      - name: Send to TestFlight
+        if: success() && steps.sign.outputs.app == 'true'
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+        run: |
+          set -euo pipefail
+          S="$RUNNER_TEMP/sign"
+          KC="$RUNNER_TEMP/ij.keychain-db"
+          KCP=$(openssl rand -hex 24)
+          security create-keychain -p "$KCP" "$KC"
+          security set-keychain-settings -lut 21600 "$KC"
+          security unlock-keychain -p "$KCP" "$KC"
+          security import "$S/dist.p12" -k "$KC" -P "$(cat "$S/p12.pass")" -f pkcs12 -T /usr/bin/codesign -T /usr/bin/security
+          if curl -fsSL -o "$S/wwdr.cer" https://www.apple.com/certificateauthority/AppleWWDRCAG3.cer; then security import "$S/wwdr.cer" -k "$KC" || true; fi
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KCP" "$KC" > /dev/null
+          security list-keychains -d user -s "$KC" $(security list-keychains -d user | tr -d '"')
+          security find-identity -v -p codesigning "$KC" | tee -a ios-out/signing.log
+          for d in "$HOME/Library/MobileDevice/Provisioning Profiles" "$HOME/Library/Developer/Xcode/UserData/Provisioning Profiles"; do
+            mkdir -p "$d"
+            cp "$S/profile.mobileprovision" "$d/${{ steps.sign.outputs.uuid }}.mobileprovision"
+          done
+          node native/configure-ios.mjs --sign "${{ steps.sign.outputs.team }}" "${{ steps.sign.outputs.profile }}" | tee -a ios-out/configure.log
+          cd native/ios/App
+          if ! xcodebuild -project App.xcodeproj -scheme App -configuration Release -destination 'generic/platform=iOS' \
+              -archivePath "$RUNNER_TEMP/App.xcarchive" \
+              MARKETING_VERSION=${{ steps.web.outputs.version }} CURRENT_PROJECT_VERSION=${{ steps.web.outputs.build }} \
+              OTHER_CODE_SIGN_FLAGS="--keychain $KC" archive > ../../../ios-out/xcodebuild-archive.log 2>&1; then
+            grep -E "error:|ARCHIVE FAILED" ../../../ios-out/xcodebuild-archive.log | head -n 60
+            tail -n 40 ../../../ios-out/xcodebuild-archive.log
+            exit 1
+          fi
+          printf '%s\n' "$ASC_KEY_P8" > "$S/AuthKey.p8"
+          cat > "$S/ExportOptions.plist" <<EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key><string>app-store-connect</string>
+            <key>destination</key><string>upload</string>
+            <key>teamID</key><string>${{ steps.sign.outputs.team }}</string>
+            <key>signingStyle</key><string>manual</string>
+            <key>signingCertificate</key><string>Apple Distribution</string>
+            <key>provisioningProfiles</key>
+            <dict><key>com.wsqm1990.ironjourney</key><string>${{ steps.sign.outputs.profile }}</string></dict>
+            <key>manageAppVersionAndBuildNumber</key><false/>
+            <key>uploadSymbols</key><true/>
+          </dict>
+          </plist>
+          EOF
+          if ! xcodebuild -exportArchive -archivePath "$RUNNER_TEMP/App.xcarchive" -exportOptionsPlist "$S/ExportOptions.plist" \
+              -exportPath "$RUNNER_TEMP/export" -authenticationKeyPath "$S/AuthKey.p8" \
+              -authenticationKeyID "$ASC_KEY_ID" -authenticationKeyIssuerID "$ASC_ISSUER_ID" > ../../../ios-out/xcodebuild-upload.log 2>&1; then
+            grep -iE "error|fail" ../../../ios-out/xcodebuild-upload.log | head -n 40
+            tail -n 40 ../../../ios-out/xcodebuild-upload.log
+            exit 1
+          fi
+          tail -n 12 ../../../ios-out/xcodebuild-upload.log
+          echo "sent=true" >> "$GITHUB_OUTPUT"
+
+      - name: Remove the signing files
+        if: always()
+        run: |
+          security delete-keychain "$RUNNER_TEMP/ij.keychain-db" 2>/dev/null || true
+          rm -rf "$RUNNER_TEMP/sign"
+
+      - name: Publish logs and screenshots to the ci-results-ios branch
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set +e
+          rm -rf site && mkdir site && cd site
+          git init -q
+          git checkout -q -b ci-results-ios
+          [ -d ../ios-out ] && cp -r ../ios-out ios
+          for f in ios/xcodebuild-*.log; do
+            [ -f "$f" ] || continue
+            grep -nE "error:|warning: .*(Iron|MainViewController)|BUILD (SUCCEEDED|FAILED)|ARCHIVE (SUCCEEDED|FAILED)|EXPORT|Upload" "$f" | head -n 300 > "$f.errors.txt"
+            tail -n 300 "$f" > "$f.tail.txt"
+            rm -f "$f"
+          done
+          echo "run ${{ github.run_number }} (${{ github.event_name }}, ${{ github.sha }}): job=${{ job.status }} web=${{ steps.web.outputs.version }} build=${{ steps.web.outputs.build }} keys=${{ steps.keys.outputs.ready }} upload=${{ steps.keys.outputs.upload }} app_record=${{ steps.sign.outputs.app }}" > SUMMARY.txt
+          git add -A
+          git -c user.name="Iron Journey build" -c user.email="build@users.noreply.github.com" commit -qm "iPhone build ${{ github.run_number }}"
+          git push -qf "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git" ci-results-ios

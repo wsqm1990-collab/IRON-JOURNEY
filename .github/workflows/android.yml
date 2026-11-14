@@ -5,7 +5,7 @@ name: Android app
 on:
   push:
     branches: [main]
-    paths-ignore: ['README.md']
+    paths-ignore: ['README.md', 'native/ios-src/**', 'native/configure-ios.mjs', 'native/ci/ios-*', '.github/workflows/ios.yml', 'tools/ios-assets.py']
   workflow_dispatch:
 
 permissions:

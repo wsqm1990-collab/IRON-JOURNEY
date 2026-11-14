@@ -19,6 +19,9 @@ Object.assign(STR, {
   bg_title: ['So alerts keep coming while you watch something:', 'Para os avisos continuarem enquanto você assiste:', 'Para que los avisos sigan mientras ves algo:'],
   bg_notif: ['Notifications allowed', 'Notificações permitidas', 'Notificaciones permitidas'], bg_battery: ['Running in the background allowed', 'Funcionar em segundo plano permitido', 'Funcionar en segundo plano permitido'],
   bg_note: ['If the phone ever cuts the voice mid-workout, open Settings > Apps > Iron Journey > Battery and choose "Unrestricted" (or turn on autostart).', 'Se o celular cortar a voz no meio do treino, abra Configurações > Apps > Iron Journey > Bateria e escolha "Sem restrições" (ou ative a inicialização automática).', 'Si el móvil corta la voz a mitad del entrenamiento, abre Ajustes > Apps > Iron Journey > Batería y elige "Sin restricciones" (o activa el inicio automático).'],
+  bg_note_ios: ['On iPhone the voice keeps going behind other apps on its own. Just don\'t close Iron Journey by swiping it up while you train.', 'No iPhone a voz continua por trás de outros apps sozinha. Só não feche o Iron Journey arrastando para cima durante o treino.', 'En el iPhone la voz sigue detrás de otras apps sola. Solo no cierres Iron Journey deslizándolo hacia arriba mientras entrenas.'],
+  backup_note_ios: ['Your workouts are saved only on this iPhone. Save a copy now and then (to iCloud Drive, for example) so you never lose them.', 'Seus treinos ficam salvos só neste iPhone. Salve uma cópia de vez em quando (no iCloud Drive, por exemplo) para nunca perder.', 'Tus entrenamientos se guardan solo en este iPhone. Guarda una copia de vez en cuando (en iCloud Drive, por ejemplo) para no perderlos nunca.'],
+  need_tf: ['A new version of the app is waiting in TestFlight.', 'Uma versão nova do app está esperando no TestFlight.', 'Una versión nueva de la app te espera en TestFlight.'], open_tf: ['Open TestFlight', 'Abrir TestFlight', 'Abrir TestFlight'],
   allow: ['Allow', 'Permitir', 'Permitir'],
   backup: ['Backup', 'Cópia de segurança', 'Copia de seguridad'],
   backup_note: ['Your workouts are saved only on this phone. Save a copy now and then (to Google Drive, for example) so you never lose them.', 'Seus treinos ficam salvos só neste celular. Salve uma cópia de vez em quando (no Google Drive, por exemplo) para nunca perder.', 'Tus entrenamientos se guardan solo en este móvil. Guarda una copia de vez en cuando (en Google Drive, por ejemplo) para no perderlos.'],
@@ -53,7 +56,7 @@ function ajustesHTML() {
       <button class="btn ghost block" data-a="testarSom">${t('test_sound')}</button>
       ${Nat.on ? '<div id="bgStatus" class="stack"></div>' : ''}
     </div>
-    <div class="card pad stack"><h3 class="h3">${t('backup')}</h3><p class="small muted">${t('backup_note')}</p>
+    <div class="card pad stack"><h3 class="h3">${t('backup')}</h3><p class="small muted">${t(Nat.ios ? 'backup_note_ios' : 'backup_note')}</p>
       <button class="btn ghost block" data-a="backupSalvar">${t('backup_save')}</button>
       <label class="btn ghost block" for="backupIn">${t('backup_restore')}</label><input type="file" id="backupIn" accept="application/json,.json" hidden>
     </div>
@@ -67,7 +70,7 @@ async function statusSegundoPlano() {
   const el = $('#bgStatus');
   if (!el) return;
   const linha = (txt, ok, acao) => `<div class="row between" style="gap:12px"><span class="small">${txt}</span>${ok ? '<b class="small" style="color:var(--ok)">✓</b>' : `<button class="btn small" data-a="${acao}">${t('allow')}</button>`}</div>`;
-  el.innerHTML = `<p class="small">${t('bg_title')}</p>${linha(t('bg_notif'), n && n.granted, 'pedirNotif')}${linha(t('bg_battery'), b && b.ignoring, 'abrirBateria')}<p class="xs muted">${t('bg_note')}</p>`;
+  el.innerHTML = `<p class="small">${t('bg_title')}</p>${linha(t('bg_notif'), n && n.granted, 'pedirNotif')}${Nat.ios ? '' : linha(t('bg_battery'), b && b.ignoring, 'abrirBateria')}<p class="xs muted">${t(Nat.ios ? 'bg_note_ios' : 'bg_note')}</p>`;
 }
 async function salvarChave() {
   const inp = $('#key-in'), k = ((inp && inp.value) || '').trim();
@@ -111,6 +114,30 @@ function aplicarBackup() {
   location.reload();
 }
 
+/* ---------- iPhone: a copy of the data in the app's own files ----------
+   iOS may clear a web view's storage when the phone runs out of space. A few seconds after each
+   change the same data as a backup file is copied into the app's files (with Apple's own backups),
+   and it comes back by itself if the storage is ever found empty. */
+const COPIA = { t: 0 };
+function copiaDepois() { if (!Nat.ios) return; clearTimeout(COPIA.t); COPIA.t = setTimeout(copiaAgora, 2500); }
+function copiaAgora() {
+  if (!Nat.ios) return;
+  clearTimeout(COPIA.t);
+  const d = dadosBackup();
+  if (!Object.keys(d.dados).some(k => k.startsWith('td:'))) return; /* never replace a good copy with an empty one */
+  Nat.safe('saveSnapshot', { text: JSON.stringify(d) });
+}
+async function restaurarCopia() {
+  if (!Nat.ios || LS.keys().some(k => k.startsWith('td:'))) return false;
+  const r = await Nat.safe('loadSnapshot');
+  let j = null;
+  try { j = JSON.parse((r && r.text) || 'null'); } catch { j = null; }
+  if (!j || j.app !== 'iron-journey' || !j.dados || !Object.keys(j.dados).some(k => k.startsWith('td:'))) return false;
+  for (const [k, v] of Object.entries(j.dados)) { try { localStorage.setItem(k, v); } catch { /* full */ } }
+  return true;
+}
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') copiaAgora(); });
+
 /* ---------- automatic updates ----------
    Every build publishes the app's page as a small zip with the release. The installed app checks
    for a newer one, downloads it in the background and switches to it the next time it's idle.
@@ -133,7 +160,8 @@ async function checarAtualizacao(forcar, manual) {
     const ruins = LS.get('ij_bad') || [];
     if (!(Number(v.build) > buildAtual()) || ruins.includes(Number(v.build))) return res;
     const info = await Nat.safe('info');
-    if (v.minShell && (!info || (info.shell || 1) < v.minShell)) { S.precisaApk = true; render(); return (res = 'apk'); }
+    const minShell = Nat.ios ? v.minShellIos : v.minShell; /* each phone's app has its own minimum */
+    if (minShell && (!info || (info.shell || 1) < minShell)) { S.precisaApk = true; render(); return (res = 'apk'); }
     const b = await Nat.call('fetchBundle', { url: v.zip, build: String(v.build), sha256: v.sha256 || '' });
     LS.set('ij_staged', { build: Number(v.build), path: b.path });
     res = 'staged';
@@ -194,6 +222,7 @@ function voltar() {
 }
 function iniciarNativo() {
   if (!Nat.on) return;
+  if (Nat.ios) setTimeout(copiaAgora, 15000);
   Nat.listen('timer', eventoTimer);
   Nat.listen('backButton', voltar, 'App');
   Nat.listen('resume', () => {

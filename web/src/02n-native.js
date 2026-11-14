@@ -15,6 +15,9 @@ const Nat = (() => {
   }
   return {
     get on() { return nativo() && !!plugin('IronTimer'); },
+    /* 'android', 'ios' or 'web' */
+    get plat() { try { return (nativo() && C().getPlatform && C().getPlatform()) || 'web'; } catch { return 'web'; } },
+    get ios() { return this.plat === 'ios'; },
     async call(m, o, name = 'IronTimer') {
       const p = plugin(name);
       if (!p || typeof p[m] !== 'function') throw { code: 'unavailable' };

@@ -178,7 +178,7 @@ function viewCardio() {
       ${Nat.on ? `<p class="eyebrow">${t('open_with')}</p>
       <div class="chips">${VIDEO.map(([n]) => `<button class="chip" data-a="svcSel" data-v="${esc(n)}" aria-pressed="${!!svcEscolhido() && svcEscolhido()[0] === n}">${esc(n)}</button>`).join('')}<button class="chip" data-a="svcSel" data-v="" aria-pressed="${!svcEscolhido()}">${t('none_svc')}</button></div>` : ''}
       <button class="btn big block" data-a="stIniciarW">${t('start')} · ${t('min_total', { n: total })}${Nat.on && svcEscolhido() ? ' · ' + esc(svcEscolhido()[0]) : ''}</button>
-      ${Nat.on ? `<p class="small muted">${esc(t('watch_native_tip', { s: svcEscolhido() ? svcEscolhido()[0] : t('your_show') }))}</p>` : `<p class="small muted">${t('pip_tip')}</p><p class="small muted">${t('colors_tip')}</p>`}
+      ${Nat.on ? `<p class="small muted">${esc(t(Nat.ios ? 'watch_native_tip_ios' : 'watch_native_tip', { s: svcEscolhido() ? svcEscolhido()[0] : t('your_show') }))}</p>` : `<p class="small muted">${t('pip_tip')}</p><p class="small muted">${t('colors_tip')}</p>`}
     </div>
     ${Nat.on ? '' : `<div class="card pad stack"><h2 class="h3">${t('open_streaming')}</h2>${servicos(VIDEO)}<p class="xs muted">${t('links_note')}</p></div>`}`;
   } else {
@@ -278,6 +278,7 @@ function testarSom() {
 Object.assign(STR, {
   open_with: ['Open with', 'Abrir com', 'Abrir con'], none_svc: ['Nothing', 'Nenhum', 'Nada'], your_show: ['your show', 'sua série', 'tu serie'],
   watch_native_tip: ['Tap Start: the timer starts and {s} opens. Watch full screen; the voice and beeps tell you when to push and when to recover. Pause, skip or finish from the notification.', 'Toque em Começar: o cronômetro liga e o {s} abre. Assista em tela cheia; a voz e os bipes avisam quando acelerar e quando recuperar. Pause, pule ou encerre pela notificação.', 'Toca Empezar: el cronómetro arranca y se abre {s}. Mira a pantalla completa; la voz y los pitidos te avisan cuándo apretar y cuándo recuperar. Pausa, salta o termina desde la notificación.'],
+  watch_native_tip_ios: ['Tap Start: the timer starts and {s} opens. Watch full screen; the voice and beeps tell you when to push and when to recover. To pause or finish, come back to Iron Journey.', 'Toque em Começar: o cronômetro liga e o {s} abre. Assista em tela cheia; a voz e os bipes avisam quando acelerar e quando recuperar. Para pausar ou encerrar, volte ao Iron Journey.', 'Toca Empezar: el cronómetro arranca y se abre {s}. Mira a pantalla completa; la voz y los pitidos te avisan cuándo apretar y cuándo recuperar. Para pausar o terminar, vuelve a Iron Journey.'],
   cant_open: ['Couldn\'t open that app.', 'Não deu para abrir esse app.', 'No se pudo abrir esa app.'],
   notif_channel: ['Workout timer', 'Cronômetro do treino', 'Cronómetro del entrenamiento'], notif_done_text: ['Tap to log your cardio and collect your XP.', 'Toque para registrar o cardio e ganhar seu XP.', 'Toca para registrar el cardio y ganar tu XP.'],
   alerts: ['Alerts', 'Avisos', 'Avisos'], al_voice: ['Voice + beeps', 'Voz + bipes', 'Voz + pitidos'], al_beeps: ['Beeps only', 'Só bipes', 'Solo pitidos'], al_silent: ['Vibration only', 'Só vibração', 'Solo vibración'],

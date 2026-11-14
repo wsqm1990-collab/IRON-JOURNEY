@@ -44,13 +44,13 @@ const Store = (() => {
     set(path, data) {
       const body = clone(data);
       return queue(path, async () => {
-        if (!db) { mem.set(path, body); LS.set(PREFIX + path, body); notify(path); return; }
+        if (!db) { mem.set(path, body); LS.set(PREFIX + path, body); notify(path); if (typeof copiaDepois === 'function') copiaDepois(); return; }
         await retry(() => db.doc(path).set(body));
       });
     },
     del(path) {
       return queue(path, async () => {
-        if (!db) { mem.delete(path); LS.del(PREFIX + path); notify(path); return; }
+        if (!db) { mem.delete(path); LS.del(PREFIX + path); notify(path); if (typeof copiaDepois === 'function') copiaDepois(); return; }
         await retry(() => db.doc(path).delete());
       });
     },

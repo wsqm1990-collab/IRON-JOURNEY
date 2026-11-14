@@ -19,7 +19,7 @@ function viewLoading() {
 }
 function banners() {
   if (!S.ready) return '';
-  if (S.precisaApk) return `<div class="banner row between" style="gap:12px"><span>${t('need_apk')}</span><button class="btn small" data-a="apkNovo">${t('get_apk')}</button></div>`;
+  if (S.precisaApk) return `<div class="banner row between" style="gap:12px"><span>${t(Nat.ios ? 'need_tf' : 'need_apk')}</span><button class="btn small" data-a="apkNovo">${t(Nat.ios ? 'open_tf' : 'get_apk')}</button></div>`;
   if (S.apkSugerido && !S.live) return `<div class="banner stack" style="gap:8px"><span>${t('apk_portrait')}</span><div class="row" style="gap:8px"><button class="btn small" data-a="apkNovo">${t('install')}</button><button class="btn quiet small" data-a="apkDepois">${t('not_now')}</button></div></div>`;
   if (S.mode === 'local' && !Nat.on) return `<div class="banner">${t('local_mode')}</div>`;
   if (!S.canWrite) return `<div class="banner">${t('read_only')}</div>`;
@@ -118,7 +118,7 @@ const ACT = {
   checarAgora: () => checarAgora(),
   backupAplicar: () => aplicarBackup(),
   svcSel: el => { LS.set('ij_svc', el.dataset.v || null); render(); },
-  apkNovo: () => { if (Nat.on) Nat.safe('openApp', { url: APK_URL }); else window.open(APK_URL, '_blank'); },
+  apkNovo: () => { if (Nat.ios) Nat.safe('openApp', { url: 'itms-beta://' }); else if (Nat.on) Nat.safe('openApp', { url: APK_URL }); else window.open(APK_URL, '_blank'); },
   apkDepois: () => { LS.set('ij_apk_depois', Date.now() + 3 * 86400000); S.apkSugerido = false; render(); },
   novoPerfil: () => { closeSheet(); novoWizard(null); render(); window.scrollTo(0, 0); },
   editarPerfil: () => { novoWizard(S.me); render(); window.scrollTo(0, 0); },
@@ -338,6 +338,7 @@ function use(name) {
   catch { return Promise.resolve(null); }
 }
 async function boot() {
+  if (await restaurarCopia()) { location.reload(); return; }
   if (atualizacaoNoInicio(boot)) return;
   setLang(LS.get('td_lang') || 'en');
   aplicarTema();

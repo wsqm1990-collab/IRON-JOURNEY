@@ -11,3 +11,6 @@ native/keystore/
 test-out/
 test/shots/
 test/contact.png
+native/ios/
+ios-out/
+ios-dd/
