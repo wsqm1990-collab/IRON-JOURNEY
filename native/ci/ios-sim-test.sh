@@ -7,6 +7,9 @@ set -u
 APP="$1"
 OUT="${2:-ios-out}"
 mkdir -p "$OUT"
+# absolute paths: the simulator opens the app's output files itself, from its own folder
+OUT=$(cd "$OUT" && pwd)
+APP=$(cd "$(dirname "$APP")" && pwd)/$(basename "$APP")
 BID=com.wsqm1990.ironjourney
 
 # the newest plain iPhone (not Plus, Pro Max, mini...) on the newest iOS
