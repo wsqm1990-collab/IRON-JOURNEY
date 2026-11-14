@@ -34,6 +34,7 @@ function render() {
   else if (S.sub === 'gym') html = viewGym();
   else if (S.sub === 'pesos' && S.gymDraft) html = viewPesos();
   else if (!S.me || !S.perfis[S.me]) html = viewWelcome();
+  else if (S.sub === 'aval' && S.aval) html = viewAval();
   else switch (S.tab) {
     case 'plano': html = viewPlano(); break;
     case 'cardio': html = viewCardio(); break;
@@ -190,6 +191,44 @@ const ACT = {
     sheetBody(casaHTML());
   },
   casaGerar: () => gerarCasa(),
+  /* physical assessment */
+  avAbrir: () => abrirAval(),
+  avSet: el => {
+    const a = S.aval; if (!a) return;
+    const k = el.dataset.k, v = el.dataset.v;
+    if (k === 'onde') a.onde = v === 'casa' ? 'casa' : 'academia';
+    else if (k === 'leve' || k === 'liberado') { a.leve = k === 'leve'; a.liberado = k === 'liberado'; }
+    else if (k === 'cardioTeste') { avTimerFim(); a.cardioTeste = v === 'degrau' ? 'degrau' : 'rockport'; }
+    else if (k === 'alcanceLado') a.alcanceLado = a.alcanceLado === v ? null : v;
+    render();
+  },
+  avParq: el => { const a = S.aval; if (!a) return; a.parq[+el.dataset.k] = el.dataset.v === '1'; if (!a.parq.some(Boolean)) { a.leve = false; a.liberado = false; } render(); },
+  avDor: el => { const a = S.aval; if (!a) return; const id = el.dataset.v, k = a.dores.findIndex(d => d.id === id); if (k >= 0) a.dores.splice(k, 1); else a.dores.push({ id, nivel: 'leve' }); render(); },
+  avDorNada: () => { if (S.aval) { S.aval.dores = []; render(); } },
+  avDorNivel: el => { const d = S.aval && S.aval.dores.find(x => x.id === el.dataset.k); if (d) { d.nivel = el.dataset.v; render(); } },
+  avGosto: el => { const a = S.aval; if (!a) return; const v = el.dataset.v, k = a.gostos.indexOf(v); if (k >= 0) a.gostos.splice(k, 1); else a.gostos.push(v); render(); },
+  avSexo: el => { if (S.aval) { S.aval.medidas.sexo = el.dataset.v; render(); } },
+  avCostas: el => { const a = S.aval; if (!a) return; const v = Number(el.dataset.v), k = el.dataset.k === 'costasE' ? 'costasE' : 'costasD'; a[k] = a[k] === v ? null : v; render(); },
+  avObs: el => { const a = S.aval; if (!a) return; const l = a.agachObs || [], v = el.dataset.v, k = l.indexOf(v); if (k >= 0) l.splice(k, 1); else l.push(v); a.agachObs = l; render(); },
+  avObsNada: () => { if (S.aval) { S.aval.agachObs = []; render(); } },
+  avLiftTroca: el => { const f = S.aval && S.aval.forca[+el.dataset.k]; if (!f || f.ids.length < 2) return; f.id = f.ids[(f.ids.indexOf(f.id) + 1) % f.ids.length]; render(); },
+  avLiftRir: el => { const f = S.aval && S.aval.forca[+el.dataset.k]; if (f) { f.rir = Number(el.dataset.v); render(); } },
+  avCrono: el => avCrono(el.dataset.v),
+  avPararCrono: () => avParar(false),
+  avPararPrancha: () => avParar(true),
+  avAvancar: () => { if (S.aval) avAvancar(); },
+  avVoltar: () => { const a = S.aval; if (!a) return; avTimerFim(); a.i = Math.max(0, a.i - 1); render(); window.scrollTo(0, 0); },
+  avSair: () => openSheet(t('av_exit_q'), `<p>${t('av_exit_text')}</p><button class="btn danger block" data-a="avSairSim">${t('av_exit')}</button><button class="btn quiet block" data-a="fecharSheet">${t('cancel')}</button>`),
+  avSairSim: () => { avTimerFim(); S.aval = null; S.sub = null; closeSheet(); render(); window.scrollTo(0, 0); },
+  avIA: () => lerAvaliacao(),
+  avPlano: () => {
+    const pr = progresso(S.me), temGym = S.gym && (S.gym.itens || []).length;
+    S.aval = null; S.sub = null;
+    if (!temGym) { ACT.editarGym(); return; }
+    S.tab = 'plano'; LS.set('td_tab', 'plano'); render(); window.scrollTo(0, 0);
+    abrirGerar(pr && pr.completo ? 'proximo' : 'novo');
+  },
+  avConcluir: () => { avTimerFim(); S.aval = null; S.sub = null; render(); window.scrollTo(0, 0); },
   casaComecar: () => iniciarTreinoCasa(),
   casaVoltar: () => { limparCasa(S.me); render(); window.scrollTo(0, 0); toast(t('dif_back_done')); },
   iniciar: el => iniciarTreino(+el.dataset.dia),
@@ -263,6 +302,14 @@ const INP = {
   medida: el => { if (!S.medidas) return; S.medidas[el.dataset.k] = el.value; atualizaComposicao('#bc-res', { ...(perfil() || {}), ...S.medidas }); },
   gymOutros: el => { S.gymDraft.outros = el.value; },
   casaPedido: el => { if (S.casa) S.casa.pedido = el.value.slice(0, 300); },
+  av: el => { if (S.aval) S.aval[el.dataset.k] = el.value.slice(0, 300); },
+  avMedida: el => { const a = S.aval; if (!a) return; a.medidas[el.dataset.k] = el.value; atualizaComposicao('#av-comp', { ...(perfil() || {}), ...a.medidas }); },
+  avLift: el => {
+    const k = +el.dataset.k, f = S.aval && S.aval.forca[k]; if (!f) return;
+    f[el.dataset.c === 'reps' ? 'reps' : 'kg'] = el.value;
+    const o = $('#av-e1-' + k), kg = nAv(f.kg), r = nAv(f.reps);
+    if (o) o.textContent = kg > 0 && r > 0 ? t('av_e1rm', { n: fmtKg(Math.round(e1rmRIR(kg, Math.round(r), f.rir))) }) : '';
+  },
   kg: el => {
     const i = +el.dataset.i, j = +el.dataset.j, x = S.live.exs[i], v = parseNum(el.value);
     x.sets[j].kg = v; x.sets[j].manual = true;

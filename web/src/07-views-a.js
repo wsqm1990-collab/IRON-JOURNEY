@@ -336,9 +336,10 @@ function aliadosHoje() {
   return `<div class="row small">${outros.map(p => { const foi = S.sessoes.some(s => s.pid === p && dayKey(s.inicio) === hoje); return `<span class="row" style="gap:6px">${avatar(p, 'medal')}<span>${esc(S.perfis[p].nome)} ${foi ? `<b style="color:var(--ok)">${t('trained_today')}</b>` : t('not_trained_today')}</span></span>`; }).join('')}</div>`;
 }
 function semPlanoCard() {
-  const temGym = S.gym && (S.gym.itens || []).length;
+  const temGym = S.gym && (S.gym.itens || []).length, semAval = !ultimaAval(perfil());
   return `<div class="hero"><p class="eyebrow">${t('chapter_n', { n: 1 })}</p><h1 class="h-display h1">${t('noplan_title')}</h1><p class="muted">${t('noplan_text')}</p>
-    <button class="btn big block" data-a="${temGym ? 'gerar' : 'editarGym'}" data-modo="novo">${temGym ? t('build_plan') : t('gym_first')}</button>
+    ${semAval ? `<button class="btn big block" data-a="avAbrir">${I.crono}${t('av_btn_first')}</button><p class="small muted">${t('av_first_note')}</p>` : ''}
+    <button class="btn ${semAval ? 'ghost' : 'big'} block" data-a="${temGym ? 'gerar' : 'editarGym'}" data-modo="novo">${temGym ? t('build_plan') : t('gym_first')}</button>
     ${AI.on ? '' : `<p class="small muted">${t('plan_local_note')}</p><button class="btn quiet small" data-a="ajustes">${t('open_settings')}</button>`}</div>`;
 }
 function linhaCardioPlano(c, sem, z) {
@@ -364,7 +365,7 @@ function cardioPlanoCard(pg, pr) {
 function viewHoje() {
   const pid = S.me, pr = progresso(pid);
   if (!pr) return `<section class="screen">${semPlanoCard()}${cardioCard(pid)}${aliadosHoje()}</section>`;
-  if (pr.completo) return `<section class="screen"><div class="hero"><p class="eyebrow">${t('chapter_done', { n: pr.pl.ciclo })}</p><h1 class="h-display h1">${t('back_stronger')}</h1>${barbell(pr.pg.semanas, pr.nW, true)}<p class="muted">${t('chapter_done_text')}</p><button class="btn big block" data-a="gerar" data-modo="proximo">${t('next_chapter')}</button></div>${cardioCard(pid)}${xpMini(pid)}</section>`;
+  if (pr.completo) return `<section class="screen"><div class="hero"><p class="eyebrow">${t('chapter_done', { n: pr.pl.ciclo })}</p><h1 class="h-display h1">${t('back_stronger')}</h1>${barbell(pr.pg.semanas, pr.nW, true)}<p class="muted">${t('chapter_done_text')}</p><button class="btn big block" data-a="gerar" data-modo="proximo">${t('next_chapter')}</button><button class="btn ghost block" data-a="avAbrir">${t('av_redo_chapter')}</button></div>${cardioCard(pid)}${xpMini(pid)}</section>`;
   const dia = pr.pg.dias[pr.proxDia], ultima = sessoesDe(pid)[0];
   /* already trained today: say so, and show the next workout as the next one, not as today's */
   const hoje = dayKey(Date.now()), feitoHoje = ultima && dayKey(ultima.inicio) === hoje && ultima.planoId === pr.pl.id ? ultima : null;
@@ -464,12 +465,12 @@ async function pedirExplicacao() {
 const fmtDesc = s => (s >= 60 ? (Math.round(s / 6) / 10).toLocaleString(LOC()) + ' min' : s + ' s');
 function viewPlano() {
   const pid = S.me, pr = progresso(pid), p = perfil(pid);
-  const acoes = `<div class="stack"><button class="btn ghost block" data-a="editarPerfil">${t('edit_profile')}</button><button class="btn ghost block" data-a="editarGym">${t('gym_equipment')}</button><button class="btn ghost block" data-a="editarPesos">${t('pw_btn')}</button></div>`;
+  const acoes = `<div class="stack">${pr && !ultimaAval(p) ? `<button class="btn ghost block" data-a="avAbrir">${t('av_btn')}</button>` : ''}<button class="btn ghost block" data-a="editarPerfil">${t('edit_profile')}</button><button class="btn ghost block" data-a="editarGym">${t('gym_equipment')}</button><button class="btn ghost block" data-a="editarPesos">${t('pw_btn')}</button></div>`;
   const focos = (p.foco || []).map(id => label4(FOCOS, id)).join(', ').toLowerCase();
   const lims = [...(p.limites || []).map(id => label4(LIMITES, id)), p.limitesTxt].filter(Boolean).join('; ');
   const resumoPerfil = `<div class="card pad stack"><div class="row between"><h2 class="h3">${esc(p.nome)}</h2><span class="pill">${esc(nomeNivel(p.nivel))}</span></div>
     <p class="small muted">${esc(nomeObj(p.objetivo))} · ${t('days_n', { n: p.dias })} · ${p.minutos} min · ${p.cardioVezes ? t('cardio_xweek', { n: p.cardioVezes }) : t('no_cardio')}${focos ? ' · ' + esc(t('focus_on', { x: focos })) : ''}${lims ? ' · ' + esc(t('care_x', { x: lims })) : ''}</p></div>`;
-  if (!pr) return `<section class="screen">${semPlanoCard()}${resumoPerfil}${acoes}</section>`;
+  if (!pr) return `<section class="screen">${semPlanoCard()}${resumoPerfil}${avalCardHTML(p)}${acoes}</section>`;
   const pg = pr.pg;
   const semanas = pg.semanas.map((w, i) => {
     const extra = [w.nota, w.cardioExtra ? t('cardio_plus', { n: (w.cardioExtra > 0 ? '+' : '') + w.cardioExtra }) : '', w.deload ? t('cardio_shorter') : ''].filter(Boolean).join(' · ');
@@ -495,6 +496,7 @@ function viewPlano() {
     <div class="card pad"><h2 class="h3">${t('week_by_week')}</h2><div class="exlist">${semanas}</div></div>
     ${pg.dicas.length ? `<div class="card pad stack"><h2 class="h3">${t('coach_tips')}</h2><ul class="small stack" style="margin:0;padding-left:18px">${pg.dicas.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>` : ''}
     ${resumoPerfil}
+    ${avalCardHTML(p)}
     ${acoes}
     <button class="btn quiet block" data-a="confirmarNovo">${t('new_plan_scratch')}</button>
   </section>`;

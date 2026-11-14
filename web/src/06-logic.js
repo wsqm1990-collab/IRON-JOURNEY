@@ -18,7 +18,8 @@ function alvo(item, sem) {
 function ultimaVez(pid, exId, casa = false) {
   let reserva = null;
   for (const s of sessoesDe(pid)) {
-    if (!!s.casa !== !!casa) continue;
+    /* the physical assessment counts at home and at the gym */
+    if (!!s.casa !== !!casa && !s.avaliacao) continue;
     const x = (s.exs || []).find(e => e.id === exId && (e.sets || []).some(z => z.ok && z.reps > 0));
     if (!x) continue;
     if (!s.deload) return { s, x };
@@ -46,6 +47,8 @@ function sugestao(pid, item, alv, casa = false) {
   if (!u) return usaCarga(ex) ? { kg: null, k: 'sug_first_load', v: { n: Math.max(alv.rir, 2) }, ult: [] } : { kg: null, k: 'sug_first', v: {}, ult: [] };
   const ok = u.x.sets.filter(z => z.ok && z.reps > 0);
   const ult = ok.map(z => [usaCarga(ex) ? z.kg || 0 : 0, z.reps]);
+  /* the assessment's set was a test, not a workout in this range: the weight comes from its estimated max */
+  if (u.s.avaliacao) return { kg: null, k: usaCarga(ex) ? 'sug_from_test' : 'sug_from_test_bw', v: {}, ult };
   if (!usaCarga(ex)) {
     const best = Math.max(...ok.map(z => z.reps));
     return { kg: null, k: best >= alv.rmax ? (ex.carga === 'c' ? 'sug_top_bw' : 'sug_top') : 'sug_beat', v: { n: best >= alv.rmax ? best + 1 : best, u: ex.carga }, ult };

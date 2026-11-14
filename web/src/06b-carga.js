@@ -155,13 +155,18 @@ const RAZAO = {
   supino_chao: 0.34, remada_halteres: 0.28, remada_mochila: 0.45, rosca_mochila: 0.3, agach_mochila: 0.3, kb_swing: 0.3,
 };
 const INFERIOR = ['quadriceps', 'posteriores', 'gluteos', 'adutores', 'panturrilhas'];
-function e1Inicial(ex, p) {
+function e1Pop(ex, p) {
   const r = RAZAO[ex.id];
   if (!r) return null;
   const peso = parseNum(p.peso) || (p.sexo === 'f' ? 62 : p.sexo === 'm' ? 75 : 70);
   const sexo = p.sexo === 'f' ? (INFERIOR.includes(ex.grupo) ? 0.75 : 0.55) : 1;
   const nivel = { iniciante: 0.6, intermediario: 1, avancado: 1.3 }[p.nivel] || 0.8;
   return peso * r * sexo * nivel;
+}
+/* the population guess, scaled by what the physical assessment measured (when there is one) */
+function e1Inicial(ex, p) {
+  const e = e1Pop(ex, p);
+  return e && typeof fatorAval === 'function' ? e * fatorAval(ex, p) : e;
 }
 
 /* the plan for one exercise today: weight and exact reps for every set, test-set rules */

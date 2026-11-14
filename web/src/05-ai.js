@@ -27,7 +27,8 @@ const idioma = () => `Write every piece of text meant for the person in ${LANG_I
 /* ---------- context the coach reads (in English; answers come in the person's language) ---------- */
 const en3 = a => (Array.isArray(a) ? a[0] : a);
 const focoEn = p => (p.foco || []).map(id => { const r = FOCOS.find(x => x[0] === id); return r ? r[1] : id; });
-const limitesEn = p => [...(p.limites || []).map(id => { const r = LIMITES.find(x => x[0] === id); return r ? r[1] : id; }), p.limitesTxt].filter(Boolean).join('; ');
+const DOR_EN = { leve: 'mild', moderada: 'moderate', forte: 'strong' };
+const limitesEn = p => [...(p.limites || []).map(id => { const r = LIMITES.find(x => x[0] === id), d = (p.dores || []).find(x => x.id === id); return (r ? r[1] : id) + (d && DOR_EN[d.nivel] ? ` (${DOR_EN[d.nivel]})` : ''); }), p.limitesTxt].filter(Boolean).join('; ');
 const objEn = id => { const o = OBJETIVOS.find(x => x.id === id); return o ? o.nome[0] : '—'; };
 const nivelEn = id => { const o = NIVEIS.find(x => x.id === id); return o ? o.nome[0] : '—'; };
 function ctxPerfil(p) {
@@ -45,12 +46,16 @@ function ctxPerfil(p) {
   if (comp) l.push(comp);
   l.push('Pain or injuries: ' + (limitesEn(p) || 'none reported'));
   if (p.gosta) l.push('Likes: ' + p.gosta);
+  const gostos = typeof gostosEn === 'function' ? gostosEn(p) : '';
+  if (gostos) l.push('Enjoys: ' + gostos);
   if (p.evita) l.push('Prefers to avoid: ' + p.evita);
   const modos = (p.cardioModos || []).map(id => exInfo(id).nomeEn).join(', ');
   const quando = { apos: 'after lifting', separado: 'on separate days', tanto: 'any day' }[p.cardioQuando] || '';
   l.push('Cardio: ' + [p.cardioVezes ? p.cardioVezes + ' sessions per week' : 'does not want cardio sessions', modos && 'prefers ' + modos, quando].filter(Boolean).join('; '));
   const z = zonasFC(p.idade);
   if (z) l.push(`Estimated heart rate: max ~${z.max} bpm; easy (zone 2) ${z.leve[0]}-${z.leve[1]} bpm; hard ${z.forte[0]}-${z.forte[1]} bpm`);
+  const av = typeof ultimaAval === 'function' ? ultimaAval(p) : null;
+  if (av) l.push(resumoAvalEn(av));
   return l.join('\n');
 }
 function ctxAcademia() {
@@ -69,6 +74,7 @@ function ctxPlano(pid) {
 }
 /* a one-day change of the plan's workout (the plan itself stayed the same) */
 function ajusteEn(s) {
+  if (s.avaliacao) return ' [physical assessment: test sets, not a plan workout]';
   const a = s.ajuste || (s.casa ? { onde: 'casa', modo: 'mesmos' } : null);
   if (!a) return '';
   const onde = a.onde === 'casa' ? 'at home (' + (((s.casa && s.casa.equip) || []).join(', ') || 'body weight only') + ')' : 'at the gym';

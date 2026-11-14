@@ -155,4 +155,33 @@ img.px.ico{width:22px;height:auto;vertical-align:-5px;margin-right:4px}
 .bc-big{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}.bc-big b{font-family:var(--f-cond);font-size:34px;line-height:1}
 .bc-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:var(--t-sm)}.bc-row b{font-size:17px}
 .bc-how{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--surface)}.bc-how summary{cursor:pointer;font-weight:700;font-size:var(--t-sm)}.bc-how p{margin:8px 0 0}
+/* physical assessment */
+.av-q{display:flex;flex-direction:column;gap:8px;border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;background:var(--surface);min-width:0}
+.av-q p{margin:0}
+.av-ficha{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:center}
+.av-attrs{display:grid;gap:10px;min-width:0}
+.av-attr{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px;font-weight:700;font-size:var(--t-sm)}
+.av-bar{display:flex;gap:4px}
+.av-bar i{width:18px;height:12px;border-radius:3px;background:var(--surface-2);border:1px solid var(--line)}
+.av-bar i.on{background:var(--accent);border-color:var(--accent)}
+.av-timer{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center}
+.av-timer:empty{display:none}
+.av-timer p{margin:0}
+.av-big{font-family:var(--f-cond);font-size:64px;font-weight:800;line-height:1;letter-spacing:.02em}
+.av-big.sobe{color:var(--accent)}
+.av-qh{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.av-qh>:first-child{flex:1;min-width:0}
+.av-qh .btn{flex:none;margin-top:-4px}
+.av-dots{display:flex;gap:10px}
+.av-dots i{width:14px;height:14px;border-radius:50%;background:var(--surface-2);border:2px solid var(--line)}
+.av-dots i.up{border-color:var(--accent)}
+.av-dots i.on{background:var(--ink);border-color:var(--ink)}
+.av-dots i.on.up{background:var(--accent);border-color:var(--accent)}
+.av-row{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 12px;padding:10px 0;border-top:1px solid var(--line);font-size:var(--t-sm)}
+.av-row:first-child{border-top:0;padding-top:0}
+.av-row .av-n{flex:1 1 auto;min-width:0}
+.av-row b{font-size:16px;text-align:right;min-width:0}
+.av-row .av-c{flex-basis:100%;display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px}
+.av-lift{display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--line);padding-top:12px}
+.av-lift p{margin:0}
 </style>
