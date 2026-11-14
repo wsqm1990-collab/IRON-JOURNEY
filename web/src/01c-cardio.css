@@ -74,7 +74,7 @@ a.svc.yt span{color:var(--danger)}
 .fig .bn{stroke:var(--fig-n)}.fig circle.bn{fill:var(--fig-n);stroke:none}
 .fig .bf{stroke:var(--fig-f)}.fig circle.bf{fill:var(--fig-f);stroke:none}
 .fig .eq,.fig .cb{stroke:var(--fig-eq)}.fig .eqf{stroke:var(--fig-eqf)}.fig circle.eqf{fill:var(--fig-eqf);stroke:none}
-.fig polygon.pl{fill:var(--fig-pl);fill-opacity:.22;stroke:var(--fig-pl);stroke-width:3.2;stroke-linejoin:round}.fig polygon.pd{fill:var(--fig-pd)}.fig polygon.pd2{fill:var(--fig-pd2)}.fig polygon.eqf,.fig polygon.eqf2{fill:var(--fig-eqf)}.fig polygon.sh{fill:var(--fig-sh)}
+.fig polygon.pl{fill:var(--fig-pl);fill-opacity:.12;stroke:var(--fig-pl);stroke-width:2.6;stroke-linejoin:round}.fig polygon.pd{fill:var(--fig-pd)}.fig polygon.pd2{fill:var(--fig-pd2)}.fig polygon.eqf,.fig polygon.eqf2{fill:var(--fig-eqf)}.fig polygon.sh{fill:var(--fig-sh)}
 .fig .bd{stroke:var(--fig-bd)}
 .fig-fase{display:flex;flex-direction:column;gap:6px;padding:6px 4px 2px}
 .fig-fase>span{font-weight:700;font-size:var(--t-sm);min-height:1.3em}
@@ -184,4 +184,18 @@ img.px.ico{width:22px;height:auto;vertical-align:-5px;margin-right:4px}
 .av-row .av-c{flex-basis:100%;display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px}
 .av-lift{display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--line);padding-top:12px}
 .av-lift p{margin:0}
+/* the mannequin with volume */
+.fig-defs{position:absolute;width:0;height:0;overflow:hidden}
+.g-n0{stop-color:var(--fig-n0)}.g-n1{stop-color:var(--fig-n1)}.g-f0{stop-color:var(--fig-f0)}.g-f1{stop-color:var(--fig-f1)}.g-m0{stop-color:var(--fig-m0)}.g-m1{stop-color:var(--fig-m1)}
+.fig .vn{fill:url(#fgN) var(--fig-n1);stroke:var(--fig-ol);stroke-width:.9;stroke-linejoin:round}
+.fig .vf{fill:url(#fgF) var(--fig-f1);stroke:var(--fig-ol);stroke-width:.9;stroke-linejoin:round}
+.fig .vh{fill:var(--fig-hair);stroke:var(--fig-ol);stroke-width:.9}
+.fig .m1{fill:url(#fgM) var(--fig-m1)}.fig .m2{fill:url(#fgM) var(--fig-m1);fill-opacity:.42}.fig .m1.mf{fill-opacity:.78}.fig .m2.mf{fill-opacity:.3}
+.fig .gh{fill:var(--fig-gh);stroke:none}
+.fig .tr{fill:none;stroke:var(--fig-tr);stroke-width:1.6;stroke-dasharray:2.5 4;stroke-linecap:round}
+.fig .tre{fill:var(--surface-2);stroke:var(--fig-tr);stroke-width:1.4}
+.fig .ar{stroke:var(--surface-2);stroke-width:1.2;stroke-linejoin:round}.fig .ar.con{fill:var(--ok)}.fig .ar.exc{fill:var(--accent)}
+.fig svg{touch-action:pan-y}
+.fig-ctl{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.fig-ctl p{margin:0}
 </style>

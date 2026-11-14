@@ -240,6 +240,7 @@ const ACT = {
   tecnica: el => abrirTecnica(+el.dataset.i),
   guia: el => abrirGuia(el.dataset.id, el.dataset.nome || ''),
   figPausa: () => pausarFigura(),
+  figGirar: () => girarFigura(),
   heroiEditar: () => abrirCriador(),
   heroiSet: el => { if (!S.heroiDraft) return; S.heroiDraft[el.dataset.k] = el.dataset.v; if (el.dataset.k === 'corpo' && el.dataset.v === 'f') S.heroiDraft.barba = ''; atualizarCriador(); },
   heroiSalvar: () => salvarHeroi(),

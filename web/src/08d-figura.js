@@ -62,16 +62,79 @@ function corpo(o) {
   }
   return J;
 }
-function primsCorpo(J) {
-  const L = (a, b, w, lado = 'C') => ({ t: 'l', a, b, w, c: 'b', lado });
-  return [
-    L(vSub(J.P, vMul(J.T, 3)), vSub(J.nk, vMul(J.T, 6)), 21), L(J.sL, J.sR, 11), L(J.qL, J.qR, 15),
-    L(J.nk, vLerp(J.nk, J.hd, 0.55), 8), { t: 'c', p: J.hd, r: 10, c: 'b', lado: 'C' },
-    ...['R', 'L'].flatMap(s => [
-      L(J['s' + s], J['e' + s], 9.5, s), L(J['e' + s], J['w' + s], 7.5, s), { t: 'c', p: J['h' + s], r: 3.6, c: 'b', lado: s },
-      L(J['q' + s], J['k' + s], 13, s), L(J['k' + s], J['a' + s], 9.5, s), L(J['a' + s], J['t' + s], 5.5, s),
-    ]),
+/* ---------- the body: an artist's mannequin with volume ----------
+   Ellipsoids (head, ribcage, waist, pelvis, glutes, shoulders, calves) and tapered capsules (limbs),
+   projected exactly and shaded. The muscles the exercise trains are drawn on top in red (main) or
+   light red (helpers), on the side of the limb where that muscle lies, and fade out when facing away. */
+const VK = (a, b, ra, rb, c, lado, extra) => ({ t: 'k', a, b, ra, rb, c, lado, ...extra });
+const VE = (p, u, v, w, c, lado, extra) => ({ t: 'e', p, ax: [u, v, w], c, lado, ...extra });
+const perpA = (v, eixo) => vSub(v, vMul(eixo, vDot(v, eixo)));
+function quadroCorpo(J) {
+  const T = vNorm(J.T), N = peitoDe(T, J.lat), L = vNorm(vCross(N, T));
+  const Hd = vNorm(vSub(J.hd, J.nk)), f0 = perpA(N, Hd);
+  const Fh = vLen(f0) > 0.2 ? vNorm(f0) : vNorm(perpA(vMul(T, -1), Hd));
+  return { T, N, L, Hd, Fh, at: (d, n = 0, l = 0) => vAdd(vAdd(vAdd(J.P, vMul(T, d)), vMul(N, n)), vMul(L, l)) };
+}
+function primsCorpo(J, mus) {
+  const F = quadroCorpo(J), { T, N, L, Hd, Fh, at } = F;
+  const out = [
+    VE(at(2), vMul(L, 14.5), vMul(N, 9.6), vMul(T, 10.5), 'b', 'C'),
+    VE(at(-1.5, -4.6), vMul(L, 13.5), vMul(N, 7), vMul(T, 9), 'b', 'C'),
+    VE(at(18), vMul(L, 12.8), vMul(N, 9.4), vMul(T, 11.5), 'b', 'C'),
+    VE(at(34.5, 0.5), vMul(L, 16.4), vMul(N, 11.2), vMul(T, 14.6), 'b', 'C'),
+    VK(vSub(J.nk, vMul(T, 3)), vAdd(J.nk, vMul(Hd, 6)), 5.4, 4.6, 'b', 'C'),
+    VE(J.hd, vMul(L, 9.2), vMul(Fh, 10), vMul(Hd, 11), 'b', 'C'),
+    VE(vAdd(vAdd(J.hd, vMul(Fh, -3.4)), vMul(Hd, 3.2)), vMul(L, 9.5), vMul(Fh, 7.6), vMul(Hd, 8.3), 'hair', 'C'),
+    VE(vAdd(vAdd(J.hd, vMul(Fh, 9.5)), vMul(Hd, -0.8)), vMul(L, 1.7), vMul(Fh, 2.4), vMul(Hd, 2.8), 'b', 'C'),
   ];
+  const frente = D0 => { const c = vCross(L, D0); return vLen(c) > 0.2 ? vNorm(c) : N; };
+  for (const [s, sg] of [['R', 1], ['L', -1]]) {
+    const A0 = J['a' + s], K0 = J['k' + s], pe = vNorm(vSub(J['t' + s], A0)), fSh = frente(vNorm(vSub(A0, K0)));
+    out.push(
+      VE(vAdd(vAdd(J['s' + s], vMul(L, sg * 1.2)), vMul(T, -0.5)), vMul(L, 7), vMul(N, 7.4), vMul(T, 7.2), 'b', s),
+      VK(J['s' + s], J['e' + s], 6.3, 4.7, 'b', s), VK(J['e' + s], J['w' + s], 4.8, 3.3, 'b', s), VK(J['w' + s], J['h' + s], 3.4, 3.1, 'b', s),
+      VK(J['q' + s], K0, 9.3, 5.9, 'b', s), VK(K0, A0, 5.9, 3.7, 'b', s),
+      VE(vAdd(vLerp(K0, A0, 0.3), vMul(fSh, -1.6)), vMul(vNorm(vSub(A0, K0)), 11), vMul(fSh, 4.7), vMul(L, 4.6), 'b', s),
+      VK(vSub(A0, vMul(pe, 2.6)), J['t' + s], 3.9, 2.9, 'b', s),
+    );
+  }
+  if (mus && (mus[0] || []).length) out.push(...musculosVol(J, F, mus));
+  return out;
+}
+function musculosVol(J, F, mus) {
+  const { T, N, L, at } = F, out = [], M = new Map([...(mus[1] || []).map(m => [m, 2]), ...(mus[0] || []).map(m => [m, 1])]);
+  const cls = m => (M.get(m) === 1 ? 'm1' : 'm2');
+  const el = (m, p, u, v, w, face, lado = 'C') => { if (M.has(m)) out.push(VE(p, u, v, w, cls(m), lado, { face })); };
+  const cap = (m, a, b, ra, rb, face, lado) => { if (M.has(m)) out.push(VK(a, b, ra, rb, cls(m), lado, { face })); };
+  const costas = vMul(N, -1);
+  el('peito', at(37, 6.6), vMul(L, 12.6), vMul(N, 4.8), vMul(T, 8.4), N);
+  el('abs', at(20, 5.4), vMul(L, 7.4), vMul(N, 4), vMul(T, 11.5), N);
+  el('costas_meio', at(35, -7.2), vMul(L, 7.4), vMul(N, 4.2), vMul(T, 10), costas);
+  el('trapezio', at(46, -3.6), vMul(L, 11.5), vMul(N, 5.2), vMul(T, 6.2), vNorm(vAdd(costas, vMul(T, 0.6))));
+  el('lombar', at(17, -5.2), vMul(L, 7.4), vMul(N, 4.2), vMul(T, 10.5), costas);
+  el('gluteo', at(-1.5, -5), vMul(L, 12.6), vMul(N, 6.6), vMul(T, 8.3), costas);
+  for (const [s, sg] of [['R', 1], ['L', -1]]) {
+    const ld = vMul(L, sg);
+    el('obliquos', at(18, 2.5, 8.6 * sg), vMul(L, 4), vMul(N, 6), vMul(T, 9.5), ld, s);
+    el('dorsal', at(30, -4.6, 8.2 * sg), vMul(L, 7), vMul(N, 4.6), vMul(T, 12.5), vNorm(vAdd(costas, vMul(ld, 0.9))), s);
+    el('gluteo_med', at(6, -2, 11.5 * sg), vMul(L, 4.4), vMul(N, 6), vMul(T, 6), ld, s);
+    const S0 = J['s' + s], E0 = J['e' + s], W0 = J['w' + s], Q0 = J['q' + s], K0 = J['k' + s], A0 = J['a' + s];
+    const del = vAdd(S0, vMul(L, sg * 1.2)), bola = (m, dir) => el(m, vAdd(del, vMul(dir, 2.6)), vMul(L, 4.9), vMul(N, 4.9), vMul(T, 4.9), dir, s);
+    bola('delt_f', N); bola('delt_l', ld); bola('delt_r', costas);
+    /* the biceps lies where the forearm folds; with the arm straight, the front of the arm */
+    const Dua = vNorm(vSub(E0, S0)), dob = perpA(vNorm(vSub(W0, E0)), Dua), ref = vNorm(vCross(L, Dua));
+    const db = vLen(dob) > 0.3 ? vNorm(dob) : vNorm(vAdd(dob, vMul(vLen(ref) > 0.1 ? ref : N, 0.3 - vLen(dob))));
+    cap('biceps', vAdd(vLerp(S0, E0, 0.22), vMul(db, 2.2)), vAdd(vLerp(S0, E0, 0.86), vMul(db, 1.8)), 4.3, 2.9, db, s);
+    cap('triceps', vAdd(vLerp(S0, E0, 0.12), vMul(db, -2.2)), vAdd(vLerp(S0, E0, 0.85), vMul(db, -1.6)), 4.4, 3, vMul(db, -1), s);
+    cap('antebraco', vLerp(E0, W0, 0.08), vLerp(E0, W0, 0.72), 4.5, 3.2, null, s);
+    const Dth = vNorm(vSub(K0, Q0)), Dsh = vNorm(vSub(A0, K0)), c1 = vCross(L, Dth), c2 = vCross(L, Dsh);
+    const fTh = vLen(c1) > 0.2 ? vNorm(c1) : N, fSh = vLen(c2) > 0.2 ? vNorm(c2) : N;
+    cap('quadriceps', vAdd(vLerp(Q0, K0, 0.14), vMul(fTh, 2.8)), vAdd(vLerp(Q0, K0, 0.9), vMul(fTh, 1.6)), 6.2, 4, fTh, s);
+    cap('posteriores', vAdd(vLerp(Q0, K0, 0.2), vMul(fTh, -2.8)), vAdd(vLerp(Q0, K0, 0.88), vMul(fTh, -1.8)), 5.8, 3.6, vMul(fTh, -1), s);
+    cap('adutores', vAdd(vLerp(Q0, K0, 0.06), vMul(ld, -3.4)), vAdd(vLerp(Q0, K0, 0.62), vMul(ld, -2.6)), 5.4, 3.4, vMul(ld, -1), s);
+    el('panturrilha', vAdd(vLerp(K0, A0, 0.3), vMul(fSh, -2.4)), vMul(Dsh, 10), vMul(fSh, 4.4), vMul(L, 4.2), vMul(fSh, -1), s);
+  }
+  return out;
 }
 
 /* ---------- equipment ---------- */
@@ -122,14 +185,29 @@ function facesCaixaO(x) {
     f(S(-1, -1, 1), S(1, -1, 1), S(1, 1, 1), S(-1, 1, 1), x.w), f(S(-1, -1, -1), S(1, -1, -1), S(1, 1, -1), S(-1, 1, -1), vMul(x.w, -1)),
     f(S(1, -1, -1), S(1, -1, 1), S(1, 1, 1), S(1, 1, -1), x.u), f(S(-1, -1, -1), S(-1, -1, 1), S(-1, 1, 1), S(-1, 1, -1), vMul(x.u, -1))];
 }
-/* everything as flat shapes with a depth, ready to sort */
-function achatar(prims, cam, J) {
+/* everything as flat shapes with a depth, ready to sort (painter's algorithm) */
+function achatar(prims, cam, J, fantasma) {
   const out = [], perto = J && vDot(cam.c, J.lat) < 0 ? 'L' : 'R', pts = ps => ps.map(p => proj(cam, p));
   const media = ps => ps.reduce((s, p) => s + p[2], 0) / ps.length;
-  const cor = q => (q.c === 'b' ? (q.lado === 'C' || q.lado === perto ? 'bn' : 'bf') : q.c);
+  const longe = q => q.lado && q.lado !== 'C' && q.lado !== perto;
+  const cor = q => (fantasma ? 'gh' : q.c === 'b' ? (longe(q) ? 'vf' : 'vn') : q.c === 'hair' ? 'vh' : q.c === 'm1' || q.c === 'm2' ? q.c + (longe(q) ? ' mf' : '') : q.c);
+  /* a muscle on the far side of a limb fades out instead of showing through */
+  const vis = q => { if (!q.face) return 1; const f = vDot(q.face, cam.c); return f < -0.6 ? 0 : clamp((f + 0.6) / 0.45, 0, 1); };
   for (const q of prims) {
     if (q.t === 'l') { const a = proj(cam, q.a), b = proj(cam, q.b); out.push({ k: 'l', a, b, w: q.w, c: cor(q), z: (a[2] + b[2]) / 2 }); }
     else if (q.t === 'c') { const p = proj(cam, q.p); out.push({ k: 'c', p, r: q.r, c: cor(q), z: p[2] + (q.c === 'b' ? 0.5 : 0) }); }
+    else if (q.t === 'k') {
+      const op = vis(q); if (!op) continue;
+      const a = proj(cam, q.a), b = proj(cam, q.b);
+      out.push({ k: 'k', a, b, ra: q.ra, rb: q.rb, c: cor(q), op, z: (a[2] + b[2]) / 2 + ('face' in q ? 0.4 : 0) });
+    } else if (q.t === 'e') {
+      const op = vis(q); if (!op) continue;
+      const p = proj(cam, q.p);
+      let a = 0, b = 0, c = 0;
+      for (const v of q.ax) { const x = vDot(v, cam.r), y = -vDot(v, cam.u); a += x * x; b += x * y; c += y * y; }
+      const m = (a + c) / 2, d = Math.sqrt(((a - c) / 2) ** 2 + b * b);
+      out.push({ k: 'e', p, rx: Math.sqrt(m + d), ry: Math.sqrt(Math.max(m - d, 0.04)), ang: 0.5 * Math.atan2(2 * b, a - c), c: cor(q), op, z: p[2] + (q.c === 'hair' ? 0.3 : 0) + ('face' in q ? 0.4 : 0) });
+    }
     else if (q.t === 'd') { const ps = pts(poligonoDisco(q)); out.push({ k: 'p', ps, c: q.c, z: media(ps) }); }
     else if (q.t === 'x' || q.t === 'o') {
       for (const f of q.t === 'x' ? facesCaixa(q) : facesCaixaO(q)) {
@@ -143,29 +221,55 @@ function achatar(prims, cam, J) {
   return out.sort((a, b) => a.z - b.z);
 }
 const n1 = v => Math.round(v * 10) / 10;
+const pt2 = (o, r, v) => n1(o[0] + v[0] * r) + ' ' + n1(o[1] + v[1] * r);
+/* a tapered capsule: the outline around two circles of different radii */
+function capsulaPath(f) {
+  const dx = f.b[0] - f.a[0], dy = f.b[1] - f.a[1], d = Math.hypot(dx, dy);
+  if (d < Math.abs(f.ra - f.rb) + 0.05) { const o = f.ra >= f.rb ? f.a : f.b, r = Math.max(f.ra, f.rb); return `M${n1(o[0] - r)} ${n1(o[1])}a${n1(r)} ${n1(r)} 0 1 0 ${n1(2 * r)} 0a${n1(r)} ${n1(r)} 0 1 0 ${n1(-2 * r)} 0Z`; }
+  const ux = dx / d, uy = dy / d, s = (f.ra - f.rb) / d, c = Math.sqrt(Math.max(0, 1 - s * s));
+  const v1 = [ux * s - uy * c, uy * s + ux * c], v2 = [ux * s + uy * c, uy * s - ux * c];
+  return `M${pt2(f.a, f.ra, v1)}L${pt2(f.b, f.rb, v1)}A${n1(f.rb)} ${n1(f.rb)} 0 ${s < 0 ? 1 : 0} 0 ${pt2(f.b, f.rb, v2)}L${pt2(f.a, f.ra, v2)}A${n1(f.ra)} ${n1(f.ra)} 0 ${s > 0 ? 1 : 0} 0 ${pt2(f.a, f.ra, v1)}Z`;
+}
+function elipsePath(f) {
+  const c = Math.cos(f.ang), s = Math.sin(f.ang), g = n1(f.ang / RAD), r = `${n1(f.rx)} ${n1(f.ry)} ${g}`;
+  return `M${n1(f.p[0] + c * f.rx)} ${n1(f.p[1] + s * f.rx)}A${r} 1 0 ${n1(f.p[0] - c * f.rx)} ${n1(f.p[1] - s * f.rx)}A${r} 1 0 ${n1(f.p[0] + c * f.rx)} ${n1(f.p[1] + s * f.rx)}Z`;
+}
 function svgFormas(formas) {
+  const op = f => (f.op != null && f.op < 0.99 ? ` opacity="${Math.round(f.op * 100) / 100}"` : '');
   return formas.map(f => f.k === 'l' ? `<line x1="${n1(f.a[0])}" y1="${n1(f.a[1])}" x2="${n1(f.b[0])}" y2="${n1(f.b[1])}" stroke-width="${f.w}" class="${f.c}"/>`
     : f.k === 'c' ? `<circle cx="${n1(f.p[0])}" cy="${n1(f.p[1])}" r="${f.r}" class="${f.c}"/>`
-      : `<polygon points="${f.ps.map(p => n1(p[0]) + ',' + n1(p[1])).join(' ')}" class="${f.c}"/>`).join('');
+      : f.k === 'k' ? `<path d="${capsulaPath(f)}" class="${f.c}"${op(f)}/>`
+        : f.k === 'e' ? `<path d="${elipsePath(f)}" class="${f.c}"${op(f)}/>`
+          : f.k === 'raw' ? f.svg
+            : `<polygon points="${f.ps.map(p => n1(p[0]) + ',' + n1(p[1])).join(' ')}" class="${f.c}"/>`).join('');
 }
-function cena(fig, k) {
+function cena(fig, k, soCorpo) {
   const r = fig.pose(k);
   const J = corpo(r.corpo);
+  if (soCorpo) return { J, prims: primsCorpo(J) };
   const eq = r.eq ? r.eq(J) : [];
   const sombra = { t: 'd', p: [J.P[0], 0.2, 0], n: [0, 1, 0], r: 48, c: 'sh' };
-  return { J, prims: [sombra, ...(r.atras ? r.atras(J) : []), ...eq, ...primsCorpo(J)] };
+  return { J, prims: [sombra, ...(r.atras ? r.atras(J) : []), ...eq, ...primsCorpo(J, fig.mus)] };
+}
+/* the corners of each flat shape, to frame the picture */
+function caixa2D(f) {
+  if (f.k === 'l') return [f.a, f.b];
+  if (f.k === 'c') return [[f.p[0] - f.r, f.p[1] - f.r], [f.p[0] + f.r, f.p[1] + f.r]];
+  if (f.k === 'k') return [[f.a[0] - f.ra, f.a[1] - f.ra], [f.a[0] + f.ra, f.a[1] + f.ra], [f.b[0] - f.rb, f.b[1] - f.rb], [f.b[0] + f.rb, f.b[1] + f.rb]];
+  if (f.k === 'e') { const c = Math.cos(f.ang), s = Math.sin(f.ang), w = Math.hypot(f.rx * c, f.ry * s), h = Math.hypot(f.rx * s, f.ry * c); return [[f.p[0] - w, f.p[1] - h], [f.p[0] + w, f.p[1] + h]]; }
+  return f.ps || [];
 }
 /* a fixed frame that fits every moment of the movement */
-function enquadrar(fig, cam) {
+function enquadrar(fig, cam, m = 12) {
   let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
   for (const k of [0, 0.25, 0.5, 0.75, 1]) {
     const { prims, J } = cena(fig, k);
     for (const f of achatar(prims, cam, J)) {
-      const ps = f.k === 'l' ? [f.a, f.b] : f.k === 'c' ? [[f.p[0] - f.r, f.p[1] - f.r], [f.p[0] + f.r, f.p[1] + f.r]] : f.ps;
+      const ps = caixa2D(f);
       for (const p of ps) { x0 = Math.min(x0, p[0]); y0 = Math.min(y0, p[1]); x1 = Math.max(x1, p[0]); y1 = Math.max(y1, p[1]); }
     }
   }
-  const m = 12, w = x1 - x0 + 2 * m, h = y1 - y0 + 2 * m, W = Math.max(w, h * 1.15), H = Math.max(h, W / 1.6);
+  const w = x1 - x0 + 2 * m, h = y1 - y0 + 2 * m, W = Math.max(w, h * 1.15), H = Math.max(h, W / 1.6);
   return [n1(x0 - m - (W - w) / 2), n1(y0 - m - (H - h) / 2), n1(W), n1(H)];
 }
 
@@ -241,7 +345,7 @@ const FIG = {
     const barra2 = z => [Q.l([-34, 113, z], [34, 113, z], 4.5, 'eq'), Q.l([-28, 0, z], [-28, 113, z], 4, 'eqf'), Q.l([28, 0, z], [28, 113, z], 4, 'eqf')];
     return { corpo: { nk, tr: T, bR: { m: [0, 114, 24], polo: [-1, 0.3, 0.1], mao: [1, 0, 0] }, pR: { th: D(6, -72), sh: D(180, -42), pe: D(180, -25) } }, eq: () => [...barra2(25), ...barra2(-25)] };
   } },
-  puxada: { cam: [52, 4], exc: false, pose(k, o) {
+  puxada: { cam: [-35, 8], exc: false, pose(k, o) {
     const P = [0, 54, 0], T = vSlerp(D(180, 84), D(180, 74), k), nk = nkDe(P, T), sh = ombroDe(P, T);
     const z = o.neutra ? 7 : o.uni ? 22 : 40, m = vLerp([sh[0] + 4, 184, z], [nk[0] + 11, nk[1] - 4, z], k);
     return {
@@ -253,7 +357,7 @@ const FIG = {
       },
     };
   } },
-  barraFixa: { cam: [38, 2], exc: false, pose(k, o) {
+  barraFixa: { cam: [-40, 4], exc: false, pose(k, o) {
     const nk = vLerp([0, 157, 0], [-1, 196, 0], k), T = vSlerp(D(180, 89), D(180, 78), k);
     return {
       corpo: { nk, tr: T, hd: vSlerp(D(0, 90), D(0, 84), k), bR: { m: [5, 205, 33], polo: [0, -0.6, 0.8], mao: [0, 1, 0] }, pR: o.grav ? { th: D(8, -88), sh: D(180, -4), pe: D(180, -20) } : { th: D(8, -84), sh: D(180, -68), pe: D(0, -60) } },
@@ -261,7 +365,7 @@ const FIG = {
         ...(o.grav ? [prancha3(vAdd(J.kR, [-26, -5, -9]), [1, 0, 0], 32, [0, 1, 0], 20, 6), Q.l(vAdd(J.kR, [-10, -10, -9]), [-30, 0, 0], 4, 'eqf')] : [])],
     };
   } },
-  remadaCurvada: { cam: [26, 8], exc: false, pose(k, o) {
+  remadaCurvada: { cam: [-25, 18], exc: false, pose(k, o) {
     const P = [-22, 80, 0], T = D(0, 35), sh = ombroDe(P, T), N = peitoDe(T), z = o.tbar || o.mochila ? 7 : o.halter ? 19 : 23;
     const cima = vAdd(vAdd(P, vMul(T, 30)), vMul(N, 13)), m = vLerp([sh[0] + 1, sh[1] - 52, z], [cima[0], cima[1], z], k);
     return {
@@ -291,7 +395,7 @@ const FIG = {
       eq: J => [prancha3(vAdd(vAdd(P, vMul(N, 11)), vMul(T, -6)), T, 76, vMul(N, -1)), Q.l([-12, 0, 0], vAdd(P, vMul(N, 16)), 4, 'eqf'), ...halter(J.hR, [1, 0, 0]), ...halter(J.hL, [1, 0, 0])],
     };
   } },
-  remadaBaixa: { cam: [22, 10], exc: false, pose(k, o) {
+  remadaBaixa: { cam: [-15, 10], exc: false, pose(k, o) {
     const P = [0, 44, 0];
     if (o.maq) {
       const T = D(180, 88), sh = ombroDe(P, T);
@@ -335,7 +439,7 @@ const FIG = {
       ],
     };
   } },
-  crucInverso: { cam: o => (o.maq ? [74, 42] : [52, 18]), exc: false, pose(k, o) {
+  crucInverso: { cam: o => (o.maq ? [-100, 28] : [52, 18]), exc: false, pose(k, o) {
     if (o.maq) {
       const P = [0, 56, 0], T = D(0, 88), sh = ombroDe(P, T);
       return { corpo: { P, tr: T, bR: { m: vLerp([sh[0] + 44, sh[1] - 2, 8], [sh[0] - 2, sh[1] - 2, 62], k), polo: [0, -1, 0] }, pR: { a: [36, 3, 15], polo: [0.3, 1, 0.2] } },
@@ -344,7 +448,7 @@ const FIG = {
     const P = [-16, 80, 0], T = D(0, 14), sh = ombroDe(P, T);
     return { corpo: { P, tr: T, hd: D(0, 0), bR: { m: vLerp([sh[0] + 1, sh[1] - 50, 13], [sh[0] - 1, sh[1] - 6, 62], k), polo: [0, 0.3, -1] }, pR: emPe(15) }, eq: J => [...halter(J.hR, [1, 0, 0]), ...halter(J.hL, [1, 0, 0])] };
   } },
-  facePull: { cam: [60, 14], exc: false, pose(k, o) {
+  facePull: { cam: [-40, 12], exc: false, pose(k, o) {
     const P = [0, 87, 0], T = D(180, 86), sh = ombroDe(P, T);
     return {
       corpo: { P, tr: T, bR: { m: vLerp([sh[0] + 50, sh[1] + 5, 8], [sh[0] + 7, sh[1] + 15, 24], k), polo: vSlerp([0, -0.4, 1], [0, 0.6, 1], k) }, pR: emPe(15) },
@@ -393,7 +497,7 @@ const FIG = {
       eq: J => [...pegaZ(J).slice(0, 1), ...cabo([-82, 24, 18], J.hR)],
     };
   } },
-  tricepsPolia: { cam: [16, 6], exc: false, pose(k, o) {
+  tricepsPolia: { cam: [-20, 6], exc: false, pose(k, o) {
     const P = [-4, 86, 0], T = D(0, 82);
     return {
       corpo: { P, tr: T, bR: { ua: D(0, -82), fa: vSlerp(D(0, 32), D(0, -86), k) }, pR: emPe(14) },
@@ -499,7 +603,7 @@ const FIG = {
       eq: J => [...assento(-20, 40, 46, { a: [P[0] - 11, P[1] - 4, 0], d: T, n: [1, 0.1, 0] }), rolo(vAdd(J.kR, [-4, 10, -9]), 18), rolo(vSub(J.aR, vMul(pe, 6)), 18)],
     };
   } },
-  stiff: { cam: [22, 6], exc: true, pose(k, o) {
+  stiff: { cam: [-15, 6], exc: true, pose(k, o) {
     const th = nLerp(88, o.uni ? 12 : 22, k), h = nLerp(78, o.uni ? 46 : 38, k), shY = h + 55;
     const P = [6 - 46 * Math.cos(th * RAD), shY - 46 * Math.sin(th * RAD), 0], T = D(0, th);
     const pernaTras = D(180, -th);
@@ -509,7 +613,7 @@ const FIG = {
       eq: J => (o.livre ? [] : o.uni ? halter(J.hL, [1, 0, 0]) : o.imp === 'halter' ? [...halter(J.hR, [0, 0, 1]), ...halter(J.hL, [0, 0, 1])] : [...barra(meio(J)), ...(o.imp === 'smith' ? trilhos(meio(J)[0], 0, 172) : [])]),
     };
   } },
-  terra: { cam: [24, 6], exc: false, pose(k) {
+  terra: { cam: [-15, 6], exc: false, pose(k) {
     const th = nLerp(41, 90, k), h = nLerp(22, 78, k), shY = h + 55;
     const P = [7 - 46 * Math.cos(th * RAD), shY - 46 * Math.sin(th * RAD), 0];
     return { corpo: { P, tr: D(0, th), hd: D(0, Math.max(th - 15, 10)), bR: { ua: D(0, -90), fa: D(0, -90) }, pR: emPe(13, 0, 8) }, eq: J => barra(meio(J)) };
@@ -532,7 +636,7 @@ const FIG = {
       eq: () => (ponte ? [] : [...banco(-66, -26, 44), ...(o.maq ? [rolo(barC, 26)] : [...barra(barC, [0, 0, 1], 62, 22), rolo(barC, 12)]), ...(o.smith ? trilhos(barC[0], 0, 120) : [])]),
     };
   } },
-  coice: { cam: o => (o.quad ? [26, 16] : [18, 6]), exc: false, pose(k, o) {
+  coice: { cam: o => (o.quad ? [26, 16] : [-35, 8]), exc: false, pose(k, o) {
     if (o.quad) {
       const P = [0, 50, 0], T = D(0, 1), sh = ombroDe(P, T);
       const pR = { th: vSlerp(D(0, -88), D(180, 4), k), sh: vSlerp(D(180, -3), D(0, 86), k) };
@@ -554,7 +658,7 @@ const FIG = {
         ...(o.band ? [Q.l(J.kR, J.kL, 3, 'bd')] : [caixaO(vAdd(J.kR, vMul(D(az + (o.adu ? -90 : 90), 0), 7)), [0, 8, 0], [5, 0, 0], vMul(D(az + 90, 0), 2)), caixaO(vAdd(J.kL, vMul(D(-az - (o.adu ? -90 : 90), 0), 7)), [0, 8, 0], [5, 0, 0], vMul(D(-az - 90, 0), 2))])],
     };
   } },
-  panturrilha: { cam: [22, 6], exc: false, pose(k, o) {
+  panturrilha: { cam: o => (o.sent || o.leg ? [22, 6] : [-30, 6]), exc: false, pose(k, o) {
     const pe = vSlerp(D(0, 30), D(0, -48), k);
     if (o.sent) {
       const toe = [12, 10, 11], an = vSub(toe, vMul(pe, C.PE)), P = [-38, 52, 0];
@@ -711,7 +815,7 @@ function figuraDe(id) {
   const m = FIG_EX[id];
   if (!m || !FIG[m[0]]) return null;
   const base = FIG[m[0]], o = m[1] || {}, cam = typeof base.cam === 'function' ? base.cam(o) : base.cam;
-  return { ...base, o, camA: cam, pose: k => base.pose(k, o) };
+  return { ...base, o, camA: cam, pose: k => base.pose(k, o), mus: typeof MUSC_EX !== 'undefined' ? MUSC_EX[id] : null };
 }
 
 /* a still picture of the exercise for the workout card (cached: cards redraw often) */
@@ -724,7 +828,10 @@ function miniFigura(id) {
   return (MINI[id] = `<svg viewBox="${enquadrar(f, cam).join(' ')}" aria-hidden="true">${svgFormas(achatar(prims, cam, J))}</svg>`);
 }
 
-/* ---------- the player inside the "How to" sheet ---------- */
+/* ---------- the player inside the "How to" sheet ----------
+   The movement plays with the tempo of a good rep. A dashed line shows the path of the part that
+   travels the most, with an arrow riding on it (green: push with intent, blue: slow return), and a
+   faint ghost shows where the movement is going. Drag the figure to turn it; "Turn around" orbits it. */
 Object.assign(STR, {
   fig_exc: ['Return slowly, in control: 2–3 s', 'Volte devagar, controlando: 2–3 s', 'Vuelve despacio, con control: 2–3 s'],
   fig_con: ['Push or pull with intent: about 1 s', 'Faça força: cerca de 1 s', 'Haz fuerza: alrededor de 1 s'],
@@ -735,27 +842,91 @@ Object.assign(STR, {
   fig_start: ['Starting position · tap for the other end', 'Posição inicial · toque para ver o fim', 'Posición inicial · toca para ver el final'],
   fig_end: ['End position · tap for the start', 'Posição final · toque para ver o início', 'Posición final · toca para ver el inicio'],
   fig_label: ['Animated demonstration of {x}', 'Demonstração animada de {x}', 'Demostración animada de {x}'],
+  fig_drag: ['Drag to turn it · red: muscles worked', 'Arraste para girar · vermelho: músculos trabalhados', 'Arrastra para girar · rojo: músculos trabajados'],
+  fig_spin: ['Turn around', 'Dar a volta', 'Dar la vuelta'],
 });
-const Fig = { raf: 0, fig: null, cam: null, t0: 0, pausado: false, pausaEm: 0, ultimo: 0, estatico: false, k: 0 };
+const Fig = { raf: 0, fig: null, id: '', cam: null, yaw: 0, pitch: 0, t0: 0, pausado: false, pausaEm: 0, ultimo: 0, estatico: false, k: 0, fase: null, trilha: null, fant: null, drag: null, arrastou: false, orbita: null };
 function figuraHTML(id, nome) {
   const f = figuraDe(id);
   if (!f) return '';
-  const vb = enquadrar(f, camera(f.camA[0], f.camA[1]));
-  return `<button class="fig" data-a="figPausa" aria-label="${esc(t('fig_label', { x: nome }))}"><svg id="figSvg" viewBox="${vb.join(' ')}" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></svg><span class="fig-fase"><span id="figFase"></span><i><b id="figBarra"></b></i></span></button>`;
+  const vb = enquadrar(f, camera(f.camA[0], f.camA[1]), 16);
+  return `<div class="stack" style="gap:4px"><button class="fig" data-a="figPausa" aria-label="${esc(t('fig_label', { x: nome }))}"><svg id="figSvg" viewBox="${vb.join(' ')}" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></svg><span class="fig-fase"><span id="figFase"></span><i><b id="figBarra"></b></i></span></button>
+    <div class="fig-ctl"><p class="xs muted">${t('fig_drag')}</p><button class="btn quiet small" data-a="figGirar">${I.troca}${t('fig_spin')}</button></div></div>`;
+}
+/* the part of the body that travels the most (the near one of a pair), sampled along the rep */
+function trilhaDe(fig, cam) {
+  const Js = Array.from({ length: 21 }, (_, i) => corpo(fig.pose(i / 20).corpo));
+  const perto = vDot(cam.c, Js[0].lat) < 0 ? 'L' : 'R', longe = perto === 'R' ? 'L' : 'R';
+  const comp = c => Js.reduce((s, J, i) => (i ? s + vLen(vSub(J[c], Js[i - 1][c])) : 0), 0);
+  let melhor = null, max = 0;
+  for (const c of ['h', 'a', 'k', 'P']) {
+    const par = c !== 'P';
+    let nome = par ? c + perto : c, v = comp(nome);
+    if (par) { const v2 = comp(c + longe); if (v2 > v * 1.12) { nome = c + longe; v = v2; } }
+    if (v > max * 1.15) { max = v; melhor = nome; }
+  }
+  return max < 10 ? null : { c: melhor, pts: Js.map(J => J[melhor]) };
 }
 function desenharFigura(k) {
   const svg = $('#figSvg');
   if (!svg || !Fig.fig) return false;
-  const { prims, J } = cena(Fig.fig, k);
-  svg.innerHTML = svgFormas(achatar(prims, Fig.cam, J));
+  const cam = Fig.cam, { prims, J } = cena(Fig.fig, k);
+  let formas = achatar(prims, cam, J);
+  const fs = Fig.fase;
+  if (Fig.fant && fs && Math.abs(k - fs.alvo) > 0.06) { const g = Fig.fant[fs.alvo]; formas = [...achatar(g.prims, cam, g.J, true), ...formas]; }
+  if (Fig.trilha) {
+    const ps = Fig.trilha.pts.map(p => proj(cam, p)), fim = n => `<circle cx="${n1(ps[n][0])}" cy="${n1(ps[n][1])}" r="2.4" class="tre"/>`;
+    let svgT = `<path d="M${ps.map(p => n1(p[0]) + ' ' + n1(p[1])).join('L')}" class="tr"/>${fim(0)}${fim(ps.length - 1)}`;
+    if (fs && fs.mov) {
+      /* the arrow rides on the moving point, pointing where it goes */
+      const i = clamp(Math.round(k * 20), 0, 20), a = ps[clamp(i - 1, 0, 20)], b = ps[clamp(i + 1, 0, 20)], sg = fs.b > fs.a ? 1 : -1;
+      let dx = (b[0] - a[0]) * sg, dy = (b[1] - a[1]) * sg; const d = Math.hypot(dx, dy);
+      if (d > 0.6) {
+        dx /= d; dy /= d;
+        const o = proj(cam, J[Fig.trilha.c]), c0 = [o[0] + dx * 5, o[1] + dy * 5], tip = [o[0] + dx * 14, o[1] + dy * 14];
+        svgT += `<polygon points="${n1(tip[0])},${n1(tip[1])} ${n1(c0[0] - dy * 5.5)},${n1(c0[1] + dx * 5.5)} ${n1(c0[0] + dy * 5.5)},${n1(c0[1] - dx * 5.5)}" class="ar ${fs.chave === 'fig_con' ? 'con' : 'exc'}"/>`;
+      }
+    }
+    formas.push({ k: 'raw', svg: svgT });
+  }
+  svg.innerHTML = svgFormas(formas);
   return true;
+}
+function mudarCamera() {
+  Fig.cam = camera(Fig.yaw, Fig.pitch);
+  const svg = $('#figSvg');
+  if (!svg || !Fig.fig) return;
+  svg.setAttribute('viewBox', enquadrar(Fig.fig, Fig.cam, 16).join(' '));
+  if (Fig.pausado || Fig.estatico) desenharFigura(Fig.k);
+}
+/* drag sideways to turn the figure (up and down tilts it with a mouse; on a phone the page still scrolls) */
+function prepararArrasto(svg) {
+  if (svg.dataset.arrasto) return;
+  svg.dataset.arrasto = '1';
+  svg.addEventListener('pointerdown', e => { Fig.drag = { x: e.clientX, y: e.clientY, yaw: Fig.yaw, pitch: Fig.pitch, moveu: false, id: e.pointerId }; Fig.orbita = null; Fig.arrastou = false; });
+  svg.addEventListener('pointermove', e => {
+    const d = Fig.drag;
+    if (!d) return;
+    const dx = e.clientX - d.x, dy = e.clientY - d.y;
+    if (!d.moveu && Math.abs(dx) < 7 && Math.abs(dy) < 7) return;
+    if (!d.moveu) { d.moveu = true; try { svg.setPointerCapture(d.id); } catch { /* fine */ } }
+    Fig.yaw = d.yaw + dx * 0.7; Fig.pitch = clamp(d.pitch - (e.pointerType === 'mouse' ? dy * 0.35 : 0), -8, 70);
+    mudarCamera();
+  });
+  svg.addEventListener('pointerup', () => { if (Fig.drag && Fig.drag.moveu) Fig.arrastou = true; Fig.drag = null; });
+  svg.addEventListener('pointercancel', () => { Fig.drag = null; });
 }
 function iniciarFigura(id) {
   cancelAnimationFrame(Fig.raf);
   const f = figuraDe(id);
   if (!f) return;
-  Object.assign(Fig, { fig: f, cam: camera(f.camA[0], f.camA[1]), t0: performance.now(), pausado: false, ultimo: 0, k: 0, estatico: matchMedia('(prefers-reduced-motion: reduce)').matches });
-  if (Fig.estatico) { desenharFigura(0); $('#figFase').textContent = t('fig_start'); return; }
+  if (Fig.id !== id) Object.assign(Fig, { id, yaw: f.camA[0], pitch: f.camA[1] });
+  Object.assign(Fig, { fig: f, cam: camera(Fig.yaw, Fig.pitch), t0: performance.now(), pausado: false, ultimo: 0, k: 0, fase: null, orbita: null, arrastou: false, estatico: matchMedia('(prefers-reduced-motion: reduce)').matches });
+  Fig.trilha = f.iso ? null : trilhaDe(f, Fig.cam);
+  Fig.fant = f.iso ? null : { 0: cena(f, 0, true), 1: cena(f, 1, true) };
+  const svg = $('#figSvg');
+  if (svg) { prepararArrasto(svg); svg.setAttribute('viewBox', enquadrar(f, Fig.cam, 16).join(' ')); }
+  if (Fig.estatico) { Fig.fase = f.iso ? null : { a: 0, b: 0, alvo: 1, mov: false }; desenharFigura(0); $('#figFase').textContent = t('fig_start'); return; }
   const fases = f.iso ? [[0, 1, 2.6, 'fig_iso'], [1, 0, 2.6, 'fig_iso']]
     : f.exc ? [[0, 1, 2.4, 'fig_exc'], [1, 1, 0.5, 'fig_pausa'], [1, 0, 1.1, 'fig_con'], [0, 0, 0.8, 'fig_topo']]
       : [[0, 1, 1.1, 'fig_con'], [1, 1, 0.7, 'fig_topo'], [1, 0, 2.4, 'fig_exc'], [0, 0, 0.5, 'fig_pausa']];
@@ -764,12 +935,20 @@ function iniciarFigura(id) {
   const passo = agora => {
     if (!$('#figSvg')) return; /* the sheet was closed */
     Fig.raf = requestAnimationFrame(passo);
+    if (Fig.orbita) {
+      const u = clamp((agora - Fig.orbita.t0) / 4200, 0, 1), e = u * u * (3 - 2 * u);
+      Fig.yaw = Fig.orbita.de + 360 * e;
+      if (u >= 1) { Fig.yaw = Fig.orbita.de; Fig.orbita = null; }
+      Fig.cam = camera(Fig.yaw, Fig.pitch); $('#figSvg').setAttribute('viewBox', enquadrar(Fig.fig, Fig.cam, 16).join(' '));
+      if (Fig.pausado) { desenharFigura(Fig.k); return; }
+    }
     if (Fig.pausado || agora - Fig.ultimo < 33) return;
     Fig.ultimo = agora;
     let s = ((agora - Fig.t0) / 1000) % total, i = 0;
     while (i < fases.length - 1 && s > fases[i][2]) { s -= fases[i][2]; i++; }
     const [a, b, dur, chave] = fases[i], u = clamp(s / dur, 0, 1), e = u * u * (3 - 2 * u);
     Fig.k = a + (b - a) * e;
+    Fig.fase = f.iso ? null : { a, b, chave, alvo: a === b ? 1 - a : b, mov: a !== b };
     desenharFigura(Fig.k);
     if (rotulo !== chave) { rotulo = chave; $('#figFase').textContent = t(chave); $('#figBarra').className = chave === 'fig_con' ? 'con' : chave === 'fig_exc' ? 'exc' : ''; }
     $('#figBarra').style.width = Math.round(u * 100) + '%';
@@ -778,7 +957,13 @@ function iniciarFigura(id) {
 }
 function pausarFigura() {
   if (!Fig.fig) return;
-  if (Fig.estatico) { Fig.k = Fig.k ? 0 : 1; desenharFigura(Fig.k); $('#figFase').textContent = t(Fig.k ? 'fig_end' : 'fig_start'); return; }
+  if (Fig.arrastou) { Fig.arrastou = false; return; } /* that tap was the end of a drag */
+  if (Fig.estatico) { Fig.k = Fig.k ? 0 : 1; if (Fig.fase) Fig.fase.alvo = 1 - Fig.k; desenharFigura(Fig.k); $('#figFase').textContent = t(Fig.k ? 'fig_end' : 'fig_start'); return; }
   if (Fig.pausado) { Fig.t0 += performance.now() - Fig.pausaEm; Fig.pausado = false; }
   else { Fig.pausado = true; Fig.pausaEm = performance.now(); $('#figFase').textContent = t('fig_paused'); }
+}
+function girarFigura() {
+  if (!Fig.fig) return;
+  if (Fig.estatico) { Fig.yaw += 90; mudarCamera(); return; }
+  Fig.orbita = { t0: performance.now(), de: Fig.yaw };
 }
