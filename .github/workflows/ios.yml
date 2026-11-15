@@ -217,6 +217,10 @@ jobs:
             tail -n 300 "$f" > "$f.tail.txt"
             rm -f "$f"
           done
+          # the repository is public: no names from the Apple account in what is published
+          if [ -n "${{ steps.sign.outputs.team }}" ]; then
+            find ios -type f \( -name '*.txt' -o -name '*.log' \) -print0 | xargs -0 perl -pi -e 's/(Apple (Distribution|Development)|iPhone (Distribution|Developer)): [^"\n(]*\(/$1: (hidden) (/g; s/${{ steps.sign.outputs.team }}/TEAM/g'
+          fi
           echo "run ${{ github.run_number }} (${{ github.event_name }}, ${{ github.sha }}): job=${{ job.status }} web=${{ steps.web.outputs.version }} build=${{ steps.web.outputs.build }} keys=${{ steps.keys.outputs.ready }} upload=${{ steps.keys.outputs.upload }} app_record=${{ steps.sign.outputs.app }}" > SUMMARY.txt
           git add -A
           git -c user.name="Iron Journey build" -c user.email="build@users.noreply.github.com" commit -qm "iPhone build ${{ github.run_number }}"

@@ -171,7 +171,7 @@ function main() {
       PROVISIONING_PROFILE_SPECIFIER: profile,
     });
     write(PBX, pbx);
-    console.log('signing set for Release: team ' + team + ', profile "' + profile + '"');
+    console.log('signing set for Release (Apple Distribution, profile "' + profile + '")');
     return;
   }
   const swift = fs.readdirSync(SRC).filter(f => f.endsWith('.swift')).sort();
