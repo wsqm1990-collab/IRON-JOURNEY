@@ -223,7 +223,7 @@ ous = cert.subject.get_attributes_for_oid(NameOID.ORGANIZATIONAL_UNIT_NAME)
 team = team_secret or (ous[0].value if ous else '')
 if not team:
     sys.exit('Could not find the Team ID (set the APPLE_TEAM_ID secret)')
-print('Team: %s' % team)
+print('Team: found')  # logs of a public repository are public
 
 # ---------------------------------------------------------------- 3. the App Store profile
 profile = None

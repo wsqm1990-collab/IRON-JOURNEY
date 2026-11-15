@@ -152,7 +152,7 @@ jobs:
           if curl -fsSL -o "$S/wwdr.cer" https://www.apple.com/certificateauthority/AppleWWDRCAG3.cer; then security import "$S/wwdr.cer" -k "$KC" || true; fi
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KCP" "$KC" > /dev/null
           security list-keychains -d user -s "$KC" $(security list-keychains -d user | tr -d '"')
-          security find-identity -v -p codesigning "$KC" | tee -a ios-out/signing.log
+          security find-identity -v -p codesigning "$KC" | tail -n 1  # just the count: the logs are public
           for d in "$HOME/Library/MobileDevice/Provisioning Profiles" "$HOME/Library/Developer/Xcode/UserData/Provisioning Profiles"; do
             mkdir -p "$d"
             cp "$S/profile.mobileprovision" "$d/${{ steps.sign.outputs.uuid }}.mobileprovision"
