@@ -1,14 +1,42 @@
-/* ---------- where each person is in their cycle ---------- */
+/* ---------- where each person is in their cycle ----------
+   The plan's weeks follow the calendar (Monday to Sunday). Each week in which you trained is one
+   week of the plan, and "this week" counts the days you trained in it; when the week ends, the
+   days you missed stay behind. A week without training doesn't move the plan, so coming back
+   from a break never puts you straight into a harder week. */
+function semanasTreinadas(pid, planoId) {
+  const dias = new Map();
+  for (const s of sessoesDe(pid)) {
+    if (s.avaliacao || (planoId && s.planoId !== planoId)) continue;
+    const w = weekKey(s.inicio);
+    if (!dias.has(w)) dias.set(w, new Set());
+    dias.get(w).add(dayKey(s.inicio));
+  }
+  return [...dias.entries()].sort((a, b) => (a[0] < b[0] ? -1 : 1)).map(([w, d]) => ({ w, n: d.size }));
+}
 function progresso(pid) {
   const pl = plano(pid);
   if (!pl || !pl.programa) return null;
   const pg = pl.programa, nD = pg.dias.length, nW = pg.semanas.length;
   const ss = sessoesDe(pid).filter(s => s.planoId === pl.id);
   const feitos = ss.length, total = nD * nW;
-  const semanaIdx = Math.min(Math.floor(feitos / nD), nW - 1);
+  const agora = weekKey(Date.now()), W = semanasTreinadas(pid, pl.id);
+  const passadas = W.filter(x => x.w < agora), atual = W.find(x => x.w === agora);
+  const naSemana = atual ? atual.n : 0;
+  const semanaIdx = Math.min(passadas.length, nW - 1);
+  /* how far along the chapter, counted in planned days: past weeks count whole, this one by the days done */
+  const avanco = Math.min(total, passadas.length * nD + Math.min(naSemana, nD));
+  const diasSem = Array.from({ length: nW }, (_, k) => (k < passadas.length ? passadas[k].n : k === passadas.length ? naSemana : 0));
   const sem = pg.semanas[semanaIdx];
   const proxDia = ss.length ? ((Number(ss[0].dia) || 0) + 1) % nD : 0;
-  return { pl, pg, nD, nW, feitos, total, completo: feitos >= total, semanaIdx, semana: semanaIdx + 1, sem, fase: sem.fase, proxDia, naSemana: clamp(feitos - semanaIdx * nD, 0, nD) };
+  /* each stage of the map is one planned day of one week: done, missed (that week is over) or still ahead */
+  const estagio = i => {
+    const w = Math.floor(i / nD), j = i % nD;
+    if (j < Math.min(diasSem[w] || 0, nD)) return 'feito';
+    if (w < passadas.length) return 'pulado';
+    return i === avanco ? 'prox' : 'futuro';
+  };
+  const vencidas = diasSem.reduce((n, d) => n + Math.min(d, nD), 0);
+  return { pl, pg, nD, nW, feitos, total, avanco, vencidas, completo: avanco >= total, semanaIdx, semana: semanaIdx + 1, sem, fase: sem.fase, proxDia, naSemana, diasSem, passadas: passadas.length, estagio };
 }
 function alvo(item, sem) {
   const ex = exInfo(item.id, item.nome);
@@ -164,16 +192,27 @@ function jornadaDados(pid, extra, extraCardio) {
     xp += XP.treino + Math.min(ok, 40) * XP.serie + Math.min(prsPorSess[s._id] || 0, 3) * XP.recorde;
     const dk = dayKey(s.inicio);
     if (outrosDias.has(dk) && !diasJuntos.has(dk)) { diasJuntos.add(dk); xp += XP.juntos; }
+    const wk = weekKey(s.inicio);
+    /* plan weeks follow the calendar: a week counts as complete when every planned day was trained inside it */
     if (s.planoId) {
-      const p = porPlano[s.planoId] || (porPlano[s.planoId] = { n: 0, deload: 0, nDias: s.nDias || 0, total: s.total || 0 });
-      p.n++; if (s.deload) p.deload++;
+      const p = porPlano[s.planoId] || (porPlano[s.planoId] = { nDias: s.nDias || 0, total: s.total || 0, sem: new Map(), deload: new Set() });
+      if (!p.sem.has(wk)) p.sem.set(wk, new Set());
+      p.sem.get(wk).add(dk);
+      if (s.deload) p.deload.add(dk);
     }
-    const wk = weekKey(s.inicio); porSemana[wk] = (porSemana[wk] || 0) + 1;
+    porSemana[wk] = (porSemana[wk] || 0) + 1;
   }
   let semanas = 0, deloads = 0, ciclos = 0;
+  const estaSemana = weekKey(Date.now());
   for (const p of Object.values(porPlano)) {
-    if (p.nDias) { semanas += Math.floor(p.n / p.nDias); if (p.deload >= p.nDias) deloads++; }
-    if (p.total && p.n >= p.total) ciclos++;
+    if (!p.nDias) continue;
+    for (const d of p.sem.values()) if (d.size >= p.nDias) semanas++;
+    if (p.deload.size >= p.nDias) deloads++;
+    const nW = p.total ? Math.round(p.total / p.nDias) : 0;
+    if (nW) {
+      const passadas = [...p.sem.keys()].filter(w => w < estaSemana).length, atual = p.sem.get(estaSemana);
+      if (passadas >= nW || (passadas === nW - 1 && atual && atual.size >= p.nDias)) ciclos++;
+    }
   }
   xp += semanas * XP.semana + deloads * XP.deload + ciclos * XP.ciclo;
   // cardio: each session of 10+ minutes, plus a bonus for every week that hit the planned number of sessions
@@ -255,15 +294,15 @@ function etapas(pid) {
   if (iInt < 0) iInt = iDel > 0 ? iDel - 1 : pr.nW - 1;
   const iB = Math.min(iBase, iInt - 1);
   const ini = idx => idx * pr.nD;
-  const cont = (a, b) => t('of_workouts', { a: clamp(pr.feitos - a, 0, b - a), b: b - a });
+  const cont = (a, b) => t('of_workouts', { a: clamp(pr.avanco - a, 0, b - a), b: b - a });
   E.push(st('travessia', { feito: pr.feitos >= 1 }));
-  if (iB >= 0) E.push(st('provas', { feito: pr.feitos >= fim(iB), prog: cont(0, fim(iB)) }));
+  if (iB >= 0) E.push(st('provas', { feito: pr.avanco >= fim(iB), prog: cont(0, fim(iB)) }));
   const iniInt = iB >= 0 ? fim(iB) : ini(iInt);
-  E.push(st('provacao', { feito: pr.feitos >= fim(iInt), prog: cont(iniInt, fim(iInt)) }));
+  E.push(st('provacao', { feito: pr.avanco >= fim(iInt), prog: cont(iniInt, fim(iInt)) }));
   const sessCiclo = new Set(sessoesDe(pid).filter(s => s.planoId === pr.pl.id).map(s => s._id));
   const prsCiclo = recordes(pid).prs.filter(r => sessCiclo.has(r.sess)).length;
   E.push(st('recompensa', { feito: prsCiclo >= 1, lateral: true, prog: prsCiclo ? tn(prsCiclo, 'n_record', 'n_records') : '' }));
-  if (iDel >= 0) E.push(st('volta', { feito: pr.feitos >= fim(iDel), prog: cont(ini(iDel), fim(iDel)) }));
+  if (iDel >= 0) E.push(st('volta', { feito: pr.avanco >= fim(iDel), prog: cont(ini(iDel), fim(iDel)) }));
   E.push(st('retorno', { feito: pr.completo }));
   const atual = E.findIndex(e => !e.feito && !e.lateral);
   return { E, atual: atual < 0 ? E.length - 1 : atual, pr };

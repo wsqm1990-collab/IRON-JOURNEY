@@ -234,8 +234,9 @@ const P = { on: false, segs: [], ini: 0, pausa: 0, pausadoEm: 0, idx: -1, bip: '
 /* alerts: voice + beeps, beeps only, or vibration only */
 const VOZ = {
   ok: () => { if (Nat.on) return true; try { return 'speechSynthesis' in window && typeof SpeechSynthesisUtterance === 'function'; } catch { return false; } },
-  falar(txt) {
-    if (!vozLigada()) return;
+  falar(txt) { if (vozLigada()) VOZ.dizer(txt); },
+  /* speaks even with voice alerts off: only when the person asked to hear something */
+  dizer(txt) {
     if (Nat.on) { Nat.safe('speak', { text: txt, lang: LOC(), duck: duckOn() }); return; }
     try {
       const u = new SpeechSynthesisUtterance(txt), lang = LOC().toLowerCase(), vs = speechSynthesis.getVoices() || [];

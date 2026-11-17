@@ -23,6 +23,7 @@ function abrirGuia(id, nomeFallback) {
     ${fig}${pegadaHTML(id)}${fig ? ritmoHTML(id) : ''}
     ${mapa || `<p class="small muted">${esc(t('main_muscle', { x: nomeGrupo(ex.grupo) }))}</p>`}
     <div class="svc-row"><a class="svc yt" href="${esc(ytURL(ex))}" data-pkg="com.google.android.youtube" data-url="1" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">▶</span> ${esc(t('yt_videos'))}</a></div>
+    <button class="btn ghost block" data-a="exPerguntar" data-id="${esc(id)}" data-nome="${esc(nomeFallback || '')}">${I.coach}${esc(t('exq_guide_btn'))}</button>
     ${formaHTML()}
     <h3 class="h3">${t('guide_ai_title')}</h3>
     <div id="guiaIA">${AI.on ? `<p class="msg think">${t('guide_writing')}</p>` : `<p class="note">${esc(t('guide_need_key'))}</p>`}</div>

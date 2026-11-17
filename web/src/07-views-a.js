@@ -28,10 +28,12 @@ Object.assign(STR, {
   build_plan: ['Build my plan', 'Montar meu plano', 'Crear mi plan'], gym_first: ['Tick your equipment first', 'Marcar os aparelhos primeiro', 'Marca tu equipamiento primero'],
   noplan_noai: ['The AI coach isn\'t available on this account, so the plan can\'t be built here. Open the app through Claude with your own account.', 'O treinador com IA não está disponível nesta conta, então o plano não pode ser montado aqui. Abra o app pelo Claude, com a sua conta.', 'El entrenador con IA no está disponible en esta cuenta, así que el plan no se puede crear aquí. Abre la app desde Claude con tu cuenta.'],
   chapter_done: ['Chapter {n} complete', 'Capítulo {n} concluído', 'Capítulo {n} completado'], back_stronger: ['You came back stronger', 'Você voltou mais forte', 'Volviste más fuerte'],
-  chapter_done_text: ['Every session of this block is done. The coach uses what you logged to build the next chapter.', 'Todos os treinos deste ciclo foram feitos. O treinador usa o que você registrou para montar o próximo capítulo.', 'Todas las sesiones de este bloque están hechas. El entrenador usa lo que registraste para crear el siguiente capítulo.'],
+  chapter_done_text: ['The weeks of this block are over. The coach uses what you logged to build the next chapter.', 'As semanas deste ciclo terminaram. O treinador usa o que você registrou para montar o próximo capítulo.', 'Las semanas de este bloque terminaron. El entrenador usa lo que registraste para crear el siguiente capítulo.'],
   next_chapter: ['Build the next chapter', 'Gerar o próximo capítulo', 'Crear el siguiente capítulo'],
   week_of: ['Chapter {c} · Week {a} of {b}', 'Capítulo {c} · Semana {a} de {b}', 'Capítulo {c} · Semana {a} de {b}'],
-  this_week_n: ['{a} of {b} this week', '{a} de {b} nesta semana', '{a} de {b} esta semana'],
+  this_week_n: ['{a} of {b} workouts this week', '{a} de {b} treinos nesta semana', '{a} de {b} entrenamientos esta semana'],
+  this_week_more: ['{a} workouts this week (goal: {b})', '{a} treinos nesta semana (meta: {b})', '{a} entrenamientos esta semana (meta: {b})'],
+  day_trained: ['{d}: trained', '{d}: treinou', '{d}: entrenó'], day_cardio: ['{d}: cardio', '{d}: cardio', '{d}: cardio'], day_rest: ['{d}: no workout', '{d}: sem treino', '{d}: sin entrenamiento'],
   todays_workout: ['Today\'s workout', 'Treino de hoje', 'Entrenamiento de hoy'],
   effort_week: ['Effort this week: stop each set with about <b>{n}</b> reps in reserve{d}.', 'Esforço da semana: pare cada série deixando cerca de <b>{n}</b> repetições na reserva{d}.', 'Esfuerzo de la semana: termina cada serie con unas <b>{n}</b> repeticiones en reserva{d}.'],
   effort_half: [', with half the sets', ', com metade das séries', ', con la mitad de las series'],
@@ -325,7 +327,7 @@ async function salvarGym() {
 function xpMini(pid) {
   const d = jornadaDados(pid), nv = d.nivel, pct = clamp(((d.xp - nv.base) / (nv.prox - nv.base)) * 100, 0, 100), pr = progresso(pid);
   let heroi = '', onde = '';
-  try { heroi = heroiAnimHTML(heroiDe(pid, d), 'anda', 'mini'); onde = pr ? t('ally_at', { r: L3(regiaoDe(pr.pl.ciclo).nome), a: Math.min(pr.feitos + (pr.completo ? 0 : 1), pr.total), b: pr.total }) : ''; } catch { heroi = ''; }
+  try { heroi = heroiAnimHTML(heroiDe(pid, d), 'anda', 'mini'); onde = pr ? t('ally_at', { r: L3(regiaoDe(pr.pl.ciclo).nome), a: Math.min(pr.avanco + (pr.completo ? 0 : 1), pr.total), b: pr.total }) : ''; } catch { heroi = ''; }
   return `<button class="card pad xp xp-heroi" data-a="tab" data-tab="jornada" style="text-align:left;width:100%">${heroi}<span class="stack" style="gap:6px;flex:1;min-width:0">
     <span class="xp-top"><span class="lv">${t('level_n', { n: nv.n })}</span><span class="pill acc">${esc(nv.titulo)}</span><span class="small muted num" style="margin-left:auto">${d.xp - nv.base} / ${nv.prox - nv.base} XP</span></span>
     <span class="xp-track"><span class="xp-fill" style="width:${pct}%;display:block"></span></span>${onde ? `<span class="xs muted">${esc(onde)}</span>` : ''}</span></button>`;
@@ -362,6 +364,19 @@ function cardioPlanoCard(pg, pr) {
   const z = zonasFC((perfil() || {}).idade);
   return `<div class="card pad stack"><h2 class="h3">${t('cardio')}</h2>${c.resumo ? `<p class="small muted">${esc(c.resumo)}</p>` : ''}${(c.sessoes || []).length ? `<div class="exlist">${c.sessoes.map(s => linhaCardioPlano(s, pr.sem, z)).join('')}</div>` : ''}${z ? `<p class="xs muted num">${t('hr_max_est', { n: z.max })}</p>` : ''}</div>`;
 }
+/* a week as seven days, Monday first: filled = trained, ring = cardio only, today underlined */
+const diaCurto = ts => new Intl.DateTimeFormat(LOC(), { weekday: 'narrow' }).format(new Date(ts));
+const diaLongo = ts => new Intl.DateTimeFormat(LOC(), { weekday: 'long' }).format(new Date(ts));
+function semana7HTML(pid, wk, mini) {
+  const [y, m, d] = wk.split('-').map(Number), hoje = dayKey(Date.now());
+  const treino = new Set(sessoesDe(pid).filter(s => !s.avaliacao && weekKey(s.inicio) === wk).map(s => dayKey(s.inicio)));
+  const cardio = new Set(cardioDe(pid).filter(c => weekKey(c.inicio) === wk).map(c => dayKey(c.inicio)));
+  const dias = Array.from({ length: 7 }, (_, k) => new Date(y, m - 1, d + k, 12).getTime());
+  return `<div class="semana7${mini ? ' mini' : ''}">${dias.map(ts => {
+    const k = dayKey(ts), tr = treino.has(k), ca = !tr && cardio.has(k), lbl = t(tr ? 'day_trained' : ca ? 'day_cardio' : 'day_rest', { d: diaLongo(ts) });
+    return `<span class="d${tr ? ' treino' : ca ? ' cardio' : ''}${k === hoje ? ' hoje' : ''}${k > hoje ? ' depois' : ''}" title="${esc(lbl)}" aria-label="${esc(lbl)}"><b>${esc(diaCurto(ts))}</b><i>${tr ? I.check : ''}</i></span>`;
+  }).join('')}</div>`;
+}
 function viewHoje() {
   const pid = S.me, pr = progresso(pid);
   if (!pr) return `<section class="screen">${semPlanoCard()}${cardioCard(pid)}${aliadosHoje()}</section>`;
@@ -375,7 +390,8 @@ function viewHoje() {
   }).join('');
   const topo = `<div class="row between"><p class="eyebrow">${t('week_of', { c: pr.pl.ciclo, a: pr.semana, b: pr.nW })}</p><span class="pill${pr.sem.deload ? '' : ' acc'}">${esc(nomeFase(pr.fase))}</span></div>
       ${barbell(pr.pg.semanas, pr.semanaIdx, false)}
-      <div class="row between"><div class="dots">${Array.from({ length: pr.nD }, (_, i) => `<span class="dot${i < pr.naSemana ? ' on' : ''}"></span>`).join('')}</div><span class="small muted">${t('this_week_n', { a: pr.naSemana, b: pr.nD })}</span></div>
+      ${semana7HTML(pid, weekKey(Date.now()))}
+      <p class="small muted" style="margin:0">${t(pr.naSemana > pr.nD ? 'this_week_more' : 'this_week_n', { a: pr.naSemana, b: pr.nD })}</p>
       <hr class="sep">`;
   if (feitoHoje) {
     const sets = (feitoHoje.exs || []).reduce((n, x) => n + (x.sets || []).filter(z => z.ok).length, 0);

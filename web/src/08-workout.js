@@ -72,6 +72,7 @@ function exCard(x, i) {
     <div class="ex-actions">
       ${x.pulado ? `<button class="btn ghost small" data-a="despular" data-i="${i}">${t('back_to_it')}</button>` : `<button class="btn ghost small" data-a="maisSerie" data-i="${i}">${I.mais}${t('add_set')}</button>${x.sets.length > 1 ? `<button class="btn ghost small" data-a="menosSerie" data-i="${i}" aria-label="${t('remove_set')}">${I.menos}</button>` : ''}`}
       <button class="btn ghost small" data-a="guia" data-id="${esc(x.id)}" data-nome="${esc(x.nome || '')}">${I.info}${t('how_to')}</button>
+      <button class="btn ghost small" data-a="exPerguntar" data-i="${i}">${I.coach}${t('exq_btn')}</button>
       <button class="btn ghost small" data-a="trocarLive" data-i="${i}">${I.troca}${t('swap')}</button>
       ${x.pulado ? '' : `<button class="btn quiet small" data-a="pular" data-i="${i}">${t('skip')}</button>`}
     </div>

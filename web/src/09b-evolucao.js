@@ -1,4 +1,28 @@
+/* the last weeks, Monday to Sunday: which days had a workout or cardio */
+function semanasHTML(pid) {
+  const ss = sessoesDe(pid).filter(s => !s.avaliacao), cs = cardioDe(pid), todas = [...ss, ...cs];
+  if (!todas.length) return '';
+  const primeira = weekKey(Math.min(...todas.map(s => s.inicio))), linhas = [];
+  let ts = Date.now();
+  for (let k = 0; k < 8; k++) {
+    const wk = weekKey(ts);
+    if (wk < primeira) break;
+    const [y, m, d] = wk.split('-').map(Number), ini = new Date(y, m - 1, d, 12), fim = new Date(y, m - 1, d + 6, 12);
+    const nT = new Set(ss.filter(s => weekKey(s.inicio) === wk).map(s => dayKey(s.inicio))).size;
+    const nC = new Set(cs.filter(c => weekKey(c.inicio) === wk).map(c => dayKey(c.inicio))).size;
+    let faixa;
+    try { faixa = new Intl.DateTimeFormat(LOC(), { day: 'numeric', month: 'short' }).formatRange(ini, fim); } catch { faixa = ini.toLocaleDateString(LOC()) + ' – ' + fim.toLocaleDateString(LOC()); }
+    const conta = [nT ? tn(nT, 'n_day_trained', 'n_days_trained') : t('no_workout_week'), nC ? tn(nC, 'n_day_cardio', 'n_days_cardio') : ''].filter(Boolean).join(' · ');
+    linhas.push(`<div class="semana-linha"><div class="stack" style="gap:2px;min-width:0"><b class="small">${esc(k === 0 ? t('this_week_lbl') : faixa)}</b><span class="xs muted">${esc(conta)}</span></div>${semana7HTML(pid, wk, true)}</div>`);
+    ts = new Date(y, m - 1, d - 7, 12).getTime();
+  }
+  return `<div class="card pad stack" style="gap:0"><h2 class="h3" style="margin-bottom:6px">${t('weeks_title')}</h2>${linhas.join('')}</div>`;
+}
 Object.assign(STR, {
+  weeks_title: ['Your weeks', 'Suas semanas', 'Tus semanas'], this_week_lbl: ['This week', 'Esta semana', 'Esta semana'],
+  n_day_trained: ['{n} day trained', '{n} dia de treino', '{n} día de entrenamiento'], n_days_trained: ['{n} days trained', '{n} dias de treino', '{n} días de entrenamiento'],
+  n_day_cardio: ['{n} day of cardio', '{n} dia de cardio', '{n} día de cardio'], n_days_cardio: ['{n} days of cardio', '{n} dias de cardio', '{n} días de cardio'],
+  no_workout_week: ['no workout', 'sem treino', 'sin entrenamiento'],
   stats_e: ['Progress', 'Evolução', 'Progreso'], stats_h: ['Stronger every week', 'Mais forte a cada semana', 'Más fuerte cada semana'],
   stats_empty_h: ['Your numbers show up here', 'Seus números aparecem aqui', 'Tus números aparecen aquí'],
   stats_empty: ['After your first workout you\'ll see each exercise\'s progress, your records, your cardio minutes and your full history.', 'Depois do primeiro treino você vê a evolução de cada exercício, seus recordes, os minutos de cardio e o histórico completo.', 'Después de tu primer entrenamiento verás el progreso de cada ejercicio, tus récords, tus minutos de cardio y todo tu historial.'],
@@ -56,6 +80,7 @@ function viewStats(sub) {
     ${sub}
     <p class="eyebrow">${t('stats_e')}</p><h1 class="h-display h2">${t('stats_h')}</h1>
     <div class="stats"><div class="stat"><b class="num">${ss.length}</b><span>${t('st_workouts')}</span></div><div class="stat"><b class="num">${naSemana}</b><span>${t('sessions_this_week')}</span></div><div class="stat"><b class="num">${prs.length}</b><span>${t('st_records')}</span></div></div>
+    ${semanasHTML(pid)}
     ${corpoCard(pid)}
     ${avalCardHTML(perfil(pid))}
     ${lista.length ? `<div class="card pad"><div class="row between"><h2 class="h3">${t('exercises')}</h2><span class="xs muted">${t('est_strength')}</span></div>${lista.map(linhaEx).join('')}</div>` : ''}

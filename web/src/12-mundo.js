@@ -16,7 +16,7 @@ Object.assign(STR, {
   prize_real_ph: ['E.g. new running shoes', 'Ex.: um tênis novo', 'Ej.: unas zapatillas nuevas'],
   chapter_region: ['Chapter {n} · {r}', 'Capítulo {n} · {r}', 'Capítulo {n} · {r}'], stages_won: ['{a} of {b} stages won', '{a} de {b} fases vencidas', '{a} de {b} fases ganadas'],
   campaign_n: ['Campaign {n} · chapter {a} of 3', 'Campanha {n} · capítulo {a} de 3', 'Campaña {n} · capítulo {a} de 3'],
-  legend_done: ['won', 'vencida', 'ganada'], legend_next: ['next', 'próxima', 'siguiente'], legend_village: ['village (light week)', 'vila (semana leve)', 'aldea (semana ligera)'],
+  legend_done: ['won', 'vencida', 'ganada'], legend_missed: ['day that week missed', 'dia que a semana não treinou', 'día que esa semana no entrenó'], legend_next: ['next', 'próxima', 'siguiente'], legend_village: ['village (light week)', 'vila (semana leve)', 'aldea (semana ligera)'],
   legend_boss: ['boss', 'chefão', 'jefe'], legend_chest: ['cardio chest', 'baú de cardio', 'cofre de cardio'],
   mentor_name: ['Master Atlas', 'Mestre Atlas', 'Maestro Atlas'], mentor_talk: ['Talk to the master', 'Falar com o mestre', 'Hablar con el maestro'],
   m_noplan: ['Every hero needs a map. Build your training plan and I will draw the road.', 'Todo herói precisa de um mapa. Monte seu plano de treino e eu desenho a estrada.', 'Todo héroe necesita un mapa. Arma tu plan de entrenamiento y yo dibujo el camino.'],
@@ -134,7 +134,7 @@ function campanhas(pid) {
 }
 
 /* ---------- the map of the current chapter ---------- */
-const MAPA_W = 96;
+const MAPA_W = 96, MAPA_PULADO = '#7C8591'; /* a day that week didn't train: grey */
 function mapaDados(pid) {
   const pr = progresso(pid);
   if (!pr) return null;
@@ -151,7 +151,7 @@ function mapaDados(pid) {
   return { pr, R, N, H, nos, chefe, caverna, arena, curva, cardios, seed: pr.pl.id };
 }
 function mapaCanvas(M) {
-  const chave = 'mapa:' + M.seed + ':' + M.N + ':' + M.R.id + ':' + M.cardios + ':' + Math.min(M.pr.feitos, M.N);
+  const chave = 'mapa:' + M.seed + ':' + M.N + ':' + M.R.id + ':' + M.cardios + ':' + M.pr.avanco + ':' + M.pr.diasSem.join('.');
   return sprite(chave, () => {
     const { R, H, nos, chefe, caverna } = M, g = grade(MAPA_W, H), r = rnd(M.seed + 'deco');
     ret(g, 0, 0, MAPA_W, H, R.chao[0]);
@@ -175,12 +175,12 @@ function mapaCanvas(M) {
     nos.filter(o => o.deload).forEach((o, k) => { if (k % 2 === 0) cola(g, decorGrade('casa'), o.x + (o.x > 48 ? -18 : 7), o.y - 10); });
     /* the stages */
     nos.forEach(o => {
-      const feito = o.i < M.pr.feitos, prox = o.i === M.pr.feitos;
-      const cor = feito ? '#F2D25B' : prox ? '#FFFFFF' : escurece(R.trilha, 0.55);
-      elipse(g, o.x, o.y, 2.4, 2.4, PX.linha); elipse(g, o.x, o.y, 1.5, 1.5, o.deload && !feito ? '#E7A8D8' : cor);
+      const st = M.pr.estagio(o.i), feito = st === 'feito';
+      const cor = feito ? '#F2D25B' : st === 'prox' ? '#FFFFFF' : st === 'pulado' ? MAPA_PULADO : escurece(R.trilha, 0.55);
+      elipse(g, o.x, o.y, 2.4, 2.4, PX.linha); elipse(g, o.x, o.y, 1.5, 1.5, o.deload && st === 'futuro' ? '#E7A8D8' : cor);
     });
     /* cardio chests along the road */
-    for (let k = 0; k < Math.min(M.cardios, M.N); k++) { const o = nos[Math.min(M.N - 1, Math.round(((k + 0.5) * Math.max(1, M.pr.feitos)) / Math.max(1, M.cardios)))]; cola(g, itemGrade('bau', '#E2B33C'), o.x + (o.x > 48 ? 4 : -16), o.y - 6); }
+    for (let k = 0; k < Math.min(M.cardios, M.N); k++) { const o = nos[Math.min(M.N - 1, Math.round(((k + 0.5) * Math.max(1, M.pr.avanco)) / Math.max(1, M.cardios)))]; cola(g, itemGrade('bau', '#E2B33C'), o.x + (o.x > 48 ? 4 : -16), o.y - 6); }
     cola(g, decorGrade('covil'), caverna.x - 12, caverna.y - 19);
     return g;
   });
@@ -188,17 +188,17 @@ function mapaCanvas(M) {
 function mapaHTML(pid, H) {
   const M = mapaDados(pid);
   if (!M) return '';
-  const img = mapaCanvas(M), atual = Math.min(M.pr.feitos, M.N), o = atual >= M.N ? M.arena : M.nos[atual];
+  const img = mapaCanvas(M), atual = Math.min(M.pr.avanco, M.N), o = atual >= M.N ? M.arena : M.nos[atual];
   const pct = (x, tot) => ((x / tot) * 100).toFixed(2) + '%';
   const B = CHEFES_LPC[M.R.chefe], corBandeira = lpcCorUI('cloth', H.h.roupa, 4);
-  const flags = M.nos.filter(n => n.i < M.pr.feitos).map(n => `<span class="mp-flag" style="left:${pct(n.x - 1, MAPA_W)};top:${pct(n.y - 11, M.H)};width:${pct(12, MAPA_W)}">${imgPx(decor('bandeira', corBandeira))}</span>`).join('');
+  const flags = M.nos.filter(n => M.pr.estagio(n.i) === 'feito').map(n => `<span class="mp-flag" style="left:${pct(n.x - 1, MAPA_W)};top:${pct(n.y - 11, M.H)};width:${pct(12, MAPA_W)}">${imgPx(decor('bandeira', corBandeira))}</span>`).join('');
   return `<div class="mapa-rpg" style="aspect-ratio:${MAPA_W}/${M.H}">
     <img class="px mp-bg" src="${img.url}" alt="">
     ${flags}
     <span class="mp-boss${M.pr.completo ? ' won' : ''}" style="left:${pct(M.chefe.x, MAPA_W)};top:${pct(M.chefe.y, M.H)}">${lpcHTML(B.spec, { parado: true, esc: 1, cls: 'respira', alt: L3(B.nome) })}</span>
     <span class="mp-hero" style="left:${pct(o.x, MAPA_W)};top:${pct(o.y, M.H)}">${heroiAnimHTML(H, 'anda')}</span>
   </div>
-  <div class="mp-leg small">${[['#F2D25B', 'legend_done'], ['#FFFFFF', 'legend_next'], ['#E7A8D8', 'legend_village']].map(([c, k]) => `<span><i style="background:${c}"></i>${t(k)}</span>`).join('')}<span>${imgPx(itemSprite('bau', '#E2B33C'), 'ico')}${t('legend_chest')}</span><span>${imgPx(decor('covil'), 'ico')}${t('legend_boss')}</span></div>`;
+  <div class="mp-leg small">${[['#F2D25B', 'legend_done'], ['#FFFFFF', 'legend_next'], ...(M.pr.passadas && M.nos.some(n => M.pr.estagio(n.i) === 'pulado') ? [[MAPA_PULADO, 'legend_missed']] : []), ['#E7A8D8', 'legend_village']].map(([c, k]) => `<span><i style="background:${c}"></i>${t(k)}</span>`).join('')}<span>${imgPx(itemSprite('bau', '#E2B33C'), 'ico')}${t('legend_chest')}</span><span>${imgPx(decor('covil'), 'ico')}${t('legend_boss')}</span></div>`;
 }
 
 /* ---------- the journey screen ---------- */
@@ -207,7 +207,7 @@ function falaMentor(pid) {
   if (!pr) return t('m_noplan');
   if (pr.completo) return t('m_done');
   if (pr.sem.deload) return t('m_village');
-  if (pr.feitos >= pr.total - 1) return t('m_boss_next');
+  if (pr.avanco >= pr.total - 1) return t('m_boss_next');
   return pr.sem.nota ? t('m_week', { n: pr.semana, x: pr.sem.nota }) : t('m_week', { n: pr.semana, x: L3(NOTA_FASE[pr.fase] || NOTA_FASE.accum) });
 }
 const ITEM_RELIQUIA = { chamado: 'mapa', mentor: 'pergaminho', bota: 'bota', bronze: 'anilha', prata: 'anilha', ouro: 'anilha', lendaria: 'anilha', cinturao: 'cinto', campeao: 'cinto', amuleto: 'amuleto', coroa: 'coroa', calice: 'calice', elixir: 'elixir', folego: 'pulmao', coracao: 'coracao', maratona: 'medalha', selo: 'selo', laco: 'laco' };
@@ -233,7 +233,7 @@ function aliadosHTML(pid) {
   if (!outros.length) return '';
   return `<div class="stack"><h2 class="h3">${t('allies_map')}</h2><div class="aliados">${outros.map(p => {
     const H = heroiDe(p), pr = progresso(p);
-    return `<div class="aliado">${heroiAnimHTML(H, 'parado', 'mini')}<div class="stack" style="gap:2px;min-width:0"><b>${esc(H.nome)}</b><span class="xs muted">${esc(L3(H.classe.nome))} · ${t('level_n', { n: H.d.nivel.n })}</span><span class="xs muted">${pr ? esc(t('ally_at', { r: L3(regiaoDe(pr.pl.ciclo).nome), a: Math.min(pr.feitos, pr.total), b: pr.total })) : t('ally_noplan')}</span></div></div>`;
+    return `<div class="aliado">${heroiAnimHTML(H, 'parado', 'mini')}<div class="stack" style="gap:2px;min-width:0"><b>${esc(H.nome)}</b><span class="xs muted">${esc(L3(H.classe.nome))} · ${t('level_n', { n: H.d.nivel.n })}</span><span class="xs muted">${pr ? esc(t('ally_at', { r: L3(regiaoDe(pr.pl.ciclo).nome), a: pr.vencidas, b: pr.total })) : t('ally_noplan')}</span></div></div>`;
   }).join('')}</div></div>`;
 }
 function viewMundo(sub) {
@@ -250,7 +250,7 @@ function viewMundo(sub) {
       </div></div>`;
   const convite = H.criado ? '' : `<div class="note">${t('hero_create_text')}</div>`;
   const mentor = `<div class="mentor">${mentorAnimHTML('m')}<div class="balao"><b>${t('mentor_name')}</b><span>${esc(falaMentor(pid))}</span>${AI.on ? `<button class="btn quiet small" data-a="tab" data-tab="coach">${t('mentor_talk')}</button>` : ''}${pr && pr.completo ? `<button class="btn small" data-a="gerar" data-modo="proximo">${t('next_chapter')}</button>` : !pr ? `<button class="btn small" data-a="tab" data-tab="plano">${t('go_plan')}</button>` : ''}</div></div>`;
-  const regiao = pr ? `<div class="row between" style="align-items:flex-end"><h2 class="h3">${esc(t('chapter_region', { n: pr.pl.ciclo, r: L3(regiaoDe(pr.pl.ciclo).nome) }))}</h2><span class="small muted num">${esc(t('stages_won', { a: Math.min(pr.feitos, pr.total), b: pr.total }))}</span></div>` : '';
+  const regiao = pr ? `<div class="row between" style="align-items:flex-end"><h2 class="h3">${esc(t('chapter_region', { n: pr.pl.ciclo, r: L3(regiaoDe(pr.pl.ciclo).nome) }))}</h2><span class="small muted num">${esc(t('stages_won', { a: pr.vencidas, b: pr.total }))}</span></div>` : '';
   return `<section class="screen">
     ${sub}
     ${cab}${convite}

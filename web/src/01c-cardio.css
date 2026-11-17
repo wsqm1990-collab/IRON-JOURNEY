@@ -198,4 +198,26 @@ img.px.ico{width:22px;height:auto;vertical-align:-5px;margin-right:4px}
 .fig svg{touch-action:pan-y}
 .fig-ctl{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
 .fig-ctl p{margin:0}
+
+/* the week as seven days (Today card, Evolution) */
+.semana7{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:2px 0}
+.semana7 .d{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0}
+.semana7 .d b{font:600 var(--t-xs)/1 var(--f-body);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.semana7 .d i{width:28px;height:28px;border-radius:50%;border:2px solid var(--plate-edge);display:grid;place-items:center;color:var(--bg)}
+.semana7 .d i svg{width:16px;height:16px}
+.semana7 .d.treino i{background:var(--ok);border-color:var(--ok)}
+.semana7 .d.cardio i{border-color:var(--ok);border-style:dashed}
+.semana7 .d.depois i{opacity:.45}
+.semana7 .d.hoje b{color:var(--ink);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:2px}
+.semana7.mini{gap:2px}
+.semana7.mini .d b{display:none}
+.semana7.mini .d i{width:14px;height:14px;border-width:2px}
+.semana7.mini .d i svg{display:none}
+.semana-linha{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:9px 0;border-top:1px solid var(--line)}
+.semana-linha .semana7{width:118px}
+/* ask the coach about one exercise */
+.exq .msg{scroll-margin-top:84px}
+.exq-agora{margin:-6px 0 0}
+.exq-comp{position:sticky;bottom:0;z-index:1;display:flex;gap:8px;align-items:flex-end;background:var(--bg);padding-block:10px 4px;border-top:1px solid var(--line)}
+.exq-comp textarea{flex:1;min-width:0;min-height:52px;max-height:140px;resize:none}
 </style>

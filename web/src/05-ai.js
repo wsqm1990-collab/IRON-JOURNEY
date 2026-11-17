@@ -70,7 +70,7 @@ function ctxPlano(pid) {
   const dias = pr.pg.dias.map(d => `${d.nome} (${d.foco}): ` + d.exercicios.map(x => `${exInfo(x.id, x.nome).nomeEn} ${x.series}x${x.reps[0]}-${x.reps[1]}`).join('; ')).join('\n');
   const cs = (pr.pg.cardio && pr.pg.cardio.sessoes) || [];
   const cardio = cs.length ? '\nPlanned cardio: ' + cs.map(c => `${c.nome} (protocol ${c.protocolo || c.tipo}) ${c.porSemana}x/week, ${cardioAlvo(c, pr.sem).minutosAlvo} min this week, ${c.intensidade}`).join('; ') : '\nPlanned cardio: none.';
-  return `Current plan: ${pr.pg.nome}, chapter ${pr.pl.ciclo}, week ${pr.semana} of ${pr.nW} (${en3(FASES[pr.fase] || FASES.accum)}, RIR ${pr.sem.rir})\n${dias}${cardio}`;
+  return `Current plan: ${pr.pg.nome}, chapter ${pr.pl.ciclo}, week ${pr.semana} of ${pr.nW} (${en3(FASES[pr.fase] || FASES.accum)}, RIR ${pr.sem.rir}). Plan weeks follow the calendar (Monday to Sunday): every week with at least one workout is one plan week; this week they trained on ${pr.naSemana} of the ${pr.nD} planned days.\n${dias}${cardio}`;
 }
 /* a one-day change of the plan's workout (the plan itself stayed the same) */
 function ajusteEn(s) {
