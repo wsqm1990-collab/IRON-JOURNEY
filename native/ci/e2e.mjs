@@ -168,9 +168,14 @@ async function main() {
   for (let i = 0; i < 4 && teclado(); i++) { adb('shell', 'input', 'keyevent', 'KEYCODE_BACK'); await sleep(900); }
   if ((await ev('S.tab')) !== 'cardio') { await click('.tab[data-tab="cardio"]'); await sleep(500); }
   const antes = { tab: await ev('S.tab'), teclado: teclado() };
-  adb('shell', 'input', 'keyevent', 'KEYCODE_BACK'); await sleep(1200);
-  if ((await ev('S.tab')) !== 'hoje' && teclado()) { adb('shell', 'input', 'keyevent', 'KEYCODE_BACK'); await sleep(1200); }
-  check('Android back button goes to Today instead of closing', (await ev('S.tab')) === 'hoje' && (await ev('document.visibilityState')) === 'visible', { antes, depois: await ev('[S.tab, document.visibilityState]') });
+  // the keyboard app can swallow a Back press even while it isn't on screen (it never reaches the app):
+  // press again, at most twice, only while the app is still open on the same tab. Closing the app still fails.
+  let toques = 0;
+  while (toques < 3) {
+    adb('shell', 'input', 'keyevent', 'KEYCODE_BACK'); toques++; await sleep(1200);
+    if ((await ev('S.tab')) === 'hoje' || (await ev('document.visibilityState')) !== 'visible') break;
+  }
+  check('Android back button goes to Today instead of closing', (await ev('S.tab')) === 'hoje' && (await ev('document.visibilityState')) === 'visible', { antes, toques, depois: await ev('[S.tab, document.visibilityState]') });
   screen('14-today');
 
   // keyboard: a focused input must stay visible above the keyboard
