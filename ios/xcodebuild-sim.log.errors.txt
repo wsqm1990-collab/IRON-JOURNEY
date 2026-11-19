@@ -1,0 +1,5 @@
+1179:/Users/runner/work/IRON-JOURNEY/IRON-JOURNEY/native/ios/App/App/IronAudio.swift:14:17: warning: stored property 'synth' of 'Sendable'-conforming class 'IronAudio' has non-Sendable type 'AVSpeechSynthesizer'
+1254:/Users/runner/work/IRON-JOURNEY/IRON-JOURNEY/native/ios/App/App/IronAudio.swift:14:17: warning: stored property 'synth' of 'Sendable'-conforming class 'IronAudio' has non-Sendable type 'AVSpeechSynthesizer'
+1356:/Users/runner/work/IRON-JOURNEY/IRON-JOURNEY/native/ios/App/App/IronAudio.swift:14:17: warning: stored property 'synth' of 'Sendable'-conforming class 'IronAudio' has non-Sendable type 'AVSpeechSynthesizer'
+1385:/Users/runner/work/IRON-JOURNEY/IRON-JOURNEY/native/ios/App/App/IronAudio.swift:14:17: warning: stored property 'synth' of 'Sendable'-conforming class 'IronAudio' has non-Sendable type 'AVSpeechSynthesizer'
+1498:** BUILD SUCCEEDED **

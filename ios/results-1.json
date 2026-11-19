@@ -1,0 +1,197 @@
+{
+  "checks" : [
+    {
+      "detail" : [
+        "audio"
+      ],
+      "name" : "allowed to play audio in the background",
+      "pass" : true
+    },
+    {
+      "detail" : [
+        "UIInterfaceOrientationPortrait"
+      ],
+      "name" : "upright only",
+      "pass" : true
+    },
+    {
+      "detail" : "ok",
+      "name" : "page starts",
+      "pass" : true
+    },
+    {
+      "detail" : [
+        "ios",
+        true,
+        true
+      ],
+      "name" : "native bridge on iPhone",
+      "pass" : true
+    },
+    {
+      "detail" : {
+        "build" : "30.9",
+        "maker" : "Apple",
+        "model" : "arm64",
+        "platform" : "ios",
+        "sdk" : "26.5",
+        "shell" : 2,
+        "versionCode" : 30,
+        "versionName" : "1.0.30"
+      },
+      "name" : "app info",
+      "pass" : true
+    },
+    {
+      "detail" : {
+        "granted" : false
+      },
+      "name" : "notification permission can be read",
+      "pass" : true
+    },
+    {
+      "detail" : "ok",
+      "name" : "beep, voice, vibration, screen kept on",
+      "pass" : true
+    },
+    {
+      "detail" : {
+        "end" : {
+          "complete" : true,
+          "ended" : true,
+          "endedAt" : 1795098258191.073,
+          "id" : "selftest",
+          "ini" : 1795098255122,
+          "kind" : "hiit",
+          "pausa" : 0,
+          "pausadoEm" : 0,
+          "running" : false,
+          "type" : "state"
+        },
+        "ev" : {
+          "by" : "app",
+          "endedAt" : 1795098258191.073,
+          "id" : "selftest",
+          "ini" : 1795098255122,
+          "kind" : "hiit",
+          "pausa" : 0,
+          "pausadoEm" : 0,
+          "running" : false,
+          "type" : "done"
+        },
+        "mid" : {
+          "ended" : false,
+          "id" : "selftest",
+          "ini" : 1795098255122,
+          "kind" : "hiit",
+          "pausa" : 0,
+          "pausadoEm" : 0,
+          "running" : true,
+          "type" : "state"
+        },
+        "ms" : 3367
+      },
+      "name" : "interval timer runs to the end",
+      "pass" : true
+    },
+    {
+      "detail" : {
+        "after" : {
+          "complete" : false,
+          "ended" : true,
+          "endedAt" : 1795098259236,
+          "id" : "selftest2",
+          "ini" : 1795098258493,
+          "kind" : "hiit",
+          "pausa" : 0,
+          "pausadoEm" : 1795098259236,
+          "running" : false,
+          "type" : "state"
+        },
+        "ev" : {
+          "by" : "app",
+          "endedAt" : 1795098259236,
+          "id" : "selftest2",
+          "ini" : 1795098258493,
+          "kind" : "hiit",
+          "pausa" : 0,
+          "pausadoEm" : 1795098259236,
+          "running" : false,
+          "type" : "stopped"
+        },
+        "paused" : {
+          "ended" : false,
+          "id" : "selftest2",
+          "ini" : 1795098258493,
+          "kind" : "hiit",
+          "pausa" : 0,
+          "pausadoEm" : 1795098259236,
+          "running" : true,
+          "type" : "state"
+        }
+      },
+      "name" : "timer pause and stop from the app",
+      "pass" : true
+    },
+    {
+      "detail" : {
+        "by" : "app",
+        "endedAt" : 1795098260795.1091,
+        "id" : "r-selftest",
+        "ini" : 1795098259775,
+        "kind" : "rest",
+        "pausa" : 0,
+        "pausadoEm" : 0,
+        "running" : false,
+        "type" : "done"
+      },
+      "name" : "rest timer",
+      "pass" : true
+    },
+    {
+      "detail" : {
+        "length" : 104,
+        "saved" : true
+      },
+      "name" : "data copy outside the web view",
+      "pass" : true
+    },
+    {
+      "detail" : {
+        "apk" : "https:\/\/github.com\/wsqm1990-collab\/IRON-JOURNEY\/releases\/download\/v1.0.30\/IronJourney.apk",
+        "build" : 30,
+        "minShell" : 1,
+        "sha256" : "4a518d4be889580cf9b160b74899a2c7cbb003889d3bbc15ccdbb00c81ac5a64",
+        "zip" : "https:\/\/github.com\/wsqm1990-collab\/IRON-JOURNEY\/releases\/download\/v1.0.30\/web.zip"
+      },
+      "name" : "update check",
+      "pass" : true
+    },
+    {
+      "detail" : "\/Users\/runner\/Library\/Developer\/CoreSimulator\/Devices\/23C8F95C-765D-46A9-AE82-0BEE2921C8D7\/data\/Containers\/Data\/Application\/7C483C7F-5D6D-4444-8B77-C731DAD811D0\/Library\/NoCloud\/ionic_built_snapshots\/selftest30",
+      "name" : "download and unpack the update",
+      "pass" : true
+    },
+    {
+      "detail" : "ok",
+      "name" : "page restarts from the downloaded update",
+      "pass" : true
+    },
+    {
+      "detail" : "\/Users\/runner\/Library\/Developer\/CoreSimulator\/Devices\/23C8F95C-765D-46A9-AE82-0BEE2921C8D7\/data\/Containers\/Data\/Application\/7C483C7F-5D6D-4444-8B77-C731DAD811D0\/Library\/NoCloud\/ionic_built_snapshots\/selftest30",
+      "name" : "the page now comes from the update",
+      "pass" : true
+    },
+    {
+      "detail" : "kept",
+      "name" : "keep the update for the next start",
+      "pass" : true
+    },
+    {
+      "detail" : "web storage emptied",
+      "name" : "ready for the restore test",
+      "pass" : true
+    }
+  ],
+  "phase" : "1"
+}

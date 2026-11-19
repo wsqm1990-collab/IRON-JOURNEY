@@ -1,0 +1,5 @@
+Swift files: IronAudio.swift, IronBundles.swift, IronClock.swift, IronSelfTest.swift, IronTimerPlugin.swift, MainViewController.swift (added to the project)
+Info.plist: background audio, upright only, display name, no export paperwork
+SceneDelegate.swift: MainViewController
+Main.storyboard: MainViewController
+icon and launch image replaced

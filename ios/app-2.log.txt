@@ -1,0 +1,9 @@
+2026-11-19 14:25:42.795 App[19069:58759] IronTimer: using kept bundle selftest30
+2026-11-19 14:25:44.211 App[19069:58759] IronTimer: self test phase 2
+2026-11-19 14:25:44.212 App[19069:58759] IronTimer: selftest PASS allowed to play audio in the background
+2026-11-19 14:25:44.213 App[19069:58759] IronTimer: selftest PASS upright only
+2026-11-19 14:25:46.500 App[19069:58759] IronTimer: selftest PASS page starts
+2026-11-19 14:25:46.517 App[19069:58759] IronTimer: selftest PASS the kept update opens at start
+2026-11-19 14:25:46.522 App[19069:58759] IronTimer: selftest PASS data comes back from the copy
+2026-11-19 14:25:52.663 App[19069:58759] IronTimer: selftest PASS forget the update again
+2026-11-19 14:25:52.665 App[19069:58759] IronTimer: self test phase 2 done

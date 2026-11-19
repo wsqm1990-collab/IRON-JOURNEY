@@ -1,0 +1,60 @@
+⚡️  Loading app at capacitor://localhost...
+⚡️  To Native ->  IronTimer loadSnapshot 77773430
+⚡️  WebView loaded
+⚡️  TO JS {"text":null}
+⚡️  [warn] - Capacitor plugin "SystemBars" already registered. Cannot register plugins twice.
+⚡️  To Native ->  SystemBars setStyle 77773431
+⚡️  TO JS undefined
+⚡️  To Native ->  IronTimer addListener 77773432
+⚡️  To Native ->  App addListener 77773433
+⚡️  To Native ->  App addListener 77773434
+⚡️  To Native ->  IronTimer info 77773435
+⚡️  TO JS {"versionName":"1.0.30","shell":2,"platform":"ios","versionCode":30,"build":"30.9","maker":"Apple","sdk":"26.5","model":"arm64"}
+⚡️  To Native ->  IronTimer info 77773436
+⚡️  TO JS {"versionName":"1.0.30","shell":2,"platform":"ios","versionCode":30,"build":"30.9","maker":"Apple","sdk":"26.5","model":"arm64"}
+⚡️  To Native ->  IronTimer notifStatus 77773437
+⚡️  TO JS {"granted":false}
+⚡️  To Native ->  IronTimer fetchText 77773438
+⚡️  TO JS {"text":"{\"build\":30,\"zip\":\"https:\/\/github.com\/wsqm1990-collab\/IRON-JOURNEY\/releases\/download\/v1.0.30\/web.zip\",\"sha256\":\"4a518d4be889580cf9b160b74899a2c7cbb003889d3bbc15ccdbb00c81ac5a64\",\"minShell\":1,\"apk\":\"https:\/\/github.com\/wsqm
+⚡️  To Native ->  IronTimer tone 77773439
+⚡️  TO JS undefined
+⚡️  To Native ->  IronTimer speak 77773440
+⚡️  TO JS undefined
+⚡️  To Native ->  IronTimer vibrate 77773441
+⚡️  TO JS undefined
+⚡️  To Native ->  IronTimer keepAwake 77773442
+⚡️  TO JS undefined
+⚡️  To Native ->  IronTimer keepAwake 77773443
+⚡️  TO JS undefined
+⚡️  To Native ->  IronTimer addListener 77773444
+⚡️  To Native ->  IronTimer start 77773445
+⚡️  TO JS undefined
+⚡️  To Native ->  IronTimer getState 77773446
+⚡️  TO JS {"kind":"hiit","ini":1795098255122,"pausa":0,"running":true,"ended":false,"type":"state","id":"selftest","pausadoEm":0}
+⚡️  TO JS {"ini":1795098255122,"by":"app","type":"done","id":"selftest","pausadoEm":0,"endedAt":1795098258191.073,"pausa":0,"kind":"hiit","running":false}
+⚡️  TO JS {"ini":1795098255122,"by":"app","type":"done","id":"selftest","pausadoEm":0,"endedAt":1795098258191.073,"pausa":0,"kind":"hiit","running":false}
+⚡️  To Native ->  IronTimer getState 77773447
+⚡️  TO JS {"ended":true,"ini":1795098255122,"type":"state","id":"selftest","pausadoEm":0,"endedAt":1795098258191.073,"complete":true,"pausa":0,"running":false,"kind":"hiit"}
+⚡️  To Native ->  IronTimer ack 77773448
+⚡️  TO JS undefined
+⚡️  To Native ->  IronTimer start 77773449
+⚡️  TO JS undefined
+⚡️  To Native ->  IronTimer update 77773450
+⚡️  TO JS undefined
+⚡️  To Native ->  IronTimer getState 77773451
+⚡️  TO JS {"ini":1795098258493,"ended":false,"type":"state","id":"selftest2","pausadoEm":1795098259236,"pausa":0,"kind":"hiit","running":true}
+⚡️  To Native ->  IronTimer stop 77773452
+⚡️  TO JS {"ini":1795098258493,"by":"app","type":"stopped","id":"selftest2","pausadoEm":1795098259236,"endedAt":1795098259236,"pausa":0,"kind":"hiit","running":false}
+⚡️  TO JS {"ini":1795098258493,"by":"app","type":"stopped","id":"selftest2","pausadoEm":1795098259236,"endedAt":1795098259236,"pausa":0,"kind":"hiit","running":false}
+⚡️  TO JS undefined
+⚡️  To Native ->  IronTimer getState 77773453
+⚡️  TO JS {"ended":true,"ini":1795098258493,"type":"state","id":"selftest2","pausadoEm":1795098259236,"endedAt":1795098259236,"complete":false,"pausa":0,"running":false,"kind":"hiit"}
+⚡️  To Native ->  IronTimer ack 77773454
+⚡️  TO JS undefined
+⚡️  To Native ->  IronTimer start 77773455
+⚡️  TO JS undefined
+⚡️  TO JS {"ini":1795098259775,"by":"app","type":"done","id":"r-selftest","pausadoEm":0,"endedAt":1795098260795.1091,"pausa":0,"kind":"rest","running":false}
+⚡️  TO JS {"ini":1795098259775,"by":"app","type":"done","id":"r-selftest","pausadoEm":0,"endedAt":1795098260795.1091,"pausa":0,"kind":"rest","running":false}
+⚡️  To Native ->  IronTimer ack 77773456
+⚡️  TO JS undefined
+⚡️  To Native ->  IronTi
