@@ -45,7 +45,8 @@ console.log('file_paths.xml:\n' + read(fp));
 // 3. Manifest: permissions, the timer service, and the apps we can open.
 const mf = path.join(main, 'AndroidManifest.xml');
 let m = read(mf);
-const perms = ['FOREGROUND_SERVICE', 'FOREGROUND_SERVICE_MEDIA_PLAYBACK', 'POST_NOTIFICATIONS', 'WAKE_LOCK', 'VIBRATE', 'REQUEST_IGNORE_BATTERY_OPTIMIZATIONS']
+/* no REQUEST_IGNORE_BATTERY_OPTIMIZATIONS: Google Play allows it only for a few kinds of apps (the app opens its settings page instead) */
+const perms = ['FOREGROUND_SERVICE', 'FOREGROUND_SERVICE_MEDIA_PLAYBACK', 'POST_NOTIFICATIONS', 'WAKE_LOCK', 'VIBRATE']
   .filter(p => !m.includes(`android.permission.${p}"`))
   .map(p => `    <uses-permission android:name="android.permission.${p}" />`).join('\n');
 const apps = ['com.netflix.mediaclient', 'com.amazon.avod.thirdpartyclient', 'com.disney.disneyplus', 'com.wbd.stream', 'com.globo.globotv',

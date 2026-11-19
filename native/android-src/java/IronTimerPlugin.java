@@ -282,16 +282,11 @@ public class IronTimerPlugin extends Plugin {
         call.resolve(r);
     }
 
+    /* opens the app's own settings page (Battery > Unrestricted): the one-tap exemption dialog needs a
+       permission Google Play only allows for a few kinds of apps */
     @PluginMethod
     public void openBattery(PluginCall call) {
-        Context ctx = getContext();
-        try {
-            Intent i = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse("package:" + ctx.getPackageName()));
-            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            ctx.startActivity(i);
-        } catch (Exception e) {
-            openDetails(ctx);
-        }
+        openDetails(getContext());
         call.resolve();
     }
 
@@ -353,6 +348,15 @@ public class IronTimerPlugin extends Plugin {
             r.put("versionName", pi.versionName);
             r.put("versionCode", Build.VERSION.SDK_INT >= 28 ? pi.getLongVersionCode() : (long) pi.versionCode);
         } catch (Exception ignored) { }
+        /* who installed the app: "com.android.vending" means Google Play, so updates come from the store */
+        String inst = null;
+        try {
+            Context ctx = getContext();
+            PackageManager pm = ctx.getPackageManager();
+            if (Build.VERSION.SDK_INT >= 30) inst = pm.getInstallSourceInfo(ctx.getPackageName()).getInstallingPackageName();
+            else inst = pm.getInstallerPackageName(ctx.getPackageName());
+        } catch (Exception ignored) { }
+        r.put("installer", inst == null ? "" : inst);
         r.put("shell", 2); /* 2: locked in portrait */
         r.put("sdk", Build.VERSION.SDK_INT);
         r.put("maker", Build.MANUFACTURER);

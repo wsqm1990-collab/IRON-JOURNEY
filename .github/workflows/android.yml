@@ -69,11 +69,12 @@ jobs:
           node configure-android.mjs > ../ci-out/configure.log 2>&1 || { cat ../ci-out/configure.log; exit 1; }
           npx cap sync android 2>&1 | tee ../ci-out/cap-sync.log
 
-      - name: Build the APK
+      # The APK installs straight from GitHub; the .aab is the same app in the format Google Play takes.
+      - name: Build the APK and the Google Play bundle
         working-directory: native/android
         run: |
           chmod +x gradlew
-          ./gradlew --no-daemon --stacktrace assembleRelease assembleDebug > ../../ci-out/gradle.log 2>&1 || { tail -n 200 ../../ci-out/gradle.log; exit 1; }
+          ./gradlew --no-daemon --stacktrace assembleRelease assembleDebug bundleRelease > ../../ci-out/gradle.log 2>&1 || { tail -n 200 ../../ci-out/gradle.log; exit 1; }
           tail -n 30 ../../ci-out/gradle.log
 
       - name: Sign the release APK
@@ -87,6 +88,11 @@ jobs:
           "$BT/apksigner" sign --ks native/keystore/ironjourney.p12 --ks-type PKCS12 --ks-key-alias ironjourney \
             --ks-pass env:IJ_KEY_PASS --key-pass env:IJ_KEY_PASS --out ci-out/IronJourney.apk ci-out/aligned.apk
           "$BT/apksigner" verify --print-certs ci-out/IronJourney.apk | grep -i "SHA-256" | head -n 1
+          # Google Play bundle, signed with the same key (Play keeps it as the upload key)
+          cp native/android/app/build/outputs/bundle/release/app-release.aab ci-out/IronJourney-play.aab
+          jarsigner -keystore native/keystore/ironjourney.p12 -storetype PKCS12 -storepass:env IJ_KEY_PASS -keypass:env IJ_KEY_PASS \
+            -sigalg SHA256withRSA -digestalg SHA-256 ci-out/IronJourney-play.aab ironjourney > /dev/null
+          jarsigner -verify ci-out/IronJourney-play.aab | tail -n 1
           rm -f ci-out/aligned.apk native/keystore/ironjourney.p12
 
       - name: Package the release files
@@ -106,6 +112,7 @@ jobs:
           if-no-files-found: ignore
           path: |
             ci-out/IronJourney.apk
+            ci-out/IronJourney-play.aab
             ci-out/web.zip
             ci-out/version.json
 
@@ -178,7 +185,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           N=${{ github.run_number }}
-          gh release create "v1.0.$N" rel/IronJourney.apk rel/web.zip rel/version.json \
+          gh release create "v1.0.$N" rel/IronJourney.apk rel/web.zip rel/version.json $(ls rel/IronJourney-play.aab 2>/dev/null) \
             --repo "${{ github.repository }}" --title "Iron Journey 1.0.$N" --latest \
             --notes "To install: open this page on your Android phone, tap IronJourney.apk and open the download. Installed apps update by themselves."
 

@@ -2,6 +2,7 @@
 I.gear = SV('<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>');
 const REPO = 'wsqm1990-collab/iron-journey';
 const APK_URL = `https://github.com/${REPO}/releases/latest/download/IronJourney.apk`;
+const PLAY_URL = 'https://play.google.com/store/apps/details?id=com.wsqm1990.ironjourney';
 const versaoTexto = () => (Number(window.IJ_BUILD) ? '1.0.' + window.IJ_BUILD : 'dev');
 Object.assign(STR, {
   settings: ['Settings', 'Configurações', 'Ajustes'], appearance: ['Appearance', 'Aparência', 'Apariencia'], open_settings: ['Open Settings', 'Abrir Configurações', 'Abrir Ajustes'],
@@ -34,6 +35,7 @@ Object.assign(STR, {
   check_updates: ['Check for updates', 'Procurar atualização', 'Buscar actualización'], checking: ['Looking for a new version...', 'Procurando versão nova...', 'Buscando una versión nueva...'],
   up_to_date: ['You have the latest version ({v}).', 'Você já está na versão mais nova ({v}).', 'Ya tienes la versión más reciente ({v}).'], update_failed: ['Couldn\'t check for updates. Check your internet.', 'Não deu para procurar atualização. Confira a internet.', 'No se pudo buscar actualizaciones. Revisa tu internet.'], updated_to: ['Updated to version {v}.', 'Atualizado para a versão {v}.', 'Actualizado a la versión {v}.'],
   need_apk: ['A new version needs a quick reinstall.', 'Uma versão nova precisa de uma reinstalação rápida.', 'Una versión nueva necesita una reinstalación rápida.'], get_apk: ['Download', 'Baixar', 'Descargar'],
+  need_store: ['A new version of the app is waiting on Google Play.', 'Uma versão nova do app está esperando na Play Store.', 'Una versión nueva de la app te espera en Google Play.'], open_store: ['Open Play Store', 'Abrir Play Store', 'Abrir Play Store'],
   coach_need_key: ['The chat coach uses AI. Add your Anthropic key in Settings to talk to it. Your plan, workouts and journey work without it.', 'O treinador do chat usa IA. Coloque sua chave da Anthropic nas Configurações para conversar com ele. O plano, os treinos e a jornada funcionam sem ela.', 'El entrenador del chat usa IA. Añade tu clave de Anthropic en Ajustes para hablar con él. Tu plan, tus entrenamientos y la jornada funcionan sin ella.'],
   plan_local_note: ['Built-in coach: a solid evidence-based plan right away. Add your AI key in Settings for a plan tailored by AI.', 'Treinador embutido: um plano sólido, baseado em evidências, na hora. Coloque sua chave de IA nas Configurações para um plano feito sob medida pela IA.', 'Entrenador integrado: un plan sólido y basado en evidencia al instante. Añade tu clave de IA en Ajustes para un plan a medida hecho por IA.'],
 });
@@ -59,6 +61,10 @@ function ajustesHTML() {
     <div class="card pad stack"><h3 class="h3">${t('backup')}</h3><p class="small muted">${t(Nat.ios ? 'backup_note_ios' : 'backup_note')}</p>
       <button class="btn ghost block" data-a="backupSalvar">${t('backup_save')}</button>
       <label class="btn ghost block" for="backupIn">${t('backup_restore')}</label><input type="file" id="backupIn" accept="application/json,.json" hidden>
+    </div>
+    <div class="card pad stack"><h3 class="h3">${t('legal_title')}</h3>
+      <div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn ghost small" data-a="legal" data-v="privacidade">${t('privacy')}</button><button class="btn ghost small" data-a="legal" data-v="termos">${t('terms')}</button></div>
+      <button class="btn danger block" data-a="apagarTudo">${t('delete_data')}</button>
     </div>
     <details class="box"><summary>${t('art_credits')}</summary><div class="in stack"><p class="small">${esc(t('art_credits_text', { l: LPC_LICENCAS.join(', ') }))}</p><p class="xs muted">${esc(LPC_AUTORES.join(' · '))}</p><p class="xs muted">lpc.opengameart.org · github.com/LiberatedPixelCup/Universal-LPC-Spritesheet-Character-Generator</p></div></details>
     <div class="row between" style="gap:12px"><p class="xs muted num" style="margin:0">${t('version_x', { v: versaoTexto() })}</p>${Nat.on ? `<button class="btn quiet small" data-a="checarAgora">${t('check_updates')}</button>` : ''}</div>

@@ -12,7 +12,7 @@ window.__calls = [];
       if (m === 'notifStatus') return Promise.resolve({ granted: false });
       if (m === 'askNotif') return Promise.resolve({ granted: true });
       if (m === 'batteryStatus') return Promise.resolve({ ignoring: false, maker: 'Mock' });
-      if (m === 'info') return Promise.resolve({ shell: 1, versionCode: 7 });
+      if (m === 'info') return Promise.resolve({ shell: 1, versionCode: 7, installer: window.__mockInstaller || '' });
       if (m === 'fetchText') return Promise.resolve({ text: JSON.stringify({ build: 8, zip: 'https://example.invalid/web.zip', sha256: '', minShell: 1 }) });
       if (m === 'fetchBundle') return Promise.resolve({ path: '/data/bundles/8' });
       return Promise.resolve({});

@@ -162,7 +162,7 @@ function viewWizard() {
   const q = (e, titulo, corpo) => `<p class="eyebrow">${e}</p><h1 class="h-display h2">${titulo}</h1>${corpo}`;
   let html = '';
   switch (step) {
-    case 0: html = q(edit ? t('wz_edit') : t('wz_new'), t('wz_name_q'), `<label class="f" for="wz-nome">${t('wz_name')}<input class="inp" id="wz-nome" data-in="wz" data-k="nome" maxlength="30" autocomplete="given-name" value="${esc(d.nome)}" placeholder="${t('wz_name_ph')}"></label>`); break;
+    case 0: html = q(edit ? t('wz_edit') : t('wz_new'), t('wz_name_q'), `<label class="f" for="wz-nome">${t('wz_name')}<input class="inp" id="wz-nome" data-in="wz" data-k="nome" maxlength="30" autocomplete="given-name" value="${esc(d.nome)}" placeholder="${t('wz_name_ph')}"></label>${edit ? '' : aceiteHTML(d)}`); break;
     case 1: html = q(t('wz_goal_e'), t('wz_goal_q'), `<div class="stack">${OBJETIVOS.map(o => optBtn('objetivo', o.id, L3(o.nome), L3(o.desc), d.objetivo === o.id)).join('')}</div>`); break;
     case 2: html = q(t('wz_focus_e'), t('wz_focus_q'), `<p class="muted small">${t('wz_focus_note')}</p>${chipsMulti('foco', FOCOS, d.foco)}`); break;
     case 3: html = q(t('wz_level_e'), t('wz_level_q'), `<div class="stack">${NIVEIS.map(o => optBtn('nivel', o.id, L3(o.nome), L3(o.desc), d.nivel === o.id)).join('')}</div>`); break;
@@ -193,6 +193,7 @@ function viewWizard() {
 function wzValida() {
   const { step, d } = S.wizard;
   if (step === 0 && !d.nome.trim()) return t('wz_err_name');
+  if (step === 0 && !S.wizard.edit && !aceitouPerfil(d)) return t('consent_err');
   if (step === 1 && !d.objetivo) return t('wz_err_goal');
   if (step === 3 && !d.nivel) return t('wz_err_level');
   return '';

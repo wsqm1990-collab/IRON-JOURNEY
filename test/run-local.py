@@ -44,7 +44,11 @@ async def main():
         def find(cs, name, m, pred=lambda o: True): return [c for c in cs if c[0] == name and c[1] == m and pred(c[2])]
         await page.wait_for_selector(A('novoPerfil')); await page.screenshot(path=OUT + '/01-welcome.png')
         print('native on:', await page.evaluate('Nat.on'), '| header:', await page.locator('#langBtn').inner_text())
-        await tap(A('novoPerfil')); await page.fill('#wz-nome', 'Walter'); await tap(A('wzAvancar'))
+        await tap(A('novoPerfil')); await page.fill('#wz-nome', 'Walter')
+        # without ticking the consent the first step doesn't move on
+        await tap(A('wzAvancar'))
+        print('consent required:', await page.locator('[data-a="wzAceite"]').count() == 1 and await page.locator('#wz-nome').count() == 1)
+        await tap(A('wzAceite')); await tap(A('wzAvancar'))
         await tap(A('wzSet', '[data-v="hipertrofia"]')); await tap(A('wzAvancar')); await tap(A('wzToggle', '[data-v="costas"]')); await tap(A('wzAvancar'))
         await tap(A('wzSet', '[data-v="intermediario"]')); await tap(A('wzAvancar')); await tap(A('wzAvancar')); await page.fill('#wz-idade', '35'); await tap(A('wzAvancar'))
         await tap(A('wzToggle', '[data-v="joelho"]')); await tap(A('wzAvancar')); await tap(A('wzToggle', '[data-v="bike"]')); await tap(A('wzAvancar')); await tap(A('wzAvancar'))

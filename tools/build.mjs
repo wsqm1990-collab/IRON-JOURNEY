@@ -10,15 +10,18 @@ const build = Number(process.env.BUILD_NUMBER || process.argv[2] || 0);
 const HEAD = ['01-head.html', '01b-journey.css', '01c-cardio.css'];
 const BODY = ['02-body.html'];
 const JS = ['02i-i18n.js', '02n-native.js', '03-data.js', '04-store.js', '05-ai.js', '05b-key.js', '05c-local-plan.js', '06-logic.js', '06b-carga.js',
-  '07-views-a.js', '08-workout.js', '08b-cardio.js', '08c-guia.js', '08d-figura.js', '08e-musculos.js', '08f-pegada.js', '08g-casa.js', '08h-pergunta.js', '09-coach-journey.js', '09b-evolucao.js', '09c-settings.js', '09d-corpo.js', '09e-avaliacao.js', '11-pixel.js', '11a-lpc-dados.js', '11b-lpc.js', '12-mundo.js', '10-app.js'];
+  '07-views-a.js', '08-workout.js', '08b-cardio.js', '08c-guia.js', '08d-figura.js', '08e-musculos.js', '08f-pegada.js', '08g-casa.js', '08h-pergunta.js', '08i-legal.js', '09-coach-journey.js', '09b-evolucao.js', '09c-settings.js', '09d-corpo.js', '09e-avaliacao.js', '11-pixel.js', '11a-lpc-dados.js', '11b-lpc.js', '12-mundo.js', '10-app.js'];
 const read = f => fs.readFileSync(path.join(src, f), 'utf8');
 const head = HEAD.map(read).join('\n').replace(/<meta name="claude:[^>]*>\n?/g, '');
 const body = BODY.map(read).join('\n');
 const js = JS.map(f => `/* ===== ${f} ===== */\n` + read(f)).join('\n');
+// privacy policy and terms: the same texts as docs/*.md (public on GitHub), in [en, pt, es]
+const docs = path.join(root, 'docs'), doc = f => (fs.existsSync(path.join(docs, f)) ? fs.readFileSync(path.join(docs, f), 'utf8') : '');
+const legal = { privacidade: ['privacy.md', 'privacidade.md', 'privacidad.md'].map(doc), termos: ['terms.md', 'termos.md', 'terminos.md'].map(doc) };
 if (js.includes('</script')) throw new Error('a script contains </script>');
 
 // If a freshly downloaded version can't start within 15 s, go back to the previous one.
-const guard = `window.IJ_BUILD=${build};
+const guard = `window.IJ_BUILD=${build};window.IJ_LEGAL=${JSON.stringify(legal).replace(/<\//g, '<\\/')};
 setTimeout(function(){try{var tr=JSON.parse(localStorage.getItem('ij_trying')||'null');if(tr&&tr===window.IJ_BUILD&&!window.__ijOk){var C=window.Capacitor,p=window.capacitorExports&&capacitorExports.registerPlugin?capacitorExports.registerPlugin('IronTimer'):(C&&C.Plugins&&C.Plugins.IronTimer);if(p)p.reloadApp();}}catch(e){}},15000);`;
 
 const html = `<!doctype html>

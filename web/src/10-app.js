@@ -10,7 +10,8 @@ async function verShell() {
   try { if (screen.orientation && screen.orientation.lock) screen.orientation.lock('portrait').catch(() => {}); } catch { /* not supported here */ }
   if (!Nat.on) return;
   const info = await Nat.safe('info');
-  if (info && (info.shell || 1) < SHELL_IDEAL && (LS.get('ij_apk_depois') || 0) < Date.now()) { S.apkSugerido = true; render(); }
+  if (info && info.installer === 'com.android.vending') Nat.loja = 'play';
+  if (info && !Nat.loja && (info.shell || 1) < SHELL_IDEAL && (LS.get('ij_apk_depois') || 0) < Date.now()) { S.apkSugerido = true; render(); }
 }
 /* ---------- rendering ---------- */
 function viewLoading() {
@@ -19,7 +20,7 @@ function viewLoading() {
 }
 function banners() {
   if (!S.ready) return '';
-  if (S.precisaApk) return `<div class="banner row between" style="gap:12px"><span>${t(Nat.ios ? 'need_tf' : 'need_apk')}</span><button class="btn small" data-a="apkNovo">${t(Nat.ios ? 'open_tf' : 'get_apk')}</button></div>`;
+  if (S.precisaApk) return `<div class="banner row between" style="gap:12px"><span>${t(Nat.ios ? 'need_tf' : Nat.loja === 'play' ? 'need_store' : 'need_apk')}</span><button class="btn small" data-a="apkNovo">${t(Nat.ios ? 'open_tf' : Nat.loja === 'play' ? 'open_store' : 'get_apk')}</button></div>`;
   if (S.apkSugerido && !S.live) return `<div class="banner stack" style="gap:8px"><span>${t('apk_portrait')}</span><div class="row" style="gap:8px"><button class="btn small" data-a="apkNovo">${t('install')}</button><button class="btn quiet small" data-a="apkDepois">${t('not_now')}</button></div></div>`;
   if (S.mode === 'local' && !Nat.on) return `<div class="banner">${t('local_mode')}</div>`;
   if (!S.canWrite) return `<div class="banner">${t('read_only')}</div>`;
@@ -61,6 +62,7 @@ function aoFicarPronto() {
   retomarPlayerSalvo();
   lpcPreparar();
   verShell();
+  setTimeout(() => pedirAceite(), 1800);
   setTimeout(() => { window.__ijOk = true; confirmarVersao(); setTimeout(() => checarAtualizacao(true), 4000); }, 2500);
 }
 
@@ -118,7 +120,7 @@ const ACT = {
   checarAgora: () => checarAgora(),
   backupAplicar: () => aplicarBackup(),
   svcSel: el => { LS.set('ij_svc', el.dataset.v || null); render(); },
-  apkNovo: () => { if (Nat.ios) Nat.safe('openApp', { url: 'itms-beta://' }); else if (Nat.on) Nat.safe('openApp', { url: APK_URL }); else window.open(APK_URL, '_blank'); },
+  apkNovo: () => { if (Nat.ios) Nat.safe('openApp', { url: 'itms-beta://' }); else if (Nat.loja === 'play') Nat.safe('openApp', { url: PLAY_URL, pkg: 'com.android.vending', preferUrl: true }); else if (Nat.on) Nat.safe('openApp', { url: APK_URL }); else window.open(APK_URL, '_blank'); },
   apkDepois: () => { LS.set('ij_apk_depois', Date.now() + 3 * 86400000); S.apkSugerido = false; render(); },
   novoPerfil: () => { closeSheet(); novoWizard(null); render(); window.scrollTo(0, 0); },
   editarPerfil: () => { novoWizard(S.me); render(); window.scrollTo(0, 0); },
@@ -239,6 +241,12 @@ const ACT = {
   despular: el => { live(el).pulado = false; saveLiveSoon(); refreshEx(+el.dataset.i); },
   tecnica: el => abrirTecnica(+el.dataset.i),
   guia: el => abrirGuia(el.dataset.id, el.dataset.nome || ''),
+  legal: el => abrirLegal(el.dataset.v),
+  apagarTudo: () => pedirApagarDados(),
+  apagarTudoSim: () => apagarTudo(),
+  wzAceite: () => { const d = S.wizard.d; d.aceite = aceitouPerfil(d) ? null : { v: ACEITE_V, em: Date.now() }; render(); },
+  aceiteOk: () => registrarAceite(),
+  aceiteVoltar: () => pedirAceite(true),
   exPerguntar: el => abrirPergunta(el.dataset.i != null ? { i: +el.dataset.i } : { id: el.dataset.id, nome: el.dataset.nome || '' }),
   exqChip: el => perguntarEx(el.dataset.v),
   exqEnviar: () => perguntarEx(($('#exqTxt') || {}).value),

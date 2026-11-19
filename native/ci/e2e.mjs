@@ -95,7 +95,7 @@ async function main() {
   screen('01-welcome');
 
   // profile wizard (same answers a person would give)
-  await click(A('novoPerfil')); await fill('#wz-nome', 'Walter'); await click(A('wzAvancar'));
+  await click(A('novoPerfil')); await fill('#wz-nome', 'Walter'); await click(A('wzAceite')); await click(A('wzAvancar'));
   await click(A('wzSet', '[data-v="hipertrofia"]')); await click(A('wzAvancar'));
   await click(A('wzToggle', '[data-v="costas"]')); await click(A('wzAvancar'));
   await click(A('wzSet', '[data-v="intermediario"]')); await click(A('wzAvancar'));
