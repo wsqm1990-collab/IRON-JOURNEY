@@ -14,7 +14,7 @@ Tudo o que o Google Play pede para a página do app, pronto para copiar e colar.
 
 - **Categoria:** Saúde e fitness
 - **E-mail de contato:** o Gmail novo do app
-- **Política de privacidade:** https://github.com/wsqm1990-collab/iron-journey/blob/main/docs/privacidade.md
+- **Política de privacidade:** https://github.com/wsqm1990-collab/IRON-JOURNEY/blob/main/docs/privacidade.md
 - **Público-alvo:** 18 anos ou mais
 - **Anúncios:** não tem
 
