@@ -1,0 +1,3 @@
+default_voice_input_method=com.google.android.tts/com.google.android.apps.speech.tts.googletts.settings.asr.voiceime.VoiceInputMethodService
+enabled_input_methods=com.google.android.inputmethod.latin/com.android.inputmethod.latin.LatinIME:com.google.android.tts/com.google.android.apps.speech.tts.googletts.settings.asr.voiceime.VoiceInputMethodService
+voice_recognition_service=com.google.android.tts/com.google.android.apps.speech.tts.googletts.service.GoogleTTSRecognitionService
