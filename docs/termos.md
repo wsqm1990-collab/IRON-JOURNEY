@@ -1,18 +1,18 @@
 [English](terms.md) · [Español](terminos.md)
 
-# Termos de Uso do Iron Journey
+# Termos de Uso do Swordbell
 
-Última atualização: 19 de novembro de 2026
+Última atualização: 23 de novembro de 2026
 
-Ao usar o Iron Journey você concorda com estes termos. Leia com calma; eles são curtos.
+Ao usar o Swordbell você concorda com estes termos. Leia com calma; eles são curtos.
 
 ## 1. O que o app faz
 
-O Iron Journey monta e acompanha treinos de musculação e cardio, calcula cargas, guia o descanso e o cardio por voz, transforma o seu progresso numa jornada de RPG e tem um treinador de inteligência artificial (IA) que explica e ajusta o seu treino.
+O Swordbell monta e acompanha treinos de musculação e cardio, calcula cargas, guia o descanso e o cardio por voz, transforma o seu progresso numa jornada de RPG e tem um treinador de inteligência artificial (IA) que explica e ajusta o seu treino.
 
 ## 2. Sua saúde vem primeiro
 
-- O Iron Journey **não substitui** um médico, um fisioterapeuta, um nutricionista ou um profissional de educação física. O app não faz diagnóstico nem tratamento.
+- O Swordbell **não substitui** um médico, um fisioterapeuta, um nutricionista ou um profissional de educação física. O app não faz diagnóstico nem tratamento.
 - Antes de começar, converse com um médico, principalmente se você tem algum problema de saúde, dor, lesão, pressão alta, problema no coração, se está grávida ou se está voltando depois de muito tempo parado.
 - **Pare na hora** se sentir dor forte ou que piora, dor no peito, tontura, falta de ar fora do normal ou mal-estar, e procure atendimento.
 - Você é responsável por escolher cargas e exercícios que consiga fazer com segurança e por usar os aparelhos da forma correta.
@@ -37,7 +37,7 @@ Você concorda em não usar o app para nada ilegal, não tentar burlar limites d
 
 ## 6. Propriedade
 
-O app, os textos, o código e as artes próprias pertencem ao desenvolvedor do Iron Journey. Os personagens em pixel art usam artes da comunidade LPC (Liberated Pixel Cup), com os créditos e licenças listados no app, em Configurações.
+O app, os textos, o código e as artes próprias pertencem ao desenvolvedor do Swordbell. Os personagens em pixel art usam artes da comunidade LPC (Liberated Pixel Cup), com os créditos e licenças listados no app, em Configurações.
 
 ## 7. Seus dados
 

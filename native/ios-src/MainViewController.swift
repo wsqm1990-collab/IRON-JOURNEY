@@ -1,7 +1,7 @@
 import UIKit
 import Capacitor
 
-/// The app's screen: Capacitor's web view, plus Iron Journey's own native plugin, background
+/// The app's screen: Capacitor's web view, plus Swordbell's own native plugin, background
 /// audio, and the newest downloaded page when one was kept (see IronBundles).
 class MainViewController: CAPBridgeViewController {
     override func instanceDescriptor() -> InstanceDescriptor {

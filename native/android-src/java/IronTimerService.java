@@ -388,7 +388,7 @@ public class IronTimerService extends Service {
     }
 
     private Notification simpleNotification() {
-        return base().setOngoing(true).setContentTitle("Iron Journey")
+        return base().setOngoing(true).setContentTitle("Swordbell")
                 .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE).build();
     }
 

@@ -255,7 +255,7 @@ public class IronTimerPlugin: CAPPlugin, CAPBridgedPlugin {
         DispatchQueue.main.async {
             call.resolve([
                 "versionName": name, "versionCode": code, "build": build,
-                "shell": 2,  // 2: locked upright, like the Android app
+                "shell": 3,  // 2: locked upright, like the Android app; 3: the Swordbell name and icon
                 "platform": "ios", "sdk": UIDevice.current.systemVersion,
                 "maker": "Apple", "model": ijModel(),
             ])

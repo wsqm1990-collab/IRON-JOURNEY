@@ -1,3 +1,5 @@
+/* the tutorial opens by itself only in the tests that ask for it (window.__tourOn) */
+try { if (window.__tourOn) localStorage.removeItem('ij_tour_off'); else localStorage.setItem('ij_tour_off', '1'); } catch (e) { /* no storage */ }
 // A stand-in for the Android side, so the page's native paths can be tested in a desktop browser.
 window.__calls = [];
 (function () {

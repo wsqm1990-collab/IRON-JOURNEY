@@ -1,18 +1,18 @@
 [Português](termos.md) · [Español](terminos.md)
 
-# Iron Journey Terms of Use
+# Swordbell Terms of Use
 
-Last updated: November 19, 2026
+Last updated: November 23, 2026
 
-By using Iron Journey you agree to these terms. They are short; please read them.
+By using Swordbell you agree to these terms. They are short; please read them.
 
 ## 1. What the app does
 
-Iron Journey builds and follows strength and cardio workouts, works out your loads, guides your rest and cardio by voice, turns your progress into an RPG journey and has an artificial intelligence (AI) coach that explains and adjusts your training.
+Swordbell builds and follows strength and cardio workouts, works out your loads, guides your rest and cardio by voice, turns your progress into an RPG journey and has an artificial intelligence (AI) coach that explains and adjusts your training.
 
 ## 2. Your health comes first
 
-- Iron Journey **does not replace** a doctor, physical therapist, dietitian or fitness professional. The app does not diagnose or treat anything.
+- Swordbell **does not replace** a doctor, physical therapist, dietitian or fitness professional. The app does not diagnose or treat anything.
 - Before you start, talk to a doctor, especially if you have a health condition, pain, an injury, high blood pressure or a heart problem, if you are pregnant, or if you are coming back after a long break.
 - **Stop right away** if you feel strong or worsening pain, chest pain, dizziness, unusual shortness of breath or feel unwell, and get medical help.
 - You are responsible for choosing loads and exercises you can do safely and for using the equipment correctly.
@@ -37,7 +37,7 @@ You agree not to use the app for anything illegal, not to try to get around usag
 
 ## 6. Ownership
 
-The app, its texts, its code and its original artwork belong to the developer of Iron Journey. The pixel art characters use artwork from the LPC (Liberated Pixel Cup) community, with the credits and licenses listed in the app's Settings.
+The app, its texts, its code and its original artwork belong to the developer of Swordbell. The pixel art characters use artwork from the LPC (Liberated Pixel Cup) community, with the credits and licenses listed in the app's Settings.
 
 ## 7. Your data
 

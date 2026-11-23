@@ -1,7 +1,7 @@
 /* ---------- Settings: language, look, AI key, alerts, backup, version ---------- */
 I.gear = SV('<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>');
 const REPO = 'wsqm1990-collab/iron-journey';
-const APK_URL = `https://github.com/${REPO}/releases/latest/download/IronJourney.apk`;
+const APK_URL = `https://github.com/${REPO}/releases/latest/download/Swordbell.apk`;
 const PLAY_URL = 'https://play.google.com/store/apps/details?id=com.wsqm1990.ironjourney';
 const versaoTexto = () => (Number(window.IJ_BUILD) ? '1.0.' + window.IJ_BUILD : 'dev');
 Object.assign(STR, {
@@ -19,19 +19,19 @@ Object.assign(STR, {
   duck_label: ['Lower the show\'s volume while the voice talks', 'Baixar o som da série enquanto a voz fala', 'Bajar el volumen de la serie mientras habla la voz'],
   bg_title: ['So alerts keep coming while you watch something:', 'Para os avisos continuarem enquanto você assiste:', 'Para que los avisos sigan mientras ves algo:'],
   bg_notif: ['Notifications allowed', 'Notificações permitidas', 'Notificaciones permitidas'], bg_battery: ['Running in the background allowed', 'Funcionar em segundo plano permitido', 'Funcionar en segundo plano permitido'],
-  bg_note: ['If the phone ever cuts the voice mid-workout, open Settings > Apps > Iron Journey > Battery and choose "Unrestricted" (or turn on autostart).', 'Se o celular cortar a voz no meio do treino, abra Configurações > Apps > Iron Journey > Bateria e escolha "Sem restrições" (ou ative a inicialização automática).', 'Si el móvil corta la voz a mitad del entrenamiento, abre Ajustes > Apps > Iron Journey > Batería y elige "Sin restricciones" (o activa el inicio automático).'],
-  bg_note_ios: ['On iPhone the voice keeps going behind other apps on its own. Just don\'t close Iron Journey by swiping it up while you train.', 'No iPhone a voz continua por trás de outros apps sozinha. Só não feche o Iron Journey arrastando para cima durante o treino.', 'En el iPhone la voz sigue detrás de otras apps sola. Solo no cierres Iron Journey deslizándolo hacia arriba mientras entrenas.'],
+  bg_note: ['If the phone ever cuts the voice mid-workout, open Settings > Apps > Swordbell > Battery and choose "Unrestricted" (or turn on autostart).', 'Se o celular cortar a voz no meio do treino, abra Configurações > Apps > Swordbell > Bateria e escolha "Sem restrições" (ou ative a inicialização automática).', 'Si el móvil corta la voz a mitad del entrenamiento, abre Ajustes > Apps > Swordbell > Batería y elige "Sin restricciones" (o activa el inicio automático).'],
+  bg_note_ios: ['On iPhone the voice keeps going behind other apps on its own. Just don\'t close Swordbell by swiping it up while you train.', 'No iPhone a voz continua por trás de outros apps sozinha. Só não feche o Swordbell arrastando para cima durante o treino.', 'En el iPhone la voz sigue detrás de otras apps sola. Solo no cierres Swordbell deslizándolo hacia arriba mientras entrenas.'],
   backup_note_ios: ['Your workouts are saved only on this iPhone. Save a copy now and then (to iCloud Drive, for example) so you never lose them.', 'Seus treinos ficam salvos só neste iPhone. Salve uma cópia de vez em quando (no iCloud Drive, por exemplo) para nunca perder.', 'Tus entrenamientos se guardan solo en este iPhone. Guarda una copia de vez en cuando (en iCloud Drive, por ejemplo) para no perderlos nunca.'],
   need_tf: ['A new version of the app is waiting in TestFlight.', 'Uma versão nova do app está esperando no TestFlight.', 'Una versión nueva de la app te espera en TestFlight.'], open_tf: ['Open TestFlight', 'Abrir TestFlight', 'Abrir TestFlight'],
   allow: ['Allow', 'Permitir', 'Permitir'],
   backup: ['Backup', 'Cópia de segurança', 'Copia de seguridad'],
   backup_note: ['Your workouts are saved only on this phone. Save a copy now and then (to Google Drive, for example) so you never lose them.', 'Seus treinos ficam salvos só neste celular. Salve uma cópia de vez em quando (no Google Drive, por exemplo) para nunca perder.', 'Tus entrenamientos se guardan solo en este móvil. Guarda una copia de vez en cuando (en Google Drive, por ejemplo) para no perderlos.'],
   backup_save: ['Save a copy', 'Salvar uma cópia', 'Guardar una copia'], backup_restore: ['Restore from a copy', 'Restaurar de uma cópia', 'Restaurar desde una copia'],
-  backup_bad: ['That file isn\'t an Iron Journey copy.', 'Esse arquivo não é uma cópia do Iron Journey.', 'Ese archivo no es una copia de Iron Journey.'], backup_fail: ['Couldn\'t create the copy. Try again.', 'Não deu para criar a cópia. Tente de novo.', 'No se pudo crear la copia. Inténtalo de nuevo.'],
+  backup_bad: ['That file isn\'t an Swordbell copy.', 'Esse arquivo não é uma cópia do Swordbell.', 'Ese archivo no es una copia de Swordbell.'], backup_fail: ['Couldn\'t create the copy. Try again.', 'Não deu para criar a cópia. Tente de novo.', 'No se pudo crear la copia. Inténtalo de nuevo.'],
   restore_q: ['Replace everything on this phone with the copy from {d}? Workouts saved after that date will be lost.', 'Trocar tudo deste celular pela cópia de {d}? Treinos salvos depois dessa data serão perdidos.', '¿Reemplazar todo en este móvil por la copia del {d}? Se perderán los entrenamientos guardados después de esa fecha.'],
   restore_yes: ['Restore', 'Restaurar', 'Restaurar'],
-  version_x: ['Iron Journey {v} · updates install by themselves', 'Iron Journey {v} · as atualizações chegam sozinhas', 'Iron Journey {v} · las actualizaciones se instalan solas'],
-  updating: ['Updating Iron Journey...', 'Atualizando o Iron Journey...', 'Actualizando Iron Journey...'],
+  version_x: ['Swordbell {v} · updates install by themselves', 'Swordbell {v} · as atualizações chegam sozinhas', 'Swordbell {v} · las actualizaciones se instalan solas'],
+  updating: ['Updating Swordbell...', 'Atualizando o Swordbell...', 'Actualizando Swordbell...'],
   check_updates: ['Check for updates', 'Procurar atualização', 'Buscar actualización'], checking: ['Looking for a new version...', 'Procurando versão nova...', 'Buscando una versión nueva...'],
   up_to_date: ['You have the latest version ({v}).', 'Você já está na versão mais nova ({v}).', 'Ya tienes la versión más reciente ({v}).'], update_failed: ['Couldn\'t check for updates. Check your internet.', 'Não deu para procurar atualização. Confira a internet.', 'No se pudo buscar actualizaciones. Revisa tu internet.'], updated_to: ['Updated to version {v}.', 'Atualizado para a versão {v}.', 'Actualizado a la versión {v}.'],
   need_apk: ['A new version needs a quick reinstall.', 'Uma versão nova precisa de uma reinstalação rápida.', 'Una versión nueva necesita una reinstalación rápida.'], get_apk: ['Download', 'Baixar', 'Descargar'],
@@ -52,6 +52,7 @@ function ajustesHTML() {
     <div class="stack"><p class="eyebrow">${t('language')}</p><div class="seg">${LANGS.map(([c, n]) => `<button data-a="setIdioma" data-v="${c}" aria-pressed="${LANG() === c}">${n}</button>`).join('')}</div></div>
     <div class="stack"><p class="eyebrow">${t('appearance')}</p><div class="seg">${TEMAS.map(([v, n]) => `<button data-a="setTema" data-v="${v}" aria-pressed="${temaAtual() === v}">${esc(L3(n))}</button>`).join('')}</div></div>
     <div class="card pad stack"><h3 class="h3">${t('ai_coach')}</h3>${ia}</div>
+    <div class="card pad stack"><h3 class="h3">${t('tour_title')}</h3><p class="small muted">${t('tour_set_text')}</p><button class="btn ghost block" data-a="tourRever">${t('tour_replay')}</button></div>
     <div class="card pad stack"><h3 class="h3">${t('alerts')}</h3>
       <div class="row between"><span class="small">${t('alerts_mode')}</span><button class="chip" data-a="somToggleAj" aria-pressed="true">${nomeAlerta()}</button></div>
       <div class="row between" style="gap:12px"><span class="small">${t('duck_label')}</span><button class="chip" data-a="duckToggle" aria-pressed="${duckOn()}">${duckOn() ? t('on') : t('off')}</button></div>
@@ -97,7 +98,7 @@ function dadosBackup() {
   return { app: 'iron-journey', v: 1, em: Date.now(), build: window.IJ_BUILD || 'dev', dados };
 }
 async function salvarBackup() {
-  const txt = JSON.stringify(dadosBackup()), nome = 'iron-journey-' + dayKey(Date.now()) + '.json';
+  const txt = JSON.stringify(dadosBackup()), nome = 'swordbell-' + dayKey(Date.now()) + '.json';
   if (Nat.on) { try { await Nat.call('shareFile', { name: nome, text: txt, mime: 'application/json', title: t('backup_save') }); } catch { toast(t('backup_fail')); } return; }
   try { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([txt], { type: 'application/json' })); a.download = nome; document.body.appendChild(a); a.click(); a.remove(); } catch { toast(t('backup_fail')); }
 }
@@ -219,6 +220,7 @@ function atualizacaoNoInicio(seFalhar) {
 
 /* ---------- Android back button, coming back to the app ---------- */
 function voltar() {
+  if (Tour.on) { if (Tour.i > 0) tourVoltar(); else tourFechar(false); return; }
   if (!$('#sheet').hidden) { closeSheet(); return; }
   if (typeof P !== 'undefined' && P.on) { Nat.safe('minimizeApp', {}, 'App'); return; }
   if (S.sub === 'wizard' && S.wizard) { if (S.wizard.step > 0) ACT.wzVoltar(); else ACT.wzSair(); return; }

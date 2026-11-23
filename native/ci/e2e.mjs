@@ -94,6 +94,16 @@ async function main() {
   check('page fills the screen without sideways scroll', await ev('document.documentElement.scrollWidth <= innerWidth + 1'), await ev('[document.documentElement.scrollWidth, innerWidth]'));
   screen('01-welcome');
 
+  // the tutorial greets someone opening the app for the first time (the rest of this test turns it off)
+  const tour = await waitFor(`typeof Tour === 'object' && Tour.on && !!document.querySelector('#tour [data-a="tourLang"]')`, 10000);
+  check('tutorial greets a first-time person, asking the language first', tour);
+  if (tour) {
+    await click(A('tourLang', '[data-v="pt"]'), 1600);
+    check('tutorial speaks the chosen language', await ev(`(document.querySelector('#tour .sr') || {}).textContent.includes('Mestre Atlas')`), await ev(`(document.querySelector('#tour .sr') || {}).textContent.slice(0, 60)`));
+    screen('00-tutorial');
+  }
+  await ev(`(() => { localStorage.setItem('ij_tour_off', '1'); if (typeof Tour === 'object' && Tour.on) tourFechar(false); localStorage.removeItem('td_lang'); setLang('en'); render(); return true; })()`);
+
   // profile wizard (same answers a person would give)
   await click(A('novoPerfil')); await fill('#wz-nome', 'Walter'); await click(A('wzAceite')); await click(A('wzAvancar'));
   await click(A('wzSet', '[data-v="hipertrofia"]')); await click(A('wzAvancar'));

@@ -321,7 +321,7 @@ enum IronNotes {
         if used < backupIds.count { c.removePendingNotificationRequests(withIdentifiers: Array(backupIds[used...])) }
         for (i, it) in items.prefix(used).enumerated() {
             let content = UNMutableNotificationContent()
-            content.title = it.title.isEmpty ? "Iron Journey" : it.title
+            content.title = it.title.isEmpty ? "Swordbell" : it.title
             content.body = it.body
             content.sound = .default
             content.threadIdentifier = "ij-timer"

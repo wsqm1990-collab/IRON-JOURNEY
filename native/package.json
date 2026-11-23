@@ -2,7 +2,7 @@
   "name": "iron-journey-android",
   "private": true,
   "version": "1.0.0",
-  "description": "Native shells for Iron Journey (the Android and iPhone projects are generated in CI, see .github/workflows/android.yml and ios.yml)",
+  "description": "Native shells for Swordbell (the Android and iPhone projects are generated in CI, see .github/workflows/android.yml and ios.yml)",
   "dependencies": {
     "@capacitor/android": "8.6.0",
     "@capacitor/app": "8.1.2",

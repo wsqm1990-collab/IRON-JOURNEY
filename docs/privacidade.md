@@ -1,14 +1,14 @@
 [English](privacy.md) · [Español](privacidad.md)
 
-# Política de Privacidade do Iron Journey
+# Política de Privacidade do Swordbell
 
-Última atualização: 19 de novembro de 2026
+Última atualização: 23 de novembro de 2026
 
-O Iron Journey é um app de treino de musculação e cardio, com um treinador de inteligência artificial (IA) e uma jornada de RPG. Esta política explica, em palavras simples, quais dados o app usa, para quê, onde eles ficam e como você controla tudo.
+O Swordbell é um app de treino de musculação e cardio, com um treinador de inteligência artificial (IA) e uma jornada de RPG. Esta política explica, em palavras simples, quais dados o app usa, para quê, onde eles ficam e como você controla tudo.
 
 ## 1. Quem cuida dos seus dados
 
-O responsável pelos dados (o "controlador", como diz a Lei Geral de Proteção de Dados, LGPD) é o desenvolvedor do Iron Journey, no Brasil. Para falar com ele, use o e-mail de contato que aparece na página do app na Google Play ou na App Store.
+O responsável pelos dados (o "controlador", como diz a Lei Geral de Proteção de Dados, LGPD) é o desenvolvedor do Swordbell, no Brasil. Para falar com ele, use o e-mail de contato que aparece na página do app na Google Play ou na App Store.
 
 ## 2. Que dados o app usa
 
@@ -59,7 +59,7 @@ Para qualquer dúvida, escreva para o e-mail de contato.
 
 ## 8. Idade
 
-O Iron Journey é para pessoas com 18 anos ou mais.
+O Swordbell é para pessoas com 18 anos ou mais.
 
 ## 9. Segurança
 

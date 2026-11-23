@@ -1,4 +1,4 @@
-// Turns the iOS project made by `npx cap add ios` into Iron Journey for iPhone: the native timer
+// Turns the iOS project made by `npx cap add ios` into Swordbell for iPhone: the native timer
 // plugin and its screen, sound behind other apps, upright only, the icon and the launch image.
 // Run from native/ after `npx cap add ios`:   node configure-ios.mjs
 // For the TestFlight build it also sets the app's signing:   node configure-ios.mjs --sign TEAM "PROFILE NAME"
@@ -105,7 +105,7 @@ const pBool = b => (b ? '<true/>' : '<false/>');
 const pArray = items => `<array>\n${items.map(i => `\t\t<string>${xmlEsc(i)}</string>`).join('\n')}\n\t</array>`;
 
 export function configurePlist(xml) {
-  xml = plistSet(xml, 'CFBundleDisplayName', pString('Iron Journey'));
+  xml = plistSet(xml, 'CFBundleDisplayName', pString('Swordbell'));
   // sound (voice, beeps) goes on while another app is on screen
   xml = plistSet(xml, 'UIBackgroundModes', pArray(['audio']));
   // upright only, like the Android app; on an iPad it then runs full screen

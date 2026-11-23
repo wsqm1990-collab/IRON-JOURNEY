@@ -1,11 +1,11 @@
 Object.assign(STR, {
   discard_q: ['Discard this workout?', 'Descartar este treino?', '¿Descartar este entrenamiento?'], discard_text: ['The sets you logged today will be deleted. The plan stays where it was.', 'As séries registradas hoje serão apagadas. O plano continua no mesmo ponto.', 'Las series registradas hoy se borrarán. El plan sigue en el mismo punto.'],
   keep_training: ['Keep training', 'Continuar treinando', 'Seguir entrenando'],
-  apk_portrait: ['Install the new version of the app so it always stays upright (your data stays).', 'Instale a versão nova do app para ele ficar sempre na vertical (seus dados continuam).', 'Instala la versión nueva de la app para que quede siempre en vertical (tus datos se quedan).'],
+  apk_nova: ['There\'s a new version of the app with the new name and icon: Swordbell. Install it to see them (your data stays).', 'Tem uma versão nova do app com o novo nome e ícone: Swordbell. Instale para ver (seus dados continuam).', 'Hay una versión nueva de la app con el nuevo nombre e icono: Swordbell. Instálala para verlos (tus datos se quedan).'],
   install: ['Install', 'Instalar', 'Instalar'], not_now: ['Not now', 'Agora não', 'Ahora no'],
 });
-/* the native shell this web bundle hopes for (2: locked upright); older shells keep working, they just get a gentle nudge */
-const SHELL_IDEAL = 2;
+/* the native shell this web bundle hopes for (2: locked upright, 3: the Swordbell name and icon); older shells keep working, they just get a gentle nudge */
+const SHELL_IDEAL = 3;
 async function verShell() {
   try { if (screen.orientation && screen.orientation.lock) screen.orientation.lock('portrait').catch(() => {}); } catch { /* not supported here */ }
   if (!Nat.on) return;
@@ -21,7 +21,7 @@ function viewLoading() {
 function banners() {
   if (!S.ready) return '';
   if (S.precisaApk) return `<div class="banner row between" style="gap:12px"><span>${t(Nat.ios ? 'need_tf' : Nat.loja === 'play' ? 'need_store' : 'need_apk')}</span><button class="btn small" data-a="apkNovo">${t(Nat.ios ? 'open_tf' : Nat.loja === 'play' ? 'open_store' : 'get_apk')}</button></div>`;
-  if (S.apkSugerido && !S.live) return `<div class="banner stack" style="gap:8px"><span>${t('apk_portrait')}</span><div class="row" style="gap:8px"><button class="btn small" data-a="apkNovo">${t('install')}</button><button class="btn quiet small" data-a="apkDepois">${t('not_now')}</button></div></div>`;
+  if (S.apkSugerido && !S.live) return `<div class="banner stack" style="gap:8px"><span>${t('apk_nova')}</span><div class="row" style="gap:8px"><button class="btn small" data-a="apkNovo">${t('install')}</button><button class="btn quiet small" data-a="apkDepois">${t('not_now')}</button></div></div>`;
   if (S.mode === 'local' && !Nat.on) return `<div class="banner">${t('local_mode')}</div>`;
   if (!S.canWrite) return `<div class="banner">${t('read_only')}</div>`;
   return '';
@@ -45,6 +45,7 @@ function render() {
   }
   $('#view').innerHTML = banners() + html;
   const nt = $('#chatTxt'); if (nt && S.chatDraft) nt.value = S.chatDraft;
+  if (Tour.on) tourReposicionar(); else tourAgendar();
 }
 // Data arriving from another device never rebuilds the screen under someone's fingers.
 let pendente = false;
@@ -309,6 +310,12 @@ const ACT = {
   plSom: () => { proximoAlerta(); unlockAudio(); syncNativo(); tickPlayer(true); if (vozLigada()) VOZ.falar(nomeAlerta()); },
   plFim: () => terminarPlayer(false),
   forcarAbrir: () => { if (S.forceReady) S.forceReady(); },
+  /* tutorial */
+  tourProximo: () => tourProximo(),
+  tourVoltar: () => tourVoltar(),
+  tourPular: () => tourFechar(false),
+  tourLang: el => tourLang(el.dataset.v),
+  tourRever: () => tourRever(),
 };
 const INP = {
   wz: el => {
@@ -342,11 +349,15 @@ const INP = {
 document.addEventListener('click', e => {
   const el = e.target.closest('[data-a]');
   if (el && ACT[el.dataset.a] && !el.disabled) { e.preventDefault(); ACT[el.dataset.a](el, e); return; }
+  if (Tour.on) { completarTexto(); return; }
   if (e.target.id === 'sheet') closeSheet();
 });
 document.addEventListener('input', e => { const el = e.target.closest('[data-in]'); if (el && INP[el.dataset.in]) INP[el.dataset.in](el, e); });
 document.addEventListener('change', e => { const el = e.target.closest('[data-in="formaVideo"]'); if (el) analisarForma(el); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSheet(); });
+document.addEventListener('keydown', e => {
+  if (Tour.on) { if (e.key === 'Escape') tourFechar(false); else if (e.key === 'ArrowRight') tourProximo(); else if (e.key === 'ArrowLeft') tourVoltar(); return; }
+  if (e.key === 'Escape') closeSheet();
+});
 
 /* ---------- start ---------- */
 function use(name) {

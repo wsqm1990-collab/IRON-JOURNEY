@@ -52,7 +52,7 @@ final class IronSelfTest {
         """)
         await check("app info", """
           const i = await Nat.call('info');
-          return { pass: i.shell === 2 && i.platform === 'ios' && !!i.versionName, detail: i };
+          return { pass: i.shell === 3 && i.platform === 'ios' && !!i.versionName, detail: i };
         """)
         await check("notification permission can be read", """
           const n = await Nat.call('notifStatus');
@@ -61,7 +61,7 @@ final class IronSelfTest {
         await shot("home")
         await check("beep, voice, vibration, screen kept on", """
           await Nat.call('tone', { kind: 'strong' });
-          await Nat.call('speak', { text: 'Teste de voz do Iron Journey', lang: 'pt-BR', duck: true });
+          await Nat.call('speak', { text: 'Teste de voz do Swordbell', lang: 'pt-BR', duck: true });
           await Nat.call('vibrate', { pattern: [200, 100, 200] });
           await Nat.call('keepAwake', { on: true });
           await Nat.call('keepAwake', { on: false });

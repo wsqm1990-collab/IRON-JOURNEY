@@ -62,12 +62,15 @@ Object.assign(STR, {
   plan_other_lang: ['This plan was written in another language. Build a new one to get it in {x}.', 'Este plano foi escrito em outro idioma. Monte um novo para recebê-lo em {x}.', 'Este plan se escribió en otro idioma. Crea uno nuevo para tenerlo en {x}.'],
 });
 
+/* the Swordbell mark (a sword whose guard is a loaded barbell), pixel art */
+const MARCA_PNG = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAANwAAADQCAYAAABsmA/6AAAD8UlEQVR42u3dsUuUYRzA8efySoQgIoQGIQsqF8m2LIKIkwi3yM1/oIwmwSGaoq1Jgv4IoS1ClBoCE2yQbjCCysFBEClpEOPqWho6h9OX97x7H5/PZxM78973/fK7h+e9sxSIyvZOrf7/1z3d5ZKjEo8jDgEIDgQH5OP1f2Rrtt2mZ5Yavp4aH3ZOTThAcCA4sIajIGu2vdZwu1nTmXAgOEBwYA1H59ZsWddw1nQmHAgOEBxYw9G5NVveNZw1nQkHggMEB4IDBAeCA8EBggPBAYIDwQENyg5Bsc0trUX9+9feXGh672j55ueSCQcIDgQHCA4EB4IDBAfBPhyELPtsXWcu7fH4kNQ+nQkHggPBAYIDwQGCA8FBsA8H+7mA9tgnS22fzYQDwYHgAMGB4ADBgeCAYB+OAuzTmXCA4EBwgOBAcIDgQHAgOEBwIDhAcCA4EBwgOBAcIDgQHAgOEBwIDhAcCA4QHASfS/nP77GReit/XtfMnM9FjMhhP/8mHAgOBAfEvobL+5r97dJK0+/P9/c1/PzK6po13SFas8V2/k04EBwIDoh+H2593VlIWWLn34QDwYHgAMGB4ADBgeAg2Ifbp9rTx5nuhSs/euJeRgqj3devCQdeUoLggE6v4TarK44i0Wr39WvCgeBAcIDgQHCA4EBwIDhAcCA4QHAgOBAcIDgQHCA4EBwgOBAcJKC8vVPL9Ll8Pd3lqD9XMuvzPWjHlh80/f7o0eaPHz2f7f/7NfS84euHYx0+HpXLIaXryYQDLylBcED0f+M7cds/PuZ6/GI129/IvjbkmJtwIDhAcBDzGu7V+y9JPeHpmaVC/T4TvWk//8nIr6es/Zhw4CUlCA4QHAgOEBwIDpJRvnvjYimlJzw1Plyo5zsxe7We8vOfvD5Yj/l6ytqPCQdeUoLgAO+Hi9vxWwsNa4CRU2dbuqaZ2/xWcpRNOBAcIDiwhuNg3Os9EVq7hnNMTTgQHCA4EBwgOBAcIDgI9uGS92Jjy0Ew4QDBgeCAA1vDfd/66SgSrXZfvyYcCA4EB3R6DTfwetZnZgTvh4tVu69fEw4EB4IDBAeCAwQHgoNgH65Nut5VG/ZB5vv76sH74ZKR2vk34UBwIDjAZ5o0V1ldc69nwop2/k04EBwIDsjJ+qZgXg4MtXQf6s6nZefYhAPBAYIDwQGCA8EBgoPgXsrg78M5CCYcIDgQHCA4EBwIDhAcBO+HI58/H+7nev/b1sZypn9/8vaCc27CgeAAwYE1HPs0/+xcw5rtyuDpXD9vsbqe6/GVya+uARMOBAcIDgQHCA4EB4IDBAeCAwQHgoPgXkpCQe6tPGjunTThQHCA4CBqfwF3GsTpqOT5RQAAAABJRU5ErkJggg==';
 /* ---------- chrome: people, tabs, language, toast, sheet ---------- */
 function corDe(pid) { const i = S.ordem.indexOf(pid); return CORES[(i < 0 ? 0 : i) % CORES.length]; }
 function avatar(pid, cls = 'av') { const p = S.perfis[pid]; return `<span class="${cls}" style="background:${corDe(pid)}">${esc(((p && p.nome) || '?').trim().charAt(0).toUpperCase())}</span>`; }
 function renderPeople() {
   const el = $('#people');
   $('#brandSub').textContent = t('app_sub');
+  const mk = $('#brandMk'); if (mk && !mk.src) mk.src = MARCA_PNG;
   $('#langBtn').innerHTML = I.gear + '<span>' + LANG().toUpperCase() + '</span>';
   $('#langBtn').setAttribute('aria-label', t('settings'));
   if (!S.ready || !S.ordem.length) { el.innerHTML = ''; return; }
@@ -106,6 +109,7 @@ function closeSheet() {
   if ($('#sheet').hidden) return;
   $('#sheet').hidden = true; if (!P.on) document.documentElement.style.overflow = '';
   const f = Sheet.onClose; Sheet.onClose = null; if (f) f();
+  tourAgendar();
 }
 
 /* ---------- the barbell: one plate per week, colored like competition plates ---------- */
@@ -136,12 +140,12 @@ function viewWelcome() {
     <div class="seg">${LANGS.map(([c, n]) => `<button data-a="setIdioma" data-v="${c}" aria-pressed="${LANG() === c}">${n}</button>`).join('')}</div>
     <div class="hero">
       <p class="eyebrow">${t('welcome_eyebrow')}</p>
-      <h1 class="h-display h1">Iron Journey</h1>
+      <div class="marca"><img src="${MARCA_PNG}" alt="" width="72" height="68"><h1 class="h-display h1">Swordbell</h1></div>
       ${barbell(demo, 1, false)}
       <p class="lead">${t('welcome_lead')}</p>
       <button class="btn big block" data-a="novoPerfil">${t('create_profile')}</button>
     </div>
-    <div class="card pad stack"><h2 class="h3">${t('how_it_works')}</h2>
+    <div class="card pad stack" id="comoFunciona"><h2 class="h3">${t('how_it_works')}</h2>
       <ol class="stack small" style="margin:0;padding-left:20px"><li>${t('how1')}</li><li>${t('how2')}</li><li>${t('how3')}</li><li>${t('how4')}</li></ol></div>
   </section>`;
 }

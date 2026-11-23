@@ -7,26 +7,27 @@ Tudo o que o Google Play pede para a página do app, pronto para copiar e colar.
 | O que | Arquivo | Tamanho |
 |---|---|---|
 | Ícone | `icon-512.png` | 512 × 512 |
+| Foto do Gmail, marca e nome (para redes e e-mail) | pasta `store/brand/` | |
 | Imagem de destaque | `feature-graphic-pt-BR.png` (e `-en-US`, `-es-419`) | 1024 × 500 |
 | Capturas do celular (7) | pastas `pt-BR/`, `en-US/`, `es-419/`, arquivos `phone-1.png` a `phone-7.png` | 1080 × 1920 |
 
 ## Dados gerais
 
 - **Categoria:** Saúde e fitness
-- **E-mail de contato:** o Gmail novo do app
+- **E-mail de contato:** o Gmail novo do app (sugestão: swordbell.app@gmail.com)
 - **Política de privacidade:** https://github.com/wsqm1990-collab/IRON-JOURNEY/blob/main/docs/privacidade.md
 - **Público-alvo:** 18 anos ou mais
 - **Anúncios:** não tem
 
 ## Português (pt-BR)
 
-**Nome do app (até 30):** Iron Journey: Treino RPG
+**Nome do app (até 30):** Swordbell: Treino RPG
 
 **Descrição curta (até 80):** Treino de academia com personal de IA. Cada treino vira uma fase de RPG.
 
 **Descrição completa:**
 
-Transforme a academia numa aventura. O Iron Journey monta o seu treino de musculação e cardio com um personal de inteligência artificial e transforma cada treino numa fase de RPG em pixel art.
+Transforme a academia numa aventura. O Swordbell monta o seu treino de musculação e cardio com um personal de inteligência artificial e transforma cada treino numa fase de RPG em pixel art.
 
 PERSONAL DE IA QUE CONHECE VOCÊ
 • Plano feito para o seu objetivo, o seu nível, os seus dias e os aparelhos da sua academia
@@ -51,20 +52,23 @@ UMA JORNADA DE RPG
 SUA SEMANA, DIA A DIA
 • Veja os dias em que você treinou e a sua evolução em cada exercício
 
+FÁCIL DESDE O PRIMEIRO DIA
+• O Mestre Atlas, o seu guia, mostra cada tela na primeira vez que você usa
+
 PRIVACIDADE
 • Seus dados ficam no seu celular. Sem anúncios.
 
-O Iron Journey não substitui um médico. Se você tem algum problema de saúde, converse com um médico antes de começar.
+O Swordbell não substitui um médico. Se você tem algum problema de saúde, converse com um médico antes de começar.
 
 ## English (en-US)
 
-**App name (up to 30):** Iron Journey: RPG Workout
+**App name (up to 30):** Swordbell: RPG Workout
 
 **Short description (up to 80):** Gym workouts with an AI coach. Every workout becomes a level in your RPG.
 
 **Full description:**
 
-Turn the gym into an adventure. Iron Journey builds your strength and cardio training with an artificial intelligence coach and turns every workout into a level of a pixel-art RPG.
+Turn the gym into an adventure. Swordbell builds your strength and cardio training with an artificial intelligence coach and turns every workout into a level of a pixel-art RPG.
 
 AN AI COACH THAT KNOWS YOU
 • A plan built for your goal, your level, your days and the equipment at your gym
@@ -89,20 +93,23 @@ AN RPG JOURNEY
 YOUR WEEK, DAY BY DAY
 • See the days you trained and your progress on every exercise
 
+EASY FROM DAY ONE
+• Master Atlas, your guide, shows you each screen the first time you use it
+
 PRIVACY
 • Your data stays on your phone. No ads.
 
-Iron Journey does not replace a doctor. If you have a health condition, talk to a doctor before you start.
+Swordbell does not replace a doctor. If you have a health condition, talk to a doctor before you start.
 
 ## Español (es-419)
 
-**Nombre de la app (hasta 30):** Iron Journey: Rutina RPG
+**Nombre de la app (hasta 30):** Swordbell: Rutina RPG
 
 **Descripción breve (hasta 80):** Gimnasio con entrenador de IA. Cada entreno es un nivel de tu RPG.
 
 **Descripción completa:**
 
-Convierte el gimnasio en una aventura. Iron Journey crea tu entrenamiento de fuerza y cardio con un entrenador de inteligencia artificial y convierte cada entreno en un nivel de un RPG en pixel art.
+Convierte el gimnasio en una aventura. Swordbell crea tu entrenamiento de fuerza y cardio con un entrenador de inteligencia artificial y convierte cada entreno en un nivel de un RPG en pixel art.
 
 UN ENTRENADOR DE IA QUE TE CONOCE
 • Un plan hecho para tu objetivo, tu nivel, tus días y los aparatos de tu gimnasio
@@ -127,10 +134,13 @@ UNA JORNADA RPG
 TU SEMANA, DÍA A DÍA
 • Mira los días que entrenaste y tu progreso en cada ejercicio
 
+FÁCIL DESDE EL PRIMER DÍA
+• El Maestro Atlas, tu guía, te muestra cada pantalla la primera vez que la usas
+
 PRIVACIDAD
 • Tus datos quedan en tu móvil. Sin anuncios.
 
-Iron Journey no reemplaza a un médico. Si tienes algún problema de salud, habla con un médico antes de empezar.
+Swordbell no reemplaza a un médico. Si tienes algún problema de salud, habla con un médico antes de empezar.
 
 ## Formulários do Play Console (respostas sugeridas)
 

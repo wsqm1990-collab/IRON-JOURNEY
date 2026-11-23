@@ -1,7 +1,7 @@
 name: Android app
 
 # Every push to main builds the app, tests it on an Android emulator and, if it works,
-# publishes a release: IronJourney.apk (install once) and web.zip (the automatic update).
+# publishes a release: Swordbell.apk (install once; also as IronJourney.apk for older versions) and web.zip (the automatic update).
 on:
   push:
     branches: [main]
@@ -89,10 +89,10 @@ jobs:
             --ks-pass env:IJ_KEY_PASS --key-pass env:IJ_KEY_PASS --out ci-out/IronJourney.apk ci-out/aligned.apk
           "$BT/apksigner" verify --print-certs ci-out/IronJourney.apk | grep -i "SHA-256" | head -n 1
           # Google Play bundle, signed with the same key (Play keeps it as the upload key)
-          cp native/android/app/build/outputs/bundle/release/app-release.aab ci-out/IronJourney-play.aab
+          cp native/android/app/build/outputs/bundle/release/app-release.aab ci-out/Swordbell-play.aab
           jarsigner -keystore native/keystore/ironjourney.p12 -storetype PKCS12 -storepass:env IJ_KEY_PASS -keypass:env IJ_KEY_PASS \
-            -sigalg SHA256withRSA -digestalg SHA-256 ci-out/IronJourney-play.aab ironjourney > /dev/null
-          jarsigner -verify ci-out/IronJourney-play.aab | tail -n 1
+            -sigalg SHA256withRSA -digestalg SHA-256 ci-out/Swordbell-play.aab ironjourney > /dev/null
+          jarsigner -verify ci-out/Swordbell-play.aab | tail -n 1
           rm -f ci-out/aligned.apk native/keystore/ironjourney.p12
 
       - name: Package the release files
@@ -101,8 +101,10 @@ jobs:
           R="https://github.com/${{ github.repository }}/releases/download/v1.0.$N"
           mkdir -p apk && cp native/android/app/build/outputs/apk/debug/app-debug.apk apk/IronJourney-debug.apk
           (cd native/www && zip -qr -X ../../ci-out/web.zip .)
+          # the app is called Swordbell now; IronJourney.apk stays for phones with an older version, which download that name
+          if [ -f ci-out/IronJourney.apk ]; then cp ci-out/IronJourney.apk ci-out/Swordbell.apk; fi
           SHA=$(sha256sum ci-out/web.zip | cut -d' ' -f1)
-          printf '{"build":%s,"zip":"%s/web.zip","sha256":"%s","minShell":1,"apk":"%s/IronJourney.apk"}\n' "$N" "$R" "$SHA" "$R" > ci-out/version.json
+          printf '{"build":%s,"zip":"%s/web.zip","sha256":"%s","minShell":1,"apk":"%s/Swordbell.apk"}\n' "$N" "$R" "$SHA" "$R" > ci-out/version.json
           cat ci-out/version.json
           ls -la ci-out apk
 
@@ -111,8 +113,9 @@ jobs:
           name: release-files
           if-no-files-found: ignore
           path: |
+            ci-out/Swordbell.apk
             ci-out/IronJourney.apk
-            ci-out/IronJourney-play.aab
+            ci-out/Swordbell-play.aab
             ci-out/web.zip
             ci-out/version.json
 
@@ -185,9 +188,9 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           N=${{ github.run_number }}
-          gh release create "v1.0.$N" rel/IronJourney.apk rel/web.zip rel/version.json $(ls rel/IronJourney-play.aab 2>/dev/null) \
-            --repo "${{ github.repository }}" --title "Iron Journey 1.0.$N" --latest \
-            --notes "To install: open this page on your Android phone, tap IronJourney.apk and open the download. Installed apps update by themselves."
+          gh release create "v1.0.$N" rel/Swordbell.apk rel/IronJourney.apk rel/web.zip rel/version.json $(ls rel/Swordbell-play.aab 2>/dev/null) \
+            --repo "${{ github.repository }}" --title "Swordbell 1.0.$N" --latest \
+            --notes "To install: open this page on your Android phone, tap Swordbell.apk and open the download. Installed apps update by themselves. (IronJourney.apk is the same app, kept for phones with an older version.)"
 
   report:
     needs: [build, test, release]
