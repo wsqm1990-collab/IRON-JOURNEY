@@ -357,7 +357,7 @@ public class IronTimerPlugin extends Plugin {
             else inst = pm.getInstallerPackageName(ctx.getPackageName());
         } catch (Exception ignored) { }
         r.put("installer", inst == null ? "" : inst);
-        r.put("shell", 3); /* 2: locked in portrait, 3: the Swordbell name and icon */
+        r.put("shell", 4); /* 2: locked in portrait, 3: the Swordbell name and icon, 4: the shield logo */
         r.put("sdk", Build.VERSION.SDK_INT);
         r.put("maker", Build.MANUFACTURER);
         r.put("model", Build.MODEL);

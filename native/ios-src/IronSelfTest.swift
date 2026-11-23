@@ -52,7 +52,7 @@ final class IronSelfTest {
         """)
         await check("app info", """
           const i = await Nat.call('info');
-          return { pass: i.shell === 3 && i.platform === 'ios' && !!i.versionName, detail: i };
+          return { pass: i.shell === 4 && i.platform === 'ios' && !!i.versionName, detail: i };
         """)
         await check("notification permission can be read", """
           const n = await Nat.call('notifStatus');

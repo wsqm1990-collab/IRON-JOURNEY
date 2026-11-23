@@ -1,11 +1,11 @@
 Object.assign(STR, {
   discard_q: ['Discard this workout?', 'Descartar este treino?', '¿Descartar este entrenamiento?'], discard_text: ['The sets you logged today will be deleted. The plan stays where it was.', 'As séries registradas hoje serão apagadas. O plano continua no mesmo ponto.', 'Las series registradas hoy se borrarán. El plan sigue en el mismo punto.'],
   keep_training: ['Keep training', 'Continuar treinando', 'Seguir entrenando'],
-  apk_nova: ['There\'s a new version of the app with the new name and icon: Swordbell. Install it to see them (your data stays).', 'Tem uma versão nova do app com o novo nome e ícone: Swordbell. Instale para ver (seus dados continuam).', 'Hay una versión nueva de la app con el nuevo nombre e icono: Swordbell. Instálala para verlos (tus datos se quedan).'],
+  apk_nova: ['There\'s a new version of the app with the new Swordbell logo. Install it to see it (your data stays).', 'Tem uma versão nova do app com a logo nova do Swordbell. Instale para ver (seus dados continuam).', 'Hay una versión nueva de la app con el nuevo logo de Swordbell. Instálala para verlo (tus datos se quedan).'],
   install: ['Install', 'Instalar', 'Instalar'], not_now: ['Not now', 'Agora não', 'Ahora no'],
 });
 /* the native shell this web bundle hopes for (2: locked upright, 3: the Swordbell name and icon); older shells keep working, they just get a gentle nudge */
-const SHELL_IDEAL = 3;
+const SHELL_IDEAL = 4;
 async function verShell() {
   try { if (screen.orientation && screen.orientation.lock) screen.orientation.lock('portrait').catch(() => {}); } catch { /* not supported here */ }
   if (!Nat.on) return;
