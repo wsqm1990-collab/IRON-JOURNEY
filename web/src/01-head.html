@@ -58,17 +58,20 @@ button{cursor:pointer}
 /* top bar */
 .top{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--bg);border-bottom:1px solid var(--line)}
 .top .wrap{display:flex;align-items:center;gap:12px;padding-block:10px}
-.brand{display:flex;align-items:center;gap:8px;font-family:var(--f-display);font-weight:800;font-size:20px;letter-spacing:.02em;text-transform:uppercase;white-space:nowrap;line-height:1}
-.brand-mk{width:30px;height:28px;flex:none}
+.brand{display:flex;align-items:center;gap:7px;font-family:var(--f-display);font-weight:800;font-size:20px;letter-spacing:.02em;text-transform:uppercase;white-space:nowrap;line-height:1}
+.brand-mk{width:26px;height:auto;flex:none}
 .marca{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px}
 .marca img{width:72px;height:68px;flex:none}
-.brand small{display:block;font-family:var(--f-body);font-weight:500;font-size:11px;letter-spacing:.08em;color:var(--muted)}
+.brand small{display:block;font-family:var(--f-body);font-weight:500;font-size:11px;letter-spacing:.05em;color:var(--muted)}
 .people{display:flex;gap:6px;margin-left:auto;overflow-x:auto;scrollbar-width:none;min-width:0}
 .people::-webkit-scrollbar{display:none}
 .who{display:flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:4px 10px 4px 4px;font-weight:600;font-size:var(--t-sm);white-space:nowrap;min-height:36px}
 .who[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
 .who .av{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;color:#fff;font-family:var(--f-cond);font-size:15px;font-weight:700;border:2px solid rgba(255,255,255,.35)}
 .who.add{padding:4px 12px;color:var(--muted)}
+/* a name too long for the space beside the title: just the round initial (the name stays in its label) */
+.people.compacto .who{padding:4px}
+.people.compacto .who .nm{display:none}
 
 main{padding-block:16px calc(var(--tab-h) + 120px + env(safe-area-inset-bottom,0px))}
 .screen{display:flex;flex-direction:column;gap:16px}
