@@ -15,6 +15,7 @@
 .tour-mentor{width:64px;height:100px;position:relative;overflow:hidden;align-self:end}
 .tour-mentor .lpc{position:absolute;left:-32px;top:-10px}
 .tour-fala{display:flex;flex-direction:column;gap:8px;min-width:0}
+.tour-fala:focus{outline:none}
 .tour-cab{display:flex;align-items:center;gap:10px;min-height:30px}
 .tour-nome{font-family:var(--f-display);font-weight:800;font-size:20px;line-height:1;letter-spacing:.04em;text-transform:uppercase;color:#F2C230;white-space:nowrap}
 .tour-n{font-size:12px;font-weight:600;color:#A3B2C7;white-space:nowrap}

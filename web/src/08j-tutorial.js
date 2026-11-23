@@ -247,8 +247,9 @@ function tourMostrar() {
     digitar(txt);
   }
   requestAnimationFrame(() => { tourPosicionar(true); requestAnimationFrame(() => tourPosicionar(false)); });
-  const b = fala.querySelector('[data-a="tourProximo"], [data-a="tourLang"]');
-  if (b) try { b.focus({ preventScroll: true }); } catch { /* old browser */ }
+  /* focus goes to the box, not to a button: a ring on "English" would look like an answer already chosen */
+  fala.tabIndex = -1;
+  try { fala.focus({ preventScroll: true }); } catch { /* old browser */ }
 }
 /* the text appears like an RPG dialog, in about a second (all at once with reduced motion) */
 function digitar(txt) {
