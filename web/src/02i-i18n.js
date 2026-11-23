@@ -21,7 +21,7 @@ function t(k, v) {
 }
 const tn = (n, one, many, v) => t(n === 1 ? one : many, { n, ...(v || {}) });
 Object.assign(STR, {
-  app_sub: ['strength and cardio', 'musculação e cardio', 'fuerza y cardio'],
+  app_sub: ['workout + RPG', 'musculação + RPG', 'musculación + RPG'],
   close: ['Close', 'Fechar', 'Cerrar'],
   cancel: ['Cancel', 'Cancelar', 'Cancelar'],
   continue: ['Continue', 'Continuar', 'Continuar'],
