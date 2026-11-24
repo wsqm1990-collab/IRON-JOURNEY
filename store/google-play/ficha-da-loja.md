@@ -9,7 +9,7 @@ Tudo o que o Google Play pede para a página do app, pronto para copiar e colar.
 | Ícone | `icon-512.png` | 512 × 512 |
 | Foto do Gmail, marca e nome (para redes e e-mail) | pasta `store/brand/` | |
 | Imagem de destaque | `feature-graphic-pt-BR.png` (e `-en-US`, `-es-419`) | 1024 × 500 |
-| Capturas do celular (7) | pastas `pt-BR/`, `en-US/`, `es-419/`, arquivos `phone-1.png` a `phone-7.png` | 1080 × 1920 |
+| Capturas do celular (8) | pastas `pt-BR/`, `en-US/`, `es-419/`, arquivos `phone-1.png` a `phone-8.png` | 1080 × 1920 |
 
 ## Dados gerais
 
@@ -48,6 +48,7 @@ UMA JORNADA DE RPG
 • Crie o seu herói em pixel art
 • Cada dia de treino vence uma fase do mapa, e o chefão espera no fim do capítulo
 • XP, níveis e relíquias pela sua constância
+• Arsenal: cada treino abre um baú com armas, escudos e armaduras para o seu herói, e cada tipo de treino fortalece um poder. Só treinando se ganha, nunca pagando
 
 SUA SEMANA, DIA A DIA
 • Veja os dias em que você treinou e a sua evolução em cada exercício
@@ -89,6 +90,7 @@ AN RPG JOURNEY
 • Create your pixel-art hero
 • Every training day clears a stage of the map, and the boss waits at the end of the chapter
 • XP, levels and relics for showing up
+• Arsenal: every workout opens a chest with weapons, shields and armour for your hero, and each kind of workout trains a power. You earn them by training, never by paying
 
 YOUR WEEK, DAY BY DAY
 • See the days you trained and your progress on every exercise
@@ -130,6 +132,7 @@ UNA JORNADA RPG
 • Crea tu héroe en pixel art
 • Cada día de entreno supera una fase del mapa, y el jefe espera al final del capítulo
 • XP, niveles y reliquias por tu constancia
+• Arsenal: cada entreno abre un cofre con armas, escudos y armaduras para tu héroe, y cada tipo de entreno fortalece un poder. Se ganan entrenando, nunca pagando
 
 TU SEMANA, DÍA A DÍA
 • Mira los días que entrenaste y tu progreso en cada ejercicio

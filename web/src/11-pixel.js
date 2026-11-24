@@ -101,6 +101,23 @@ function itemGrade(tipo, cor) {
       ret(g, 6, 5, 2, 4, esc2); ret(g, 4, 9, 6, 1, esc2); pinta(g, 6, 9, luz2); pinta(g, 7, 9, luz2); ret(g, 4, 4, 1, 4, luz2); pinta(g, 2, 3, luz2); pinta(g, 9, 3, luz2); break;
     case 'arco': for (let k = -5; k <= 5; k++) pinta(g, 4 + Math.round(4 - (k * k) / 6.5), 7 + k, cor); linha(g, 4, 2, 4, 12, '#E9E4D8'); linha(g, 2, 7, 12, 7, PX.aco); break;
     case 'cajado': linha(g, 7, 13, 7, 4, PX.madeira); elipse(g, 7, 3, 2.5, 2.5, cor); pinta(g, 6, 2, '#FFFFFF'); break;
+    /* the Arsenal's pieces */
+    case 'adaga': linha(g, 6, 8, 11, 3, cor, 2); linha(g, 7, 7, 11, 3, luz2, 1); linha(g, 4, 7, 7, 10, '#C99A2E', 2); linha(g, 5, 9, 3, 11, '#6B4A2E', 2); pinta(g, 2, 12, '#E2B33C'); break;
+    case 'maca': linha(g, 2, 12, 8, 6, PX.madeira, 2); elipse(g, 9.5, 4.5, 3.2, 3.2, cor); [[9, 0], [13, 4], [6, 3], [12, 1], [12, 8], [8, 8]].forEach(([x, y]) => pinta(g, x, y, esc2)); pinta(g, 8, 3, luz2); pinta(g, 9, 3, luz2); break;
+    case 'machado': linha(g, 2, 12, 10, 2, PX.madeira, 2); elipse(g, 10, 5, 3.6, 4.4, cor, (x, y) => x >= 9.5); linha(g, 12, 2, 13, 6, luz2); pinta(g, 10, 8, esc2); break;
+    case 'lanca': linha(g, 1, 13, 9, 5, PX.madeira, 1); linha(g, 9, 5, 12, 2, cor, 2); pinta(g, 12, 1, cor); pinta(g, 13, 1, cor); pinta(g, 11, 3, luz2); ret(g, 7, 6, 2, 2, esc2); break;
+    case 'escudo': ret(g, 3, 2, 8, 6, cor); for (let y = 8; y < 13; y++) ret(g, 3 + (y - 7), y, 8 - 2 * (y - 7), 1, cor);
+      ret(g, 6, 3, 2, 8, '#C73E3E'); ret(g, 4, 5, 6, 2, '#C73E3E'); pinta(g, 4, 3, luz2); ret(g, 3, 2, 8, 1, luz2); break;
+    case 'escudo-redondo': elipse(g, 7, 7, 5.6, 5.6, cor); elipse(g, 7, 7, 4.4, 4.4, esc2, (x, y) => Math.hypot(x - 7, y - 7) > 3.6); elipse(g, 7, 7, 1.7, 1.7, '#D7DEE8'); pinta(g, 6, 6, '#FFFFFF'); pinta(g, 4, 3, luz2); break;
+    case 'malha': elipse(g, 3, 4, 2.2, 1.8, esc2); elipse(g, 10, 4, 2.2, 1.8, esc2); ret(g, 3, 3, 8, 7, cor); ret(g, 4, 10, 6, 2, cor);
+      apaga(g, 6.5, 2.4, 1.4, 1.4); for (let y = 4; y < 12; y++) for (let x = 3 + (y % 2); x < 11; x += 2) if (gp(g, x, y)) pinta(g, x, y, esc2); pinta(g, 4, 4, luz2); break;
+    case 'manto': ret(g, 5, 1, 4, 3, cor); for (let y = 4; y < 13; y++) { const w = 4 + Math.round((y - 4) * 0.9); ret(g, 7 - Math.floor(w / 2), y, w, 1, cor); }
+      ret(g, 3, 7, 8, 1, '#7A4E2C'); pinta(g, 7, 7, '#E2B33C'); linha(g, 7, 8, 7, 12, esc2); pinta(g, 5, 2, luz2); break;
+    case 'bracadeira': ret(g, 3, 4, 8, 7, cor); ret(g, 3, 4, 8, 1, luz2); ret(g, 3, 10, 8, 1, esc2); ret(g, 2, 6, 1, 3, esc2); pinta(g, 5, 7, esc2); pinta(g, 8, 7, esc2); break;
+    case 'capa': ret(g, 4, 1, 6, 2, cor); for (let y = 3; y < 13; y++) { const w = 6 + Math.round((y - 3) * 0.7); ret(g, 7 - Math.floor(w / 2), y, w, 1, cor); }
+      linha(g, 5, 4, 4, 12, esc2); linha(g, 9, 4, 10, 12, esc2); ret(g, 4, 1, 6, 1, luz2); pinta(g, 7, 2, '#E2B33C'); break;
+    case 'chapeu': for (let y = 1; y < 10; y++) { const w = 1 + Math.round(y * 0.8); ret(g, 7 - Math.floor(w / 2) + (y < 4 ? 1 : 0), y, w, 1, cor); }
+      ret(g, 1, 10, 12, 2, cor); ret(g, 3, 9, 8, 1, '#E2B33C'); pinta(g, 7, 6, '#F2C230'); pinta(g, 6, 4, luz2); break;
     default: elipse(g, 7, 7, 4, 4, cor);
   }
   return contorno(g);

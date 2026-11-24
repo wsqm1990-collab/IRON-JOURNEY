@@ -40,7 +40,7 @@ a.svc:focus-visible{outline:3px solid var(--accent)}
 .player.flash{animation:flash .7s ease-out}
 @keyframes flash{0%{filter:brightness(1.7) saturate(1.2)}100%{filter:none}}
 @media (prefers-reduced-motion: reduce){.player{transition:none}.player.flash,.pl-clock.pausado{animation:none}}
-.subtabs{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+.subtabs{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
 .subtabs button{border:0;background:transparent;min-height:44px;font-weight:700}
 .subtabs button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
 .lang{display:flex;align-items:center;gap:4px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:4px 10px;font-weight:700;font-size:var(--t-sm);min-height:36px;flex:none}

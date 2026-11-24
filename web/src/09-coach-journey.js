@@ -165,8 +165,10 @@ function relicHTML(d, r) {
   return `<div class="relic${on ? '' : ' off'}"><span class="disc" style="background:${r.cor}"></span><b>${esc(L3(r.nome))}</b><span>${esc(L3(r.desc))}${meta ? ` · <span class="num">${Math.min(meta[0], meta[1])}/${meta[1]}</span>` : ''}</span></div>`;
 }
 function viewJornada() {
-  const sub = `<div class="subtabs"><button data-a="jsub" data-v="jornada" aria-pressed="${S.jsub !== 'stats'}">${t('sub_journey')}</button><button data-a="jsub" data-v="stats" aria-pressed="${S.jsub === 'stats'}">${t('sub_stats')}</button></div>`;
-  if (S.jsub === 'stats') return viewStats(sub);
+  const j = S.jsub === 'stats' || S.jsub === 'arsenal' ? S.jsub : 'jornada';
+  const sub = `<div class="subtabs">${[['jornada', 'sub_journey'], ['arsenal', 'sub_arsenal'], ['stats', 'sub_stats']].map(([v, k]) => `<button data-a="jsub" data-v="${v}" aria-pressed="${j === v}">${t(k)}</button>`).join('')}</div>`;
+  if (j === 'stats') return viewStats(sub);
+  if (j === 'arsenal') return viewArsenal(sub);
   return viewMundo(sub);
 }
 function viewJornadaAntiga(sub) {

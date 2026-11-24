@@ -54,4 +54,38 @@
 .set .ck svg{width:26px;height:26px}
 .x svg{width:20px;height:20px}
 @media (max-width:380px){.relics{grid-template-columns:repeat(2,1fr)}.heroes{grid-template-columns:1fr}}
+/* Arsenal: rarity colours, the collection, the pieces worn, powers, the chest after a workout */
+.r-comum{--rar:#A4ADBA}.r-incomum{--rar:#3DB06A}.r-raro{--rar:#4F84EE}.r-epico{--rar:#A86BF2}.r-lendario{--rar:#FF7A1A}
+.ars-ico{display:grid;place-items:center;width:52px;height:52px;border-radius:12px;flex:none;background:var(--surface-2);box-shadow:inset 0 0 0 2px var(--rar,var(--line))}
+@supports (background:color-mix(in srgb,red 10%,transparent)){.ars-ico{background:color-mix(in srgb,var(--rar,var(--line)) 16%,var(--surface-2))}}
+.ars-px{width:42px;height:42px;image-rendering:pixelated}
+.ars-grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(98px,1fr));gap:8px}
+.ars-it{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 6px 9px;border-radius:12px;border:1px solid var(--line);background:var(--surface);text-align:center;min-width:0;color:inherit;font:inherit}
+.ars-it b{font-size:12.5px;line-height:1.2}
+.ars-it .xs{color:var(--muted);line-height:1.25}
+.ars-it.eq{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.ars-tag{position:absolute;top:5px;right:5px;font-style:normal;font-size:9.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;background:var(--accent);color:var(--accent-ink);border-radius:6px;padding:2px 5px}
+.ars-it.off{background:var(--surface-2);border-style:dashed}
+.ars-it.off .ars-ico{background:transparent;box-shadow:inset 0 0 0 1px var(--line)}
+.ars-it.off b{color:var(--muted);font-weight:600}
+.ars-it.r-lendario:not(.off) .ars-ico{animation:lenda-luz 2.6s ease-in-out infinite}
+@keyframes lenda-luz{50%{box-shadow:inset 0 0 0 2px var(--rar),0 0 14px -2px var(--rar)}}
+.ars-slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:8px}
+.ars-slot{display:flex;flex-direction:column;align-items:center;gap:4px;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:8px 4px;min-width:0;color:inherit;font:inherit}
+.ars-slot[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.ars-slot .xs{color:var(--muted)}
+.ars-padrao{font-size:9.5px;font-weight:700;line-height:1.1;color:var(--muted);text-transform:uppercase;letter-spacing:.03em;padding:2px;text-align:center}
+.ars-chips .chip{min-height:36px;padding:6px 12px}
+.poderes{display:grid;gap:8px}
+.poder{display:flex;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 10px}
+.poder .xp-fill{background:var(--pc)}
+.poder-orbe{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;flex:none;background:var(--surface-2);box-shadow:inset 0 0 0 2px var(--pc)}
+.poder-orbe .ars-px{width:30px;height:30px}
+.poder.off{opacity:.65}.poder.off .poder-orbe{box-shadow:inset 0 0 0 1px var(--line)}
+.ars-det .cr-box{display:flex;justify-content:center;gap:4px;background:var(--surface-2);border-radius:14px;padding:4px 12px}
+.ars-rar{display:flex;align-items:center;gap:8px;margin:0}
+.ars-dot{width:12px;height:12px;border-radius:50%;background:var(--rar);flex:none}
+.loot{gap:8px}
+.loot-it{display:flex;align-items:center;gap:10px;width:100%;border:1px solid var(--line);border-left:4px solid var(--rar);background:var(--surface);border-radius:12px;padding:8px 10px}
+@media (prefers-reduced-motion:reduce){.ars-it.r-lendario:not(.off) .ars-ico{animation:none}}
 </style>

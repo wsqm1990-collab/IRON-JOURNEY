@@ -96,7 +96,7 @@ function covilGrade() {
 function heroiDe(pid, dados) {
   const p = perfil(pid) || {}, h = heroiNorm(p.heroi, p.sexo);
   const cl = classeDe(p.objetivo), d = dados || jornadaDados(pid), camp = campanhas(pid);
-  return { h, classe: cl, nome: (p.heroi && p.heroi.nome) || p.nome || '', criado: !!p.heroi, tier: tierDe(d.nivel.n), lenda: camp.vencidas > 0, d, camp };
+  return { h, classe: cl, nome: (p.heroi && p.heroi.nome) || p.nome || '', criado: !!p.heroi, tier: tierDe(d.nivel.n), lenda: camp.vencidas > 0, d, camp, equip: equipDe(pid) };
 }
 
 /* ---------- chapters, bosses and campaigns from the real training ---------- */
@@ -280,7 +280,7 @@ function abrirCriador() {
 /* the draft as a hero, at the person's real level and class */
 function rascunhoHeroi(extra = {}) {
   const pid = S.me, p = perfil(pid) || {}, d = jornadaDados(pid), camp = campanhas(pid);
-  return { h: { ...heroiNorm(S.heroiDraft, p.sexo), ...extra }, classe: classeDe(p.objetivo), nome: S.heroiDraft.nome, tier: tierDe(d.nivel.n), lenda: camp.vencidas > 0 };
+  return { h: { ...heroiNorm(S.heroiDraft, p.sexo), ...extra }, classe: classeDe(p.objetivo), nome: S.heroiDraft.nome, tier: tierDe(d.nivel.n), lenda: camp.vencidas > 0, equip: equipDe(pid) };
 }
 const previaHTML = H => `${lpcHTML(camadasHeroi(H), { dir: 's', esc: 2, alt: H.nome || '' })}${lpcHTML(camadasHeroi(H), { dir: 'e', esc: 2 })}`;
 function criadorHTML() {
@@ -377,6 +377,9 @@ async function iniciarBatalha(C) {
   };
   const brilho = (x, y, c = '#FFE58A') => { ctx.fillStyle = c; [[4, 0], [-4, 0], [0, 4], [0, -4]].forEach(([a, b]) => ctx.fillRect(x + a, y + b, 4, 4)); ctx.fillStyle = '#FFFFFF'; ctx.fillRect(x, y, 4, 4); };
   const bau = itemSprite('bau', '#E2B33C'), gema = itemSprite('gema', '#7FE3FF'), P = PREMIOS[H.classe.id], premio = itemSprite(P.item, P.cor);
+  /* what the chest held (Arsenal) and the power this workout used */
+  const achado = C.loot && C.loot[0] && typeof ITEM !== 'undefined' ? ITEM[C.loot[0].id] : null, achadoSp = achado ? itemSprite(achado.icone[0], achado.icone[1]) : null;
+  const rgba = (hex, a) => { const [r1, g1, b1] = hex2rgb(hex); return `rgba(${r1},${g1},${b1},${a})`; };
   const golpes = C.chefe ? C.chefe.partes.filter(p => p[2] > 0) : [['', '', 34], ['', '', 33], ['', '', 33]];
   const totalDano = C.chefe ? Math.min(100, C.chefe.dano) : 100, venceu = C.chefe ? C.chefe.venceu : true;
   const T0 = 1000, TG = 780, tGolpes = T0 + 300 + golpes.length * TG, TFIM = tGolpes + 2600;
@@ -451,6 +454,11 @@ async function iniciarBatalha(C) {
       }
       pe(T.parado, 0, xAlvo, 2);
     };
+    if (C.poder && t2 > T0 && t2 < tGolpes + 200) {
+      const pulso = 0.42 + 0.12 * Math.sin(t2 / 120), g = ctx.createRadialGradient(xH, CHAO - 56, 6, xH, CHAO - 56, 78);
+      g.addColorStop(0, rgba(C.poder.cor, pulso)); g.addColorStop(1, rgba(C.poder.cor, 0));
+      ctx.fillStyle = g; ctx.fillRect(xH - 90, CHAO - 150, 180, 160);
+    }
     if (lendaria(H) && !(derrotado && t2 - tGolpes > 450)) {
       const g = ctx.createRadialGradient(xH, CHAO - 56, 6, xH, CHAO - 56, 70);
       g.addColorStop(0, 'rgba(255,229,138,.45)'); g.addColorStop(1, 'rgba(255,229,138,0)');
@@ -495,11 +503,20 @@ async function iniciarBatalha(C) {
         ctx.drawImage(bau.cv, Math.round(px), Math.round(py), tam, tam);
         if (C.prs && !C.chefe) ctx.drawImage(gema.cv, Math.round(px + tam + 6), Math.round(py + 8 + (f % 2) * 4), 40, 40);
         if (k >= 1) [[px - 10, py + 8], [px + tam + 2, py + 2]].forEach(([a, b], i) => { if ((f + i) % 2) brilho(a, b); });
+        /* the piece found rises out of the chest, in the light of its rarity */
+        if (achadoSp && k >= 1) {
+          const k2 = clamp((t2 - tGolpes - 1270) / 320, 0, 1), sz = 14 * 4, ax = px + tam / 2 - sz / 2, ay = py - 14 - k2 * 50, cor = RARIDADES[achado.rar].cor;
+          const gl = ctx.createRadialGradient(ax + sz / 2, ay + sz / 2, 4, ax + sz / 2, ay + sz / 2, 58);
+          gl.addColorStop(0, rgba(cor, 0.75 * k2)); gl.addColorStop(1, rgba(cor, 0));
+          ctx.fillStyle = gl; ctx.fillRect(ax - 40, ay - 40, sz + 80, sz + 80);
+          ctx.globalAlpha = Math.min(1, k2 * 1.6); ctx.drawImage(achadoSp.cv, Math.round(ax), Math.round(ay), sz, sz); ctx.globalAlpha = 1;
+          if (k2 >= 1) [[ax - 8, ay + 6], [ax + sz + 2, ay - 4]].forEach(([a, b], i) => { if ((f + i) % 2) brilho(a, b); });
+        }
       }
     }
     if (t2 < T0) txt(C.chefe ? t('boss_hp') + ' · ' + L3(E.nome) : t('stage_n', { n: C.n }) + ' · ' + L3(E.nome));
-    else if (t2 < tGolpes) txt(C.chefe ? golpes.map(g => `${t(g[0])} ${g[1]}`).join(' · ') : A ? t('duo_attack') : t('stage_n', { n: C.n }) + ' · ' + L3(E.nome));
-    else txt(C.chefe ? (venceu ? t('boss_won') + (C.final ? ' ' + L3(P.nome) + '!' + ((perfil(C.pid) || {}).premio ? ' ' + t('prize_real_show', { x: perfil(C.pid).premio }) : '') : '') : t('boss_fled')) : t('stage_won', { n: C.n }) + (C.prs ? ' ' + t('rare_loot') : ''));
+    else if (t2 < tGolpes) txt(C.chefe ? golpes.map(g => `${t(g[0])} ${g[1]}`).join(' · ') : (C.poder ? L3(C.poder.nome) + '! · ' : '') + (A ? t('duo_attack') : t('stage_n', { n: C.n }) + ' · ' + L3(E.nome)));
+    else txt(C.chefe ? (venceu ? t('boss_won') + (C.final ? ' ' + L3(P.nome) + '!' + ((perfil(C.pid) || {}).premio ? ' ' + t('prize_real_show', { x: perfil(C.pid).premio }) : '') : achado ? ' ' + L3(achado.nome) + '!' : '') : t('boss_fled')) : t('stage_won', { n: C.n }) + (achado ? ' ' + L3(achado.nome) + '!' : '') + (C.prs ? ' ' + t('rare_loot') : ''));
     if (t2 >= TFIM && Batalha.fim) cancelAnimationFrame(Batalha.raf);
   };
   Batalha.raf = requestAnimationFrame(quadro);

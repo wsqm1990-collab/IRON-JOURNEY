@@ -3,7 +3,8 @@
 Workouts that become an RPG (formerly Iron Journey). Strength and HIIT training app for Android and iPhone: a periodized plan for your gym, workout logging with
 double progression, a Cardio Studio with guided intervals you can do while watching a series
 (voice, beeps and vibration keep coming with Netflix or YouTube in full screen), an optional AI
-coach with your own Anthropic key, and a hero's-journey layer with XP, levels and relics.
+coach with your own Anthropic key, and a hero's-journey layer with XP, levels, relics, bosses and an
+Arsenal of weapons, shields, armour and powers that only training earns.
 
 ## Install on the phone (once)
 

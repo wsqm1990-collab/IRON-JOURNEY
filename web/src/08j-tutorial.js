@@ -93,6 +93,12 @@ Object.assign(STR, {
   tj_mapa: ['This is you on the map. Every workout clears a stage: train your days each week to move ahead and, at the end of the chapter, beat the boss!',
     'Este é você no mapa. Cada treino feito vence uma fase: treine os seus dias da semana para avançar e, no fim do capítulo, derrote o chefão!',
     'Este eres tú en el mapa. Cada entreno supera una fase: entrena tus días de la semana para avanzar y, al final del capítulo, ¡derrota al jefe!'],
+  tj_arsenal: ['And in “{b}” is your gear: every workout opens a chest with weapons, shields and armour for your hero, and each kind of workout trains a power. Only training earns them!',
+    'E em “{b}” fica o seu equipamento: cada treino abre um baú com armas, escudos e armaduras para o seu herói, e cada tipo de treino fortalece um poder. Só o treino dá esses itens!',
+    'Y en “{b}” está tu equipo: cada entreno abre un cofre con armas, escudos y armaduras para tu héroe, y cada tipo de entreno fortalece un poder. ¡Solo entrenar los da!'],
+  tj_arsenal_novo: ['New: the Arsenal! Every workout now opens a chest with weapons, shields and armour for your hero, and each kind of workout trains a power. Your past workouts already opened theirs: tap “{b}” to see.',
+    'Novidade: o Arsenal! Agora cada treino abre um baú com armas, escudos e armaduras para o seu herói, e cada tipo de treino fortalece um poder. Os treinos que você já fez abriram os deles: toque em “{b}” para ver.',
+    'Novedad: ¡el Arsenal! Ahora cada entreno abre un cofre con armas, escudos y armaduras para tu héroe, y cada tipo de entreno fortalece un poder. Tus entrenos anteriores ya abrieron los suyos: toca “{b}” para verlo.'],
 });
 
 const Tour = { on: false, id: '', chave: '', passos: [], i: 0, tick: 0, digitando: false, foco: null, revendo: false };
@@ -170,6 +176,11 @@ const TOURS = {
     { antes: () => { if (S.jsub === 'stats') { S.jsub = 'jornada'; render(); } tourTopo(); }, alvo: '.rpg-top [data-a="heroiEditar"]',
       txt: () => t('tj_heroi', { b: (($('.rpg-top [data-a="heroiEditar"]') || {}).textContent || t('hero_create')).trim() }) },
     { alvo: '.mapa-rpg .mp-hero', opcional: true, txt: () => t('tj_mapa') },
+    { antes: tourTopo, alvo: '.subtabs [data-v="arsenal"]', opcional: true, txt: () => t('tj_arsenal', { b: t('sub_arsenal') }) },
+  ],
+  /* people who already knew the Journey hear about the Arsenal once */
+  arsenal: () => [
+    { antes: tourTopo, alvo: '.subtabs [data-v="arsenal"]', txt: () => t('tj_arsenal_novo', { b: t('sub_arsenal') }) },
   ],
 };
 
@@ -185,6 +196,7 @@ function tourAuto() {
   if (S.live) { if (S.tab === 'hoje' && !tourViu(pid, 'treino')) iniciarTour('treino'); return; }
   if (!tourViu(pid, 'app')) { if (progresso(pid) && (S.tab === 'hoje' || S.tab === 'plano')) iniciarTour('app'); return; }
   if (['cardio', 'coach', 'jornada'].includes(S.tab) && !tourViu(pid, S.tab)) iniciarTour(S.tab);
+  else if (S.tab === 'jornada' && !tourViu(pid, 'arsenal')) iniciarTour('arsenal');
 }
 /* Settings: see it all again, starting from what fits the screen */
 function tourRever() {
@@ -325,6 +337,7 @@ function tourFechar(fim) {
   const p = Tour.passos[Tour.i], id = Tour.id;
   clearInterval(Tour.tick); Tour.digitando = false; Tour.on = false;
   tourMarcar(Tour.chave || '_', id);
+  if (id === 'jornada') tourMarcar(Tour.chave || '_', 'arsenal'); /* the Journey tour already showed the Arsenal */
   removeEventListener('resize', tourReposicionar);
   removeEventListener('scroll', tourReposicionar);
   TOUR_INERTES.forEach(s => { const x = $(s); if (x) x.inert = false; });

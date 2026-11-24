@@ -280,13 +280,17 @@ async function salvarTreino() {
   const antes = jornadaDados(L.pid), depois = jornadaDados(L.pid, sess);
   const prs = recordes(L.pid, { ...sess, _id: 'novo' }).prs.filter(r => r.sess === 'novo');
   const sid = L.pid + '-' + L.inicio.toString(36);
+  let arsAntes = null;
+  try { arsAntes = arsenalDe(L.pid); } catch { arsAntes = null; }
   try { await save('sessoes/' + sid, sess); } catch { return; }
   if (!S.sessoes.some(s => s._id === sid)) S.sessoes.unshift({ ...sess, _id: sid });
+  let loot = [];
+  try { if (arsAntes) loot = lootNovo(arsAntes, arsenalDe(L.pid)); } catch { loot = []; }
   if (L.casa || L.ajuste) limparCasa(L.pid);
   Store.del('aovivo/' + L.pid).catch(() => {});
   S.live = null; S.finNota = ''; stopRest(); stopWakeLock();
   closeSheet(); render(); window.scrollTo(0, 0);
-  mostrarRecompensa(antes, depois, prs, sess);
+  mostrarRecompensa(antes, depois, prs, sess, loot);
 }
 function recompensaHTML(antes, depois, linhas, extra, oferecerCardio, topo) {
   const ganho = depois.xp - antes.xp, subiu = depois.nivel.n > antes.nivel.n;
@@ -301,7 +305,7 @@ function recompensaHTML(antes, depois, linhas, extra, oferecerCardio, topo) {
       <button class="btn block" data-a="fecharSheet">${t('continue_btn')}</button>
     </div>`;
 }
-function mostrarRecompensa(antes, depois, prs, sess) {
+function mostrarRecompensa(antes, depois, prs, sess, loot) {
   const ok = sess.exs.reduce((n, x) => n + x.sets.length, 0);
   const linhas = [[t('xp_workout'), XP.treino], [tn(ok, 'n_set', 'n_sets'), Math.min(ok, 40) * XP.serie]];
   if (prs.length) linhas.push([tn(prs.length, 'n_pr', 'n_prs'), Math.min(prs.length, 3) * XP.recorde]);
@@ -313,7 +317,8 @@ function mostrarRecompensa(antes, depois, prs, sess) {
   const ci = cardioSemanaInfo(sess.pid);
   let cena = null;
   try { cena = sess.planoId ? cenaDoTreino(sess.pid, sess, prs, depois.ciclos > antes.ciclos) : null; } catch { cena = null; }
-  openSheet(t('workout_saved'), recompensaHTML(antes, depois, linhas, recs, ci.meta > ci.feitos, cena ? batalhaHTML() : ''));
+  if (cena) { cena.loot = loot || []; try { const P = poderDoTreino(sess); if (P) cena.poder = { ...P, nivel: (poderesDe(sess.pid).find(x => x.id === P.id) || {}).nivel || 1 }; } catch { /* no power */ } }
+  openSheet(t('workout_saved'), recompensaHTML(antes, depois, linhas, recs + lootHTML(loot), ci.meta > ci.feitos, cena ? batalhaHTML() : ''));
   if (cena) setTimeout(() => { iniciarBatalha(cena).catch(() => {}); }, 60);
 }
 
@@ -371,11 +376,15 @@ async function salvarCardio() {
   doc.inicio = f.ini && f.ini < doc.fim ? f.ini : doc.fim - doc.minutos * 60000;
   const antes = jornadaDados(pid), depois = jornadaDados(pid, null, doc);
   const id = pid + '-c' + doc.inicio.toString(36);
+  let arsAntes = null;
+  try { arsAntes = arsenalDe(pid); } catch { arsAntes = null; }
   try { await save('cardio/' + id, doc); } catch { return; }
   if (!S.cardio.some(s => s._id === id)) S.cardio.unshift({ ...doc, _id: id });
+  let loot = [];
+  try { if (arsAntes) loot = lootNovo(arsAntes, arsenalDe(pid)); } catch { loot = []; }
   S.cform = null; Sheet.onClose = null; closeSheet(); render();
   const vale = doc.minutos >= 10;
   const linhas = [[t('cardio_done'), vale ? XP.cardio : 0], [tn(doc.minutos, 'n_minute', 'n_minutes'), vale ? Math.min(doc.minutos, 60) * XP.cardioMin : 0]];
   if (depois.cardioSemanas > antes.cardioSemanas) linhas.push([t('cardio_week_goal'), XP.cardioSemana]);
-  openSheet(t('cardio_saved'), recompensaHTML(antes, depois, linhas, vale ? '' : `<p class="small muted">${t('xp_10min')}</p>`, false));
+  openSheet(t('cardio_saved'), recompensaHTML(antes, depois, linhas, (vale ? '' : `<p class="small muted">${t('xp_10min')}</p>`) + lootHTML(loot), false));
 }

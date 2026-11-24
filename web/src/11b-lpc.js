@@ -172,10 +172,14 @@ function heroiNorm(h, sexo) {
 }
 const ATAQUE = { guerreiro: 'slash', paladino: 'slash', cacador: 'shoot', monge: 'thrust' };
 const METAL_TIER = ['iron', 'iron', 'iron', 'steel', 'gold', 'gold'];
-/* the layers of a hero (H from heroiDe, or a draft: {h, classe, tier, lenda}); o.feliz adds the smile */
+/* the layers of a hero (H from heroiDe, or a draft: {h, classe, tier, lenda, equip}); o.feliz adds the smile.
+   The class dresses the hero for the level; a piece chosen in the Arsenal (H.equip: slot → item) takes the
+   place of the class's own gear in that slot. */
 function camadasHeroi(H, o = {}) {
-  const h = H.h, s = h.corpo === 'f' ? 'f' : 'm', tier = H.tier || 0, cl = H.classe.id, lenda = !!H.lenda, C = [];
-  const add = (p, c) => { if (LPC_PARTES[p]) C.push(c ? { p, c } : { p }); };
+  const h = H.h, s = h.corpo === 'f' ? 'f' : 'm', tier = H.tier || 0, cl = H.classe.id, lenda = !!H.lenda, C = [], SL = [];
+  let slot = 'base';
+  const add = (p, c) => { if (LPC_PARTES[p]) { C.push(c ? { p, c } : { p }); SL.push(slot); } };
+  const em = (sl, f) => { slot = sl; f(); slot = 'base'; };
   add('corpo/' + s, { body: h.pele });
   add('cab/' + s, { body: h.pele, eye: h.olhos });
   if (o.feliz) add('rosto/' + s, { body: h.pele });
@@ -183,36 +187,43 @@ function camadasHeroi(H, o = {}) {
   if (h.barba && s === 'm') add('barba/' + h.barba, { hair: h.corCabelo });
   add('camisa/' + s, { cloth: h.roupa });
   add('calca/' + s, { cloth: tier >= 3 ? 'black' : 'charcoal' });
-  add((tier >= 1 ? 'bota/' : 'sapato/') + s, { cloth: tier >= 3 ? 'black' : 'leather' });
-  const capa = c => { add('capa', { cloth: c }); add('capa-tras', { cloth: c }); };
+  em('botas', () => add((tier >= 1 ? 'bota/' : 'sapato/') + s, { cloth: tier >= 3 ? 'black' : 'leather' }));
+  const capa = c => em('capa', () => { add('capa', { cloth: c }); add('capa-tras', { cloth: c }); });
   if (cl === 'guerreiro' || cl === 'paladino') {
     const ouro = lenda && cl === 'paladino', mt = ouro ? 'gold' : METAL_TIER[tier];
-    if (tier === 1 && !ouro) add('couro/' + s);
-    if (tier === 2 && !ouro) add('malha/' + s, { metal: 'iron' });
-    if (tier >= 3 || ouro) { add('placas/' + s, { metal: mt }); add('ombreira/' + s, { cloth: 'metal.' + mt }); }
-    if (tier >= 1) add('bracadeira/' + s, { metal: tier >= 4 || ouro ? 'gold' : 'iron' });
+    em('armadura', () => {
+      if (tier === 1 && !ouro) add('couro/' + s);
+      if (tier === 2 && !ouro) add('malha/' + s, { metal: 'iron' });
+      if (tier >= 3 || ouro) { add('placas/' + s, { metal: mt }); add('ombreira/' + s, { cloth: 'metal.' + mt }); }
+    });
+    if (tier >= 1) em('bracos', () => add('bracadeira/' + s, { metal: tier >= 4 || ouro ? 'gold' : 'iron' }));
     if (tier >= 3) capa(h.roupa);
   } else if (cl === 'cacador') {
-    if (tier >= 4) add('malha/' + s, { metal: 'steel' });
-    if (tier >= 1) add('couro/' + s);
-    if (tier >= 2) { add('bracadeira/' + s, { metal: tier >= 4 ? 'gold' : 'bronze' }); capa(h.roupa); }
-    if (tier >= 3) add('ombreira/' + s, { cloth: 'leather' });
+    em('armadura', () => { if (tier >= 4) add('malha/' + s, { metal: 'steel' }); if (tier >= 1) add('couro/' + s); });
+    if (tier >= 2) { em('bracos', () => add('bracadeira/' + s, { metal: tier >= 4 ? 'gold' : 'bronze' })); capa(h.roupa); }
+    if (tier >= 3) em('armadura', () => add('ombreira/' + s, { cloth: 'leather' }));
     add('aljava');
   } else {
-    if (tier >= 1) { add('manto/' + s, { cloth: tier >= 4 ? 'yellow' : 'white' }); add('cinto/' + s); }
-    if (tier >= 2) add('bracadeira/' + s, { metal: tier >= 4 ? 'gold' : 'bronze' });
+    if (tier >= 1) em('armadura', () => { add('manto/' + s, { cloth: tier >= 4 ? 'yellow' : 'white' }); add('cinto/' + s); });
+    if (tier >= 2) em('bracos', () => add('bracadeira/' + s, { metal: tier >= 4 ? 'gold' : 'bronze' }));
     if (tier >= 3) capa(h.roupa);
   }
-  if (tier >= 5) add('coroa');
+  if (tier >= 5) em('cabeca', () => add('coroa'));
   const arma = { guerreiro: lenda ? 'arma/espada-luz' : 'arma/espada', paladino: 'arma/maca', cacador: lenda ? 'arma/arco-grande' : tier >= 4 ? 'arma/arco-ouro' : 'arma/arco', monge: lenda ? 'arma/cristal' : 'arma/cajado' }[cl];
-  add(arma); add(arma + '-tras');
-  if (cl === 'cacador') add('arma/flecha');
-  if (cl === 'paladino') {
+  em('arma', () => { add(arma); add(arma + '-tras'); if (cl === 'cacador') add('arma/flecha'); });
+  if (cl === 'paladino') em('escudo', () => {
     if (lenda || tier >= 4) { add('escudo/espartano-tras'); add('escudo/espartano'); }
     else if (tier >= 2) { add('escudo/cruzado-tras'); add('escudo/cruzado/' + s); }
     else add('escudo/redondo');
-  }
-  return C;
+  });
+  const eq = H.equip || {}, trocar = Object.keys(eq).filter(k => eq[k] && eq[k].camadas);
+  if (!trocar.length) return C;
+  /* each chosen piece goes where the class's piece for that slot was (or at the end, if the class had none) */
+  const out = [], feitos = new Set();
+  const poe = k => { if (feitos.has(k)) return; feitos.add(k); for (const x of eq[k].camadas(s)) if (LPC_PARTES[x.p]) out.push(x); };
+  C.forEach((x, i) => { if (trocar.includes(SL[i])) poe(SL[i]); else out.push(x); });
+  trocar.forEach(poe);
+  return out;
 }
 const lendaria = H => (H.tier || 0) >= 5 || !!H.lenda;
 /* the hero on the page (Journey, Today, map, allies, creator) */
