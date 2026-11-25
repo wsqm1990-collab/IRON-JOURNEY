@@ -39,8 +39,11 @@ O PESO CERTO EM CADA SÉRIE
 • A primeira série é um teste, e o app calcula as próximas
 • Mostra as anilhas de cada lado, o halter ou o pino da máquina
 • Aquecimento, descanso com aviso e recordes pessoais
+• No fim do descanso, a voz fala a próxima série: repetições e peso
 
-CARDIO ENQUANTO VOCÊ ASSISTE
+CARDIO COM O NÚMERO CERTO
+• Em cada parte, o app diz o que colocar no aparelho: velocidade e inclinação da esteira, nível da bike, ritmo do remo
+• Os números se ajustam a você, como a carga na musculação
 • HIIT, Tabata, 4×4 norueguês, zona 2 e mais, com avisos por voz e bipe
 • Funciona em segundo plano, com o celular na sua série ou na sua música
 
@@ -81,8 +84,11 @@ THE RIGHT WEIGHT EVERY SET
 • Set 1 is a test, and the app works out the next ones
 • Shows the plates on each side, the dumbbell or the machine pin
 • Warm-ups, rest alerts and personal records
+• When the rest ends, the voice calls your next set: reps and weight
 
-CARDIO WHILE YOU WATCH
+CARDIO WITH THE RIGHT NUMBERS
+• Each part tells you what to set on the machine: treadmill speed and incline, bike level, rower pace
+• The numbers adapt to you, like the weight in strength training
 • HIIT, Tabata, Norwegian 4×4, zone 2 and more, with voice and beep cues
 • Runs in the background while your phone plays your show or your music
 
@@ -123,8 +129,11 @@ EL PESO JUSTO EN CADA SERIE
 • La primera serie es una prueba, y la app calcula las siguientes
 • Muestra los discos de cada lado, la mancuerna o el pasador de la máquina
 • Calentamiento, aviso de descanso y récords personales
+• Al terminar el descanso, la voz te dice la siguiente serie: repeticiones y peso
 
-CARDIO MIENTRAS VES TU SERIE
+CARDIO CON EL NÚMERO JUSTO
+• En cada parte, la app te dice qué poner en la máquina: velocidad y pendiente de la cinta, nivel de la bici, ritmo del remo
+• Los números se ajustan a ti, como el peso en las pesas
 • HIIT, Tabata, 4×4 noruego, zona 2 y más, con avisos por voz y pitidos
 • Funciona en segundo plano mientras el móvil reproduce tu serie o tu música
 
