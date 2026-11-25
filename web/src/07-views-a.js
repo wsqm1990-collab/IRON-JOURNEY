@@ -369,7 +369,7 @@ function cardioCard(pid) {
   return `<div class="card pad stack">
     <div class="row between"><h2 class="h3">${t('cardio_week')}</h2><span class="small muted num">${t('min_done', { n: ci.minutos })}</span></div>
     <div class="row between"><div class="dots">${Array.from({ length: Math.max(ci.meta, ci.feitos) }, (_, i) => `<span class="dot${i < ci.feitos ? ' on' : ''}"></span>`).join('')}</div><span class="small muted num">${t('sessions_of', { a: Math.min(ci.feitos, ci.meta), b: ci.meta })}</span></div>
-    <div class="exlist">${ci.sessoes.map(c => linhaCardioPlano(c, ci.pr.sem, z)).join('')}</div>${botoes}</div>`;
+    <div class="exlist">${ci.sessoes.map(c => linhaCardioPlano(c, ci.pr.sem, z)).join('')}</div>${pid === S.me ? sugestaoLinhaHTML(pid) : ''}${botoes}</div>`;
 }
 function cardioPlanoCard(pg, pr) {
   const c = pg.cardio;

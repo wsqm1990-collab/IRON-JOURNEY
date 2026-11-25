@@ -71,7 +71,11 @@ function ctxPlano(pid) {
   if (!pr) return 'Current plan: not created yet.';
   const dias = pr.pg.dias.map(d => `${d.nome} (${d.foco}): ` + d.exercicios.map(x => `${exInfo(x.id, x.nome).nomeEn} ${x.series}x${x.reps[0]}-${x.reps[1]}`).join('; ')).join('\n');
   const cs = (pr.pg.cardio && pr.pg.cardio.sessoes) || [];
-  const cardio = cs.length ? '\nPlanned cardio: ' + cs.map(c => `${c.nome} (protocol ${c.protocolo || c.tipo}) ${c.porSemana}x/week, ${cardioAlvo(c, pr.sem).minutosAlvo} min this week, ${c.intensidade}`).join('; ') : '\nPlanned cardio: none.';
+  let cardio = cs.length ? '\nPlanned cardio: ' + cs.map(c => `${c.nome} (protocol ${c.protocolo || c.tipo}) ${c.porSemana}x/week, ${cardioAlvo(c, pr.sem).minutosAlvo} min this week, ${c.intensidade}`).join('; ') : '\nPlanned cardio: none.';
+  /* the same three picks the Cardio tab shows today, so the coach's answer matches the card */
+  let sgs = [];
+  try { sgs = typeof sugestoesCardio === 'function' ? sugestoesCardio(pid) : []; } catch { sgs = []; }
+  if (sgs.length) cardio += '\nThe app\'s cardio picks for today, best first (shown in the Cardio tab, from what they trained today and their cardio this week): ' + sgs.map((o, k) => `${k + 1}) ${o.p.nome[0]} on ${exInfo(o.maq).nomeEn}, ${Math.round(totalSeg(o.segs) / 60)} min`).join('; ') + '.';
   return `Current plan: ${pr.pg.nome}, chapter ${pr.pl.ciclo}, week ${pr.semana} of ${pr.nW} (${en3(FASES[pr.fase] || FASES.accum)}, RIR ${pr.sem.rir}). Plan weeks follow the calendar (Monday to Sunday): every week with at least one workout is one plan week; this week they trained on ${pr.naSemana} of the ${pr.nD} planned days.\n${dias}${cardio}`;
 }
 /* a one-day change of the plan's workout (the plan itself stayed the same) */

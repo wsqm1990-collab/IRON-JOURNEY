@@ -164,7 +164,7 @@ function viewCardio() {
     ${ci.sessoes.map((c, k) => { const a = cardioAlvo(c, ci.pr.sem), p = PROTO[c.protocolo] || PROTO.z2; return `<div class="exitem"><span class="nm">${esc(c.nome)} <span class="pill lvl-${p.nivel}">${esc(L3(p.nome))}</span></span><span class="sg num">${a.minutosAlvo} min</span><span class="mt">${esc(c.intensidade)}${c.quando ? ' · ' + esc(c.quando) : ''}</span><button class="btn small" data-a="protoAbrir" data-id="${p.id}" data-k="${k}" style="grid-column:1/-1;justify-self:start">${t('start_guided')}</button></div>`; }).join('')}</div>` : '';
   let corpo = '';
   if (st.modo === 'treinar') {
-    corpo = `<div class="stack">${PROTOCOLOS.filter(p => !p.oculto).map(protoCard).join('')}</div>`;
+    corpo = `<div class="stack"><p class="eyebrow">${t('all_workouts')}</p>${PROTOCOLOS.filter(p => !p.oculto).map(protoCard).join('')}</div>`;
   } else if (st.modo === 'assistir') {
     const p = PROTO[st.estilo], m = assistirMontado(st);
     const total = Math.round(totalSeg(m.segs) / 60), base = Math.round(m.base / 60), extra = Math.round(m.extra / 60);
@@ -207,11 +207,13 @@ function viewCardio() {
       ${z ? `<p class="small muted num">${t('hr_zones', { a: z.leve[0], b: z.leve[1], c: z.forte[0], d: z.forte[1] })}</p>` : ''}
       <button class="btn ghost small cg-btn" data-a="cardioGuia">${I.info || ''}${t('cg_btn')}</button>
     </div>
+    ${st.modo === 'treinar' ? sugestaoCardHTML() : ''}
     ${doPlano}
     ${corpo}
     <button class="btn ghost block" data-a="cardioAbrir">${t('log_without')}</button>
   </section>`;
 }
+Object.assign(STR, { all_workouts: ['All workouts', 'Todos os treinos', 'Todos los entrenamientos'] });
 Object.assign(STR, { hr_zones: ['Your heart rate: easy {a}–\u2060{b}\u00a0bpm · hard {c}–\u2060{d}\u00a0bpm', 'Seus batimentos: leve {a}–\u2060{b}\u00a0bpm · forte {c}–\u2060{d}\u00a0bpm', 'Tu pulso: suave {a}–\u2060{b}\u00a0lpm · fuerte {c}–\u2060{d}\u00a0lpm'] });
 
 /* ---------- setup sheet ---------- */

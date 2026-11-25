@@ -193,14 +193,18 @@ function perfilRects(segs) {
   const tot = totalSeg(segs) || 1;
   let x = 0;
   return segs.map(sg => {
-    const w = (sg.s / tot) * 1000, z = ZONAS[zonaSeg(sg)] || ZONAS.leve;
-    const h = Math.round((sg.k === 'climb' ? 0.42 + clamp((sg.v || 0) / 15, 0, 1) * 0.42 : z.alt) * 100);
+    const w = (sg.s / tot) * 1000, h = altSeg(sg);
     const r = `<rect class="k-${sg.k}" x="${x.toFixed(1)}" y="${100 - h}" width="${Math.max(w - 2, 0.8).toFixed(1)}" height="${h}" rx="2"/>`;
     x += w;
     return r;
   }).join('');
 }
-const perfilSVG = segs => `<svg class="pf" viewBox="0 0 1000 100" preserveAspectRatio="none" aria-hidden="true">${perfilRects(segs)}</svg>`;
+const altSeg = sg => Math.round((sg.k === 'climb' ? 0.42 + clamp((sg.v || 0) / 15, 0, 1) * 0.42 : (ZONAS[zonaSeg(sg)] || ZONAS.leve).alt) * 100);
+/* the same scale for every session (a tall bar is always a hard part); an easy session just takes less height */
+function perfilSVG(segs) {
+  const mh = Math.min(100, Math.max(30, ...segs.map(altSeg)) + 6);
+  return `<svg class="pf" viewBox="0 ${100 - mh} 1000 ${mh}" preserveAspectRatio="none" style="height:${Math.round(58 * mh / 100)}px" aria-hidden="true">${perfilRects(segs)}</svg>`;
+}
 function painelHTML(campos) {
   return campos.map(f => `<span class="lcd${f.txt ? ' txt' : ''}"><small>${esc(f.r)}</small><b class="num">${esc(f.n)}${f.u ? `<em>${esc(f.u)}</em>` : ''}</b></span>`).join('');
 }
@@ -222,7 +226,8 @@ function quantoGrupo(segs) {
   return lo === hi ? t('al_times', { n: segs.length, d: durCurta(lo) }) : t('al_times_var', { n: segs.length, a: durCurta(lo), b: durCurta(hi) });
 }
 /* the shape, then each kind of part once: how long, what to set and how it should feel */
-function alvosHTML(segs, maq, volta) {
+/* compacto: just the shape and the numbers (inside the coach's pick); the steps and tips live in the setup sheet */
+function alvosHTML(segs, maq, volta, compacto) {
   const c = alvoCtx(maq), ps = prepararSegs(segs, c);
   const grupos = [];
   for (const s of ps) {
@@ -238,6 +243,7 @@ function alvosHTML(segs, maq, volta) {
       ${s.a ? `<div class="alv-set">${painelHTML(camposGrupo(g.segs))}</div>` : ''}<p class="alv-sens num">${esc(sensacaoSeg(s))}</p></div></div>`;
   }).join('');
   const aj = c.aj;
+  if (compacto) return `<div class="alv compacto"><p class="eyebrow">${t(tem ? 'al_title' : 'al_shape')}</p>${perfilSVG(ps)}<div class="alv-lista">${linhas}</div></div>`;
   return `<div class="alv">
     <p class="eyebrow">${t(tem ? 'al_title' : 'al_shape')}</p>
     ${perfilSVG(ps)}

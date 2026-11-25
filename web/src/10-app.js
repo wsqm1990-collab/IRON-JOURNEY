@@ -300,6 +300,8 @@ const ACT = {
   alvoAj: el => { mudarAlvo(el.dataset.m, 'aj', Number(el.dataset.d)); if (el.closest('#sheet')) sheetBody(setupHTML()); else render(); },
   alvoEsc: el => { mudarAlvo(el.dataset.m, 'esc', Number(el.dataset.d)); if (el.closest('#sheet')) sheetBody(setupHTML()); else render(); },
   cardioGuia: el => abrirCardioGuia(el.dataset.volta),
+  sgIr: () => abrirSugestao(),
+  sgOutra: () => { const n = sugestoesCardio(S.me).length || 1; S.sgIdx = ((S.sgIdx || 0) + 1) % n; render(); const c = $('#sgCard'); if (c) c.scrollIntoView({ block: 'start', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); },
   cgVoltar: () => { const s = S.setup; if (s && PROTO[s.id]) openSheet(L3(PROTO[s.id].nome), setupHTML()); else closeSheet(); },
   cfSalvar: () => salvarCardio(),
   stModo: el => { estudioState().modo = el.dataset.v; render(); },

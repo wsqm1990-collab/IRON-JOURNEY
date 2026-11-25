@@ -81,6 +81,12 @@ Object.assign(STR, {
   tc_2: ['During cardio, a voice and a beep tell you when to push, when to ease off and what to set on the machine. It works with the screen off or another app open. Let\'s sweat!',
     'Durante o cardio, a voz e o bipe avisam quando acelerar, quando ir leve e o que colocar no aparelho. Funciona com a tela apagada ou com outro app aberto. Bora suar!',
     'Durante el cardio, una voz y un pitido te avisan cuándo acelerar, cuándo ir suave y qué poner en la máquina. Funciona con la pantalla apagada u otra app abierta. ¡A sudar!'],
+  tc_sug: ['Every day the coach picks the best cardio for you, from what you trained today and the cardio you\'ve done this week. Don\'t like it? Tap “{b}” for another one.',
+    'Todo dia o treinador escolhe o melhor cardio para você, pelo que você treinou hoje e pelo cardio que já fez na semana. Não gostou? Toque em “{b}” para ver outra.',
+    'Cada día el entrenador elige el mejor cardio para ti, según lo que entrenaste hoy y el cardio que ya hiciste en la semana. ¿No te gusta? Toca “{b}” para ver otra.'],
+  tc_sug_novo: ['New: the coach now suggests the best cardio for today, with three options, the best one first. Don\'t like it? Tap “{b}”.',
+    'Novidade: agora o treinador sugere o melhor cardio do dia, com três opções, a melhor primeiro. Não gostou? Toque em “{b}”.',
+    'Novedad: ahora el entrenador sugiere el mejor cardio del día, con tres opciones, la mejor primero. ¿No te gusta? Toca “{b}”.'],
   tc_alvo_novo: ['New: each part of your cardio now shows what to set on the machine (speed, incline, level or pace), on screen and by voice. Tap “{b}” to see how it works.',
     'Novidade: agora cada parte do cardio mostra o que colocar no aparelho (velocidade, inclinação, nível ou ritmo), na tela e na voz. Toque em “{b}” para entender como funciona.',
     'Novedad: ahora cada parte del cardio muestra qué poner en la máquina (velocidad, pendiente, nivel o ritmo), en pantalla y por voz. Toca “{b}” para ver cómo funciona.'],
@@ -172,12 +178,18 @@ const TOURS = {
   ],
   cardio: () => [
     { antes: tourTopo, alvo: '#view .hero .seg', txt: () => t('tc_1', { a: t('mode_train'), b: t('mode_watch'), c: t('mode_listen') }) },
-    { alvo: '#view .hero [data-a="cardioGuia"]', opcional: true, txt: () => t('tc_alvo', { b: t('cg_btn') }) },
+    { alvo: '#sgCard .sg-head', opcional: true, txt: () => t('tc_sug', { b: t('sg_other') }) },
+    { antes: tourTopo, alvo: '#view .hero [data-a="cardioGuia"]', opcional: true, txt: () => t('tc_alvo', { b: t('cg_btn') }) },
     { txt: () => t('tc_2'), fim: { k: 'tour_go' } },
   ],
   /* people who already knew the cardio studio hear about the machine numbers once */
   cardioAlvo: () => [
     { antes: tourTopo, alvo: '#view .hero [data-a="cardioGuia"]', txt: () => t('tc_alvo_novo', { b: t('cg_btn') }) },
+    { alvo: '#sgCard .sg-head', opcional: true, txt: () => t('tc_sug_novo', { b: t('sg_other') }) },
+  ],
+  /* and those who already heard about the machine numbers hear about the coach's pick */
+  cardioSug: () => [
+    { antes: tourTopo, alvo: '#sgCard .sg-head', txt: () => t('tc_sug_novo', { b: t('sg_other') }) },
   ],
   coach: () => [
     { antes: tourTopo, alvo: AI.on ? '#chat' : '#view .note.warn', txt: () => t(AI.on ? 'tq_1' : 'tq_key') },
@@ -209,6 +221,7 @@ function tourAuto() {
   if (['cardio', 'coach', 'jornada'].includes(S.tab) && !tourViu(pid, S.tab)) iniciarTour(S.tab);
   else if (S.tab === 'jornada' && !tourViu(pid, 'arsenal')) iniciarTour('arsenal');
   else if (S.tab === 'cardio' && !tourViu(pid, 'cardioAlvo')) iniciarTour('cardioAlvo');
+  else if (S.tab === 'cardio' && !tourViu(pid, 'cardioSug') && $('#sgCard')) iniciarTour('cardioSug');
 }
 /* Settings: see it all again, starting from what fits the screen */
 function tourRever() {
@@ -351,6 +364,7 @@ function tourFechar(fim) {
   tourMarcar(Tour.chave || '_', id);
   if (id === 'jornada') tourMarcar(Tour.chave || '_', 'arsenal'); /* the Journey tour already showed the Arsenal */
   if (id === 'cardio') tourMarcar(Tour.chave || '_', 'cardioAlvo'); /* and the cardio tour the machine numbers */
+  if (id === 'cardio' || id === 'cardioAlvo') tourMarcar(Tour.chave || '_', 'cardioSug'); /* and the coach's pick */
   removeEventListener('resize', tourReposicionar);
   removeEventListener('scroll', tourReposicionar);
   TOUR_INERTES.forEach(s => { const x = $(s); if (x) x.inert = false; });

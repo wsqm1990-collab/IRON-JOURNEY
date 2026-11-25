@@ -325,6 +325,7 @@ function recompensaHTML(antes, depois, linhas, extra, oferecerCardio, topo) {
       <div class="xp-lines num">${linhas.filter(l => l[1] > 0).map(([s, v]) => `<div><span>${esc(s)}</span><b>+${v}</b></div>`).join('')}</div>
       ${extra || ''}
       ${novas.length ? `<div class="stack" style="width:100%"><p class="eyebrow">${t('relic_won')}</p><div class="inv">${novas.map(r => itemRelHTML(depois, r)).join('')}</div></div>` : ''}
+      ${oferecerCardio ? sugestaoLinhaHTML(S.me) : ''}
       ${oferecerCardio ? `<div class="grid2" style="width:100%"><button class="btn ghost" data-a="tab" data-tab="cardio">${t('open_studio')}</button><button class="btn ghost" data-a="cardioAbrir">${t('log_today_cardio')}</button></div>` : ''}
       <button class="btn block" data-a="fecharSheet">${t('continue_btn')}</button>
     </div>`;
