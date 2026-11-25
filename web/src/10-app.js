@@ -95,7 +95,9 @@ function marcarSerie(i, j) {
   const prox = L.exs.slice(i + 1).find(e => !e.pulado && e.sets.some(s => !s.ok));
   const c = contagem(L);
   if (c.ok >= c.tot) { stopRest(); toast(t('all_sets_done')); return; }
-  startRest(x.alvo.desc, exFeito ? (prox ? t('next_x2', { x: exInfo(prox.id, prox.nome).nome }) : t('almost')) : t('set_n_of', { x: ex.nome, n: j + 2 }));
+  const ns = exFeito ? (prox ? serieInfo(prox) : null) : serieInfo(x);
+  const cab = ns ? (exFeito ? t('next_x2', { x: ns.nome }) : t('set_n_of', { x: ns.nome, n: ns.n })) : '';
+  startRest(x.alvo.desc, ns ? cab + ' · ' + ns.curto : t('almost'), ns ? falaSerie(ns, exFeito ? cab : '') : '');
   if (exFeito && prox) {
     const k = L.exs.indexOf(prox);
     setTimeout(() => { const el = $('#ex-' + k); if (el) el.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' }); }, 300);
@@ -275,7 +277,7 @@ const ACT = {
   swapEscopo: el => { S.swap.escopo = el.dataset.v; sheetBody(swapHTML()); },
   swapIA: () => pedirTrocaIA(),
   swapEscolher: el => aplicarTroca(el.dataset.id),
-  restMais: () => { if (Rest.go || Rest.end <= Date.now()) startRest(15, t('more15')); else { Rest.end += 15000; restNativo(); tickRest(); } },
+  restMais: () => { if (Rest.go || Rest.end <= Date.now()) startRest(15, Rest.fala ? Rest.label : t('more15'), Rest.fala); else { Rest.end += 15000; restNativo(); tickRest(); } },
   restFechar: () => stopRest(),
   finalizar: () => abrirFinalizar(),
   finSens: el => { S.finNota = ($('#fin-nota') || {}).value || ''; S.finSens = el.dataset.v; sheetBody(finHTML()); },
@@ -294,6 +296,11 @@ const ACT = {
   cfSess: el => { S.cform.sess = Number(el.dataset.v); prefillCardio(cardioSemanaInfo(S.me)); sheetBody(cardioHTML()); },
   cfModo: el => { S.cform.modo = el.dataset.v; sheetBody(cardioHTML()); },
   cfEsforco: el => { S.cform.esforco = Number(el.dataset.v); sheetBody(cardioHTML()); },
+  cfAlvo: el => { S.cform.alvoResp = Number(el.dataset.v); sheetBody(cardioHTML()); },
+  alvoAj: el => { mudarAlvo(el.dataset.m, 'aj', Number(el.dataset.d)); if (el.closest('#sheet')) sheetBody(setupHTML()); else render(); },
+  alvoEsc: el => { mudarAlvo(el.dataset.m, 'esc', Number(el.dataset.d)); if (el.closest('#sheet')) sheetBody(setupHTML()); else render(); },
+  cardioGuia: el => abrirCardioGuia(el.dataset.volta),
+  cgVoltar: () => { const s = S.setup; if (s && PROTO[s.id]) openSheet(L3(PROTO[s.id].nome), setupHTML()); else closeSheet(); },
   cfSalvar: () => salvarCardio(),
   stModo: el => { estudioState().modo = el.dataset.v; render(); },
   stConteudo: el => { const st = estudioState(), c = CONTEUDOS.find(x => x[0] === el.dataset.v); st.conteudo = c[0]; st.minutos = c[1]; st.rodadas = null; render(); },
@@ -309,7 +316,7 @@ const ACT = {
   suMaq: el => { S.setup.maq = el.dataset.v; sheetBody(setupHTML()); },
   somToggle: () => { proximoAlerta(); if (S.setup && !$('#sheet').hidden) sheetBody(setupHTML()); else render(); },
   testarSom: () => testarSom(),
-  suIniciar: () => { const s = S.setup; closeSheet(); iniciarDeConfig(s.id, s.param, s.maq, s.sessao); },
+  suIniciar: () => { const s = S.setup; closeSheet(); iniciarDeConfig(s.id, s.param, s.maq, s.sessao, segsSetup()); },
   plPausa: () => pausarPlayer(),
   plPular: () => pularSeg(),
   plSom: () => { proximoAlerta(); unlockAudio(); syncNativo(); tickPlayer(true); if (vozLigada()) VOZ.falar(nomeAlerta()); },

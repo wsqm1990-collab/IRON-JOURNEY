@@ -510,11 +510,13 @@ function seguirGrupo(L, i) {
   const c = contagem(L);
   if (c.ok >= c.tot) { stopRest(); toast(t('all_sets_done')); return true; }
   const prox = m.slice(pos + 1).find(pendente);
-  if (prox) { startRest(TROCA_S, t('next_x2', { x: nome(prox) })); ir(prox); return true; }
+  /* the rest bar shows the next set and the voice says it whole: exercise, set, reps and load */
+  const descanso = (s, e, k) => { const ns = serieInfo(e), cab = t(k, { x: nome(e) }); startRest(s, cab + ' · ' + ns.curto, falaSerie(ns, cab)); };
+  if (prox) { descanso(TROCA_S, prox, 'next_x2'); ir(prox); return true; }
   const volta = m.find(pendente);
-  if (volta) { startRest(x.alvo.desc, t('dif_round_next', { x: nome(volta) })); ir(volta); return true; }
+  if (volta) { descanso(x.alvo.desc, volta, 'dif_round_next'); ir(volta); return true; }
   const depois = L.exs.find(pendente);
-  startRest(x.alvo.desc, depois ? t('next_x2', { x: nome(depois) }) : t('almost'));
+  if (depois) descanso(x.alvo.desc, depois, 'next_x2'); else startRest(x.alvo.desc, t('almost'));
   if (depois) ir(depois);
   return true;
 }

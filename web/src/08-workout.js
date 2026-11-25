@@ -135,8 +135,32 @@ setInterval(() => { const c = $('#wkClock'); if (c && S.live) c.textContent = fm
 const Rest = { t: null, end: 0, go: false };
 let AC = null;
 function unlockAudio() { try { AC = AC || new (window.AudioContext || window.webkitAudioContext)(); if (AC.state === 'suspended') AC.resume(); } catch { AC = null; } }
-function startRest(sec, label) {
-  Rest.end = Date.now() + sec * 1000; Rest.go = false;
+Object.assign(STR, {
+  vs_set: ['{x}, set {n} of {t}: {o}', '{x}, série {n} de {t}: {o}', '{x}, serie {n} de {t}: {o}'],
+  vs_reps: ['{r} reps', '{r} repetições', '{r} repeticiones'], vs_reps_range: ['{a} to {b} reps', 'de {a} a {b} repetições', 'de {a} a {b} repeticiones'],
+  vs_secs: ['{r} seconds', '{r} segundos', '{r} segundos'], vs_mins: ['{r} minutes', '{r} minutos', '{r} minutos'],
+  vs_test: ['as many reps as you can', 'o máximo de repetições que conseguir', 'el máximo de repeticiones que puedas'],
+  vs_test_s: ['as many seconds as you can', 'o máximo de segundos que conseguir', 'el máximo de segundos que puedas'],
+  vs_rir: ['leaving {rir} in the tank', 'deixando {rir} sobrando', 'dejando {rir} en reserva'],
+  vs_kg: ['with {k} kilos', 'com {k} quilos', 'con {k} kilos'], vs_db: ['with {k} kilo dumbbells', 'com halteres de {k} quilos', 'con mancuernas de {k} kilos'],
+  vs_db1: ['with one {k} kilo dumbbell', 'com um halter de {k} quilos', 'con una mancuerna de {k} kilos'], vs_extra: ['with {k} extra kilos', 'com {k} quilos extras', 'con {k} kilos extra'],
+});
+/* the next set to do on an exercise: short for the rest bar ("10 × 40 kg"), whole for the voice ("10 reps with 40 kilos") */
+function serieInfo(x) {
+  const ex = exInfo(x.id, x.nome), a = x.alvo || {};
+  const j = Math.max(0, x.sets.findIndex(s => !s.ok)), z = x.sets[j] || {}, livre = testeLivre(x, j);
+  const rir = x.carga && x.carga.rir != null ? x.carga.rir : a.rir;
+  const r = z.alvo != null ? z.alvo : null, kg = z.kg > 0 ? z.kg : null, tipo = tipoCarga(ex);
+  const rTxt = livre ? t('test_day_ph') : r != null ? String(r) : faixa(a);
+  const curto = kg != null && usaCarga(ex) ? `${rTxt} × ${fmtKg(kg)} kg` : kg != null && ex.carga === 'c' ? `${rTxt} × +${fmtKg(kg)} kg` : `${rTxt} ${unidade(ex)}`;
+  const quanto = livre ? t(ex.carga === 's' ? 'vs_test_s' : 'vs_test') : ex.carga === 's' ? t('vs_secs', { r: r != null ? r : a.rmax })
+    : ex.carga === 'n' ? t('vs_mins', { r: r != null ? r : a.rmax }) : r != null ? t('vs_reps', { r }) : t('vs_reps_range', { a: a.rmin, b: a.rmax });
+  const k = kg == null ? '' : ex.carga === 'c' ? t('vs_extra', { k: fmtKg(kg) }) : tipo === 'halter' ? t('vs_db', { k: fmtKg(kg) }) : tipo === 'halter1' ? t('vs_db1', { k: fmtKg(kg) }) : usaCarga(ex) ? t('vs_kg', { k: fmtKg(kg) }) : '';
+  return { nome: ex.nome, n: j + 1, tot: x.sets.length, curto, oque: quanto + (k ? ' ' + k : '') + (livre && rir != null ? ', ' + t('vs_rir', { rir }) : '') };
+}
+const falaSerie = (s, nome) => t('vs_set', { x: nome || s.nome, n: s.n, t: s.tot, o: s.oque });
+function startRest(sec, label, fala) {
+  Rest.end = Date.now() + sec * 1000; Rest.go = false; Rest.fala = fala || '';
   $('#restIn').className = 'rest-in';
   $('#restIn').innerHTML = `<span class="clock" id="restClock"></span><span class="lbl">${t('rest_label')}<br><span style="opacity:.75">${esc(label)}</span></span><button data-a="restMais" aria-label="${t('more15')}">+15</button><button data-a="restFechar">${t('skip')}</button>`;
   $('#rest').hidden = false;
@@ -149,9 +173,9 @@ function tickRest() {
   if (left > 0) { const c = $('#restClock'); if (c) c.textContent = Math.floor(left / 60) + ':' + pad2(left % 60); return; }
   if (!Rest.go) {
     Rest.go = true;
-    if (!Rest.nativo) { tom(880, 0.2); tom(880, 0.2, 0.28); vibrar([220, 120, 220]); }
+    if (!Rest.nativo) { tom(880, 0.2); tom(880, 0.2, 0.28); vibrar([220, 120, 220]); const f = t('v_rest_done', { x: Rest.fala || Rest.label || '' }); setTimeout(() => { if (Rest.go) VOZ.falar(f); }, 650); }
     $('#restIn').className = 'rest-in go';
-    $('#restIn').innerHTML = `<span class="clock">0:00</span><span class="lbl"><b>${t('go')}</b><br>${t('next_set')}</span><button data-a="restFechar">OK</button>`;
+    $('#restIn').innerHTML = `<span class="clock">0:00</span><span class="lbl"><b>${t('go')}</b><br>${esc(Rest.fala && Rest.label ? Rest.label : t('next_set'))}</span><button data-a="restFechar">OK</button>`;
   }
   if (left < -45) stopRest();
 }
@@ -167,7 +191,7 @@ function restNativo() {
   Rest.nativo = true;
   Nat.call('start', {
     kind: 'rest', id: 'r' + Date.now(), title: t('rest_label') + ' · ' + (Rest.label || ''), mode: alertaModo(), lang: LOC(), duck: duckOn(), fresh: false,
-    ini: Date.now(), pausa: 0, pausadoEm: 0, done: t('v_rest_done', { x: Rest.label || '' }),
+    ini: Date.now(), pausa: 0, pausadoEm: 0, done: t('v_rest_done', { x: Rest.fala || Rest.label || '' }),
     segs: [{ s: sec, label: t('rest_label'), say: '', strong: false }],
     labels: { next: t('next_x'), last: Rest.label || t('next_set'), paused: t('paused'), pause: t('pause'), resume: t('resume'), skip: t('skip'), stop: t('skip'), channel: t('notif_channel') },
   }).catch(() => { Rest.nativo = false; });
@@ -328,7 +352,7 @@ function abrirCardio(opts) {
   const o = opts && typeof opts === 'object' ? opts : {};
   const ci = cardioSemanaInfo(S.me);
   const idx = o.sessao ? ci.sessoes.findIndex(c => c.nome === o.sessao) : opts != null && typeof opts !== 'object' && opts !== '' ? Number(opts) : (ci.sessoes.length && !o.modo ? 0 : -1);
-  S.cform = { sess: idx, modo: '', minutos: '', km: '', esforco: 0, fc: '', nota: '', protocolo: o.protocolo || '', ini: o.ini || 0, fim: o.fim || 0 };
+  S.cform = { sess: idx, modo: '', minutos: '', km: '', esforco: 0, fc: '', nota: '', protocolo: o.protocolo || '', ini: o.ini || 0, fim: o.fim || 0, alvoMaq: o.alvoMaq || '', alvoResp: null };
   prefillCardio(ci);
   if (o.modo) S.cform.modo = o.modo;
   if (o.minutos) S.cform.minutos = String(o.minutos);
@@ -356,6 +380,7 @@ function cardioHTML() {
     </div>
     <p class="eyebrow">${t('how_effort')}</p>
     <div class="grid2">${ESFORCOS.map(([v, n, d]) => `<button class="opt" data-a="cfEsforco" data-v="${v}" aria-pressed="${f.esforco === v}"><b>${esc(L3(n))}</b><span>${esc(L3(d))}</span></button>`).join('')}</div>
+    ${f.alvoMaq ? `<p class="eyebrow">${t('al_fb_q')}</p><div class="chips">${[[1, 'al_fb_facil'], [0, 'al_fb_ok_b'], [-1, 'al_fb_dificil']].map(([v, k]) => `<button class="chip" data-a="cfAlvo" data-v="${v}" aria-pressed="${f.alvoResp === v}">${t(k)}</button>`).join('')}</div>` : ''}
     <label class="f" for="cf-fc">${t('avg_hr')}<input class="inp num" id="cf-fc" data-in="cf" data-k="fc" inputmode="numeric" maxlength="3" value="${esc(f.fc)}" placeholder="${t('avg_hr_ph')}"></label>
     <label class="f" for="cf-nota">${t('note_opt')}<textarea class="inp" id="cf-nota" data-in="cf" data-k="nota" maxlength="300" placeholder="${t('cardio_note_ph')}">${esc(f.nota)}</textarea></label>
     <button class="btn ok big block" data-a="cfSalvar">${t('save_cardio')}</button>
@@ -382,9 +407,15 @@ async function salvarCardio() {
   if (!S.cardio.some(s => s._id === id)) S.cardio.unshift({ ...doc, _id: id });
   let loot = [];
   try { if (arsAntes) loot = lootNovo(arsAntes, arsenalDe(pid)); } catch { loot = []; }
+  /* the machine numbers: too easy → up a step next time, too hard → down a step */
+  let notaAlvo = '';
+  if (f.alvoMaq && f.alvoResp != null) {
+    guardarAlvo(f.alvoMaq, pid, f.alvoResp);
+    notaAlvo = `<p class="note small" style="width:100%;text-align:left">${esc(t(f.alvoResp > 0 ? 'al_fb_up' : f.alvoResp < 0 ? 'al_fb_down' : 'al_fb_same', { m: exInfo(f.alvoMaq).nome }))}</p>`;
+  }
   S.cform = null; Sheet.onClose = null; closeSheet(); render();
   const vale = doc.minutos >= 10;
   const linhas = [[t('cardio_done'), vale ? XP.cardio : 0], [tn(doc.minutos, 'n_minute', 'n_minutes'), vale ? Math.min(doc.minutos, 60) * XP.cardioMin : 0]];
   if (depois.cardioSemanas > antes.cardioSemanas) linhas.push([t('cardio_week_goal'), XP.cardioSemana]);
-  openSheet(t('cardio_saved'), recompensaHTML(antes, depois, linhas, (vale ? '' : `<p class="small muted">${t('xp_10min')}</p>`) + lootHTML(loot), false));
+  openSheet(t('cardio_saved'), recompensaHTML(antes, depois, linhas, notaAlvo + (vale ? '' : `<p class="small muted">${t('xp_10min')}</p>`) + lootHTML(loot), false));
 }

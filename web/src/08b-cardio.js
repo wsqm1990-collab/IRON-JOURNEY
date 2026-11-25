@@ -138,8 +138,15 @@ function montarAssistir(st) {
   }
   return { segs, param, base, extra };
 }
+/* built once per choice, so the shape on screen is the session you get (the surprise surges are random) */
+let ASSIST_CACHE = { k: '', m: null };
+function assistirMontado(st) {
+  const k = [st.estilo, st.minutos, st.rodadas, st.encher].join(':');
+  if (ASSIST_CACHE.k !== k) ASSIST_CACHE = { k, m: montarAssistir(st) };
+  return ASSIST_CACHE.m;
+}
 function iniciarAssistir() {
-  const st = estudioState(), p = PROTO[st.estilo], m = montarAssistir(st), sv = Nat.on ? svcEscolhido() : null;
+  const st = estudioState(), p = PROTO[st.estilo], m = assistirMontado(st), sv = Nat.on ? svcEscolhido() : null;
   iniciarPlayer({ id: p.id, maq: st.maqW, sessao: '', layout: 'baixo', titulo: L3(p.nome) + ' · ' + exInfo(st.maqW).nome, segs: m.segs });
   if (sv) setTimeout(() => Nat.call('openApp', { url: sv[1], pkg: sv[2] }).catch(() => toast(t('cant_open'))), 1200);
 }
@@ -159,7 +166,7 @@ function viewCardio() {
   if (st.modo === 'treinar') {
     corpo = `<div class="stack">${PROTOCOLOS.filter(p => !p.oculto).map(protoCard).join('')}</div>`;
   } else if (st.modo === 'assistir') {
-    const p = PROTO[st.estilo], m = montarAssistir(st);
+    const p = PROTO[st.estilo], m = assistirMontado(st);
     const total = Math.round(totalSeg(m.segs) / 60), base = Math.round(m.base / 60), extra = Math.round(m.extra / 60);
     const maqs = [...new Set([...p.maq, ...PROTO.fartlek.maq])];
     corpo = `<div class="card pad stack">
@@ -173,6 +180,7 @@ function viewCardio() {
       <div class="note num">${esc(m.extra ? t('resumo_fill', { p: L3(p.nome), a: base, b: extra, c: total }) : t('resumo_plain', { p: L3(p.nome), a: total }))}</div>
       ${p.nivel === 'max' || p.nivel === 'hard' ? `<p class="xs muted">${t('max_note')}</p>` : ''}
       <p class="eyebrow">${t('machine')}</p>${maquinasHTML(st.maqW, maqs, 'stMaq')}
+      ${alvosHTML(m.segs, st.maqW)}
       <div class="row between"><span class="small">${t('alerts')}</span><button class="chip" data-a="somToggle" aria-pressed="true">${nomeAlerta()}</button></div>
       <button class="btn ghost block" data-a="testarSom">${t('test_sound')}</button>
       ${Nat.on ? `<p class="eyebrow">${t('open_with')}</p>
@@ -197,6 +205,7 @@ function viewCardio() {
     <div class="hero"><p class="eyebrow">${t('studio')}</p><h1 class="h-display h2">${t('studio_title')}</h1>
       <div class="seg">${[['treinar', 'mode_train'], ['assistir', 'mode_watch'], ['ouvir', 'mode_listen']].map(([m, k]) => `<button data-a="stModo" data-v="${m}" aria-pressed="${st.modo === m}">${t(k)}</button>`).join('')}</div>
       ${z ? `<p class="small muted num">${t('hr_zones', { a: z.leve[0], b: z.leve[1], c: z.forte[0], d: z.forte[1] })}</p>` : ''}
+      <button class="btn ghost small cg-btn" data-a="cardioGuia">${I.info || ''}${t('cg_btn')}</button>
     </div>
     ${doPlano}
     ${corpo}
@@ -214,14 +223,20 @@ function abrirProto(id, k) {
   S.setup = { id: p.id, param: c ? paramDe(p, cardioAlvo(c, ci.pr.sem).minutosAlvo) : p.def, maq: (c && c.opcoes[0]) || maqs.find(m => pref.includes(m)) || maqs[0], maqs, sessao: c ? c.nome : '' };
   openSheet(L3(p.nome), setupHTML());
 }
+function segsSetup() {
+  const s = S.setup, k = s.id + ':' + s.param;
+  if (s.segsK !== k) { s.segs = PROTO[s.id].build(s.param); s.segsK = k; }
+  return s.segs;
+}
 function setupHTML() {
   const s = S.setup, p = PROTO[s.id];
-  const total = Math.round(totalSeg(p.build(s.param)) / 60);
+  const total = Math.round(totalSeg(segsSetup()) / 60);
   const rot = p.modo === 'dur' ? t('minutes') : p.modo === 'blocos' ? t('blocks') : t('rounds');
   return `<div class="stack">
     <p class="small muted">${esc(L3(p.desc))}</p>
     ${stepperHTML('suParam', p.modo === 'dur' ? s.param + ' min' : s.param, rot, `<p class="small muted num">${t('min_total', { n: total })}</p>`)}
     <p class="eyebrow">${t('machine')}</p>${maquinasHTML(s.maq, s.maqs, 'suMaq')}
+    ${alvosHTML(segsSetup(), s.maq, 'setup')}
     <div class="row between"><span class="small">${t('alerts')}</span><button class="chip" data-a="somToggle" aria-pressed="true">${nomeAlerta()}</button></div>
     <button class="btn ghost block" data-a="testarSom">${t('test_sound')}</button>
     ${p.nivel === 'max' || p.nivel === 'hard' ? `<p class="xs muted">${t('max_note')}</p>` : ''}
@@ -267,7 +282,7 @@ function falaSeg(i) {
   const pos = P.segs.slice(0, i + 1).filter(s => FORTES.includes(s.k)).length;
   let pre = '';
   if (FORTES.includes(sg.k) && trab.length > 1) pre = (pos === trab.length ? t('v_last') : t('v_round', { a: pos, b: trab.length })) + ' ';
-  return pre + rotuloSeg(sg).replace(/[!¡]/g, '') + ', ' + durFala(sg.s) + '.';
+  return pre + rotuloSeg(sg).replace(/[!¡]/g, '') + ', ' + durFala(sg.s) + '.' + (sg.a && sg.a.fala ? ' ' + sg.a.fala : '');
 }
 function testarSom() {
   unlockAudio();
@@ -303,6 +318,7 @@ const vibrar = padrao => { if (Nat.on) { Nat.safe('vibrate', { pattern: padrao }
 function iniciarPlayer(cfg, retomar) {
   unlockAudio();
   if (!cfg.sid) cfg.sid = 'c' + Date.now();
+  if (!cfg.alvoOk) { cfg.segs = prepararSegs(cfg.segs, alvoCtx(cfg.maq)); cfg.alvoOk = 1; if (!retomar) guardarAlvo(cfg.maq); }
   P.cfg = cfg; P.segs = cfg.segs; P.on = true;
   if (retomar) { P.ini = retomar.ini; P.pausa = retomar.pausa; P.pausadoEm = retomar.pausadoEm; }
   else { P.ini = Date.now(); P.pausa = 0; P.pausadoEm = 0; }
@@ -311,8 +327,8 @@ function iniciarPlayer(cfg, retomar) {
   $('#player').className = 'player' + (cfg.layout === 'baixo' ? ' baixo' : '');
   $('#player').hidden = false; document.documentElement.style.overflow = 'hidden';
   $('#player').innerHTML = `<div class="pl-top"><span id="plNome"></span><span class="num" id="plTot"></span></div>
-    <div class="pl-mid"><div class="pl-kind" id="plKind"></div><div class="pl-clock" id="plClock" role="timer"></div><div class="pl-hint" id="plHint"></div><div class="pl-round num" id="plRound"></div><div class="pl-next" id="plNext"></div></div>
-    <div class="pl-bar" aria-hidden="true"><i id="plBar"></i></div>
+    <div class="pl-mid"><div class="pl-kind" id="plKind"></div><div class="pl-clock" id="plClock" role="timer"></div><div class="pl-alvo" id="plAlvo" hidden></div><div class="pl-hint" id="plHint"></div><div class="pl-round num" id="plRound"></div><div class="pl-next" id="plNext"></div></div>
+    <svg class="pl-pf" viewBox="0 0 1000 100" preserveAspectRatio="none" aria-hidden="true"><defs><clipPath id="plClip"><rect id="plClipR" x="0" y="0" width="0" height="100"/></clipPath></defs><g class="base">${perfilRects(cfg.segs)}</g><g clip-path="url(#plClip)">${perfilRects(cfg.segs)}</g><rect class="agora" id="plAgora" x="0" y="0" width="4" height="100"/></svg>
     <div class="pl-ctrl"><button data-a="plPausa" id="plPausaBtn" class="main"></button><button data-a="plPular">${t('skip')}</button><button data-a="plSom" id="plSomBtn"></button><button data-a="plFim">${t('finish')}</button></div>`;
   $('#plNome').textContent = cfg.titulo;
   startWakeLock();
@@ -335,7 +351,7 @@ function planoNativo(fresh) {
     kind: 'hiit', id: P.cfg.sid, title: P.cfg.titulo, mode: alertaModo(), lang: LOC(), duck: duckOn(), fresh,
     ini: P.ini, pausa: P.pausa, pausadoEm: P.pausadoEm,
     intro: t('v_start', { x: falaSeg(0) }), half: t('v_half'), done: t('v_done'),
-    segs: P.segs.map((sg, i) => ({ s: sg.s, label: rotuloSeg(sg), say: i === 0 ? '' : falaSeg(i), strong: FORTES.includes(sg.k), round: rodadaSeg(i) })),
+    segs: P.segs.map((sg, i) => ({ s: sg.s, label: rotuloSeg(sg) + (sg.a ? ' · ' + sg.a.curto : ''), say: i === 0 ? '' : falaSeg(i), strong: FORTES.includes(sg.k), round: rodadaSeg(i) })),
     labels: { next: t('next_x'), last: t('last_part'), paused: t('paused'), pause: t('pause'), resume: t('resume'), skip: t('skip'), stop: t('finish'), channel: t('notif_channel'), doneTitle: t('done_title'), doneText: t('notif_done_text') },
   };
 }
@@ -372,14 +388,14 @@ function tickPlayer(primeiro) {
     const el = $('#player');
     el.style.setProperty('--seg-bg', def.cor); el.style.setProperty('--seg-fg', def.fg);
     $('#plKind').textContent = rotuloSeg(sg);
-    const z = zonasFC((perfil() || {}).idade);
-    const hr = z && def.z ? ' · ' + t('hr_range', { a: z[def.z][0], b: z[def.z][1] }) : '';
-    $('#plHint').textContent = L3(def.h) + hr;
+    const al = $('#plAlvo');
+    al.innerHTML = sg.a ? painelHTML(sg.a.campos) : ''; al.hidden = !sg.a;
+    $('#plHint').textContent = sensacaoSeg(sg);
     const trabalhos = P.segs.filter(s => ['work', 'max', 'surge', 'tempo', 'climb'].includes(s.k));
     const pos = P.segs.slice(0, i + 1).filter(s => ['work', 'max', 'surge', 'tempo', 'climb'].includes(s.k)).length;
     $('#plRound').textContent = trabalhos.length > 1 && FORTES_R.includes(sg.k) ? t('round_x', { a: Math.max(pos, 1), b: trabalhos.length }) : '';
     const prox = P.segs[i + 1];
-    $('#plNext').textContent = prox ? t('next_x', { s: rotuloSeg(prox), t: mmss(prox.s) }) : t('last_part');
+    $('#plNext').textContent = prox ? t('next_x', { s: rotuloSeg(prox) + (prox.a ? ' · ' + prox.a.curto : ''), t: mmss(prox.s) }) : t('last_part');
     if (mudou && !primeiro) {
       el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash');
     }
@@ -396,9 +412,10 @@ function tickPlayer(primeiro) {
   $('#plClock').textContent = mmss(resta);
   $('#plClock').classList.toggle('pausado', !!P.pausadoEm);
   if (P.pausadoEm) $('#plHint').textContent = t('paused');
-  else if ($('#plHint').textContent === t('paused')) { const z = zonasFC((perfil() || {}).idade), d = SEG[sg.k]; $('#plHint').textContent = L3(d.h) + (z && d.z ? ' · ' + t('hr_range', { a: z[d.z][0], b: z[d.z][1] }) : ''); }
+  else if ($('#plHint').textContent === t('paused')) $('#plHint').textContent = sensacaoSeg(sg);
   $('#plTot').textContent = mmss(e) + ' / ' + mmss(total);
-  $('#plBar').style.width = clamp((e / total) * 100, 0, 100) + '%';
+  const feito = clamp(e / total, 0, 1) * 1000;
+  $('#plClipR').setAttribute('width', feito.toFixed(1)); $('#plAgora').setAttribute('x', Math.max(0, feito - 2).toFixed(1));
   $('#plPausaBtn').textContent = P.pausadoEm ? t('resume') : t('pause');
   $('#plSomBtn').textContent = nomeAlerta();
 }
@@ -426,11 +443,11 @@ function terminarPlayer(completo) {
   const minutos = Math.max(1, Math.round(e / 60));
   if (e < 30) return;
   const ini = P.ini || Date.now() - e * 1000;
-  abrirCardio({ minutos, modo: cfg.maq, protocolo: cfg.id, esforco: ESFORCO_PADRAO[PROTO[cfg.id].nivel], sessao: cfg.sessao || '', titulo: completo ? t('done_title') : '', ini, fim: Math.min(Date.now(), ini + e * 1000 + (P.pausa || 0)) });
+  abrirCardio({ minutos, modo: cfg.maq, protocolo: cfg.id, esforco: ESFORCO_PADRAO[PROTO[cfg.id].nivel], sessao: cfg.sessao || '', titulo: completo ? t('done_title') : '', ini, fim: Math.min(Date.now(), ini + e * 1000 + (P.pausa || 0)), alvoMaq: (cfg.segs || []).some(s => s.a) ? cfg.maq : '' });
 }
-function iniciarDeConfig(id, param, maq, sessao) {
+function iniciarDeConfig(id, param, maq, sessao, segs) {
   const p = PROTO[id];
-  iniciarPlayer({ id, maq, sessao, titulo: L3(p.nome) + ' · ' + exInfo(maq).nome, segs: p.build(param) });
+  iniciarPlayer({ id, maq, sessao, titulo: L3(p.nome) + ' · ' + exInfo(maq).nome, segs: segs || p.build(param) });
 }
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && P.on) { startWakeLock(); tickPlayer(); sincronizarDoNativo(); } });
 async function retomarPlayerSalvo() {
