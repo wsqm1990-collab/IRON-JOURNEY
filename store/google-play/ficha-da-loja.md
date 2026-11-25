@@ -42,6 +42,7 @@ O PESO CERTO EM CADA SÉRIE
 • No fim do descanso, a voz fala a próxima série: repetições e peso
 
 CARDIO COM O NÚMERO CERTO
+• Todo dia o treinador sugere o melhor cardio para você, pelo que você treinou e pelo cardio da semana, com mais duas opções
 • Em cada parte, o app diz o que colocar no aparelho: velocidade e inclinação da esteira, nível da bike, ritmo do remo
 • Os números se ajustam a você, como a carga na musculação
 • HIIT, Tabata, 4×4 norueguês, zona 2 e mais, com avisos por voz e bipe
@@ -87,6 +88,7 @@ THE RIGHT WEIGHT EVERY SET
 • When the rest ends, the voice calls your next set: reps and weight
 
 CARDIO WITH THE RIGHT NUMBERS
+• Every day the coach suggests the best cardio for you, from what you trained and your cardio week, with two more options
 • Each part tells you what to set on the machine: treadmill speed and incline, bike level, rower pace
 • The numbers adapt to you, like the weight in strength training
 • HIIT, Tabata, Norwegian 4×4, zone 2 and more, with voice and beep cues
@@ -132,6 +134,7 @@ EL PESO JUSTO EN CADA SERIE
 • Al terminar el descanso, la voz te dice la siguiente serie: repeticiones y peso
 
 CARDIO CON EL NÚMERO JUSTO
+• Cada día el entrenador te sugiere el mejor cardio, según lo que entrenaste y tu cardio de la semana, con dos opciones más
 • En cada parte, la app te dice qué poner en la máquina: velocidad y pendiente de la cinta, nivel de la bici, ritmo del remo
 • Los números se ajustan a ti, como el peso en las pesas
 • HIIT, Tabata, 4×4 noruego, zona 2 y más, con avisos por voz y pitidos
