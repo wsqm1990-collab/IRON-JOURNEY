@@ -91,7 +91,7 @@ Object.assign(STR, {
   pause: ['Pause', 'Pausar', 'Pausa'], resume: ['Resume', 'Seguir', 'Seguir'], skip: ['Skip', 'Pular', 'Saltar'], finish: ['Finish', 'Encerrar', 'Terminar'],
   sound: ['Sound', 'Som', 'Sonido'], paused: ['Paused', 'Pausado', 'En pausa'],
   done_title: ['Done! Great work.', 'Pronto! Mandou bem.', '¡Listo! Buen trabajo.'],
-  hr_range: ['{a}–{b} bpm', '{a}–{b} bpm', '{a}–{b} lpm'],
+  hr_range: ['{a}–\u2060{b}\u00a0bpm', '{a}–\u2060{b}\u00a0bpm', '{a}–\u2060{b}\u00a0lpm'],
   resume_player: ['Resume the cardio you started?', 'Retomar o cardio que você começou?', '¿Retomar el cardio que empezaste?'],
 });
 
@@ -212,7 +212,7 @@ function viewCardio() {
     <button class="btn ghost block" data-a="cardioAbrir">${t('log_without')}</button>
   </section>`;
 }
-Object.assign(STR, { hr_zones: ['Your heart rate: easy {a}–{b} bpm · hard {c}–{d} bpm', 'Seus batimentos: leve {a}–{b} bpm · forte {c}–{d} bpm', 'Tu pulso: suave {a}–{b} lpm · fuerte {c}–{d} lpm'] });
+Object.assign(STR, { hr_zones: ['Your heart rate: easy {a}–\u2060{b}\u00a0bpm · hard {c}–\u2060{d}\u00a0bpm', 'Seus batimentos: leve {a}–\u2060{b}\u00a0bpm · forte {c}–\u2060{d}\u00a0bpm', 'Tu pulso: suave {a}–\u2060{b}\u00a0lpm · fuerte {c}–\u2060{d}\u00a0lpm'] });
 
 /* ---------- setup sheet ---------- */
 function abrirProto(id, k) {

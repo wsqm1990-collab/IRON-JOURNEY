@@ -271,7 +271,7 @@ Object.assign(STR, {
   cg_g_rua: ['Outdoors: pace is minutes per kilometer, shown by a running app or a watch.', 'Na rua: ritmo é quantos minutos para fazer 1 km; aparece no app de corrida ou no relógio.', 'Al aire libre: el ritmo son los minutos por kilómetro; lo muestra una app de correr o el reloj.'],
   cg_right: ['How to know it\'s right', 'Como saber se está certo', 'Cómo saber si va bien'],
   cg_right_t: ['Effort goes from 1 to 10. The easiest check is talking:', 'O esforço vai de 1 a 10. O jeito mais fácil de conferir é falando:', 'El esfuerzo va de 1 a 10. Lo más fácil para comprobarlo es hablar:'],
-  cg_hr: ['Your heart rate: easy {a}–{b} bpm · hard {c}–{d} bpm (estimated max {m}).', 'Seus batimentos: leve {a}–{b} bpm · forte {c}–{d} bpm (máximo estimado {m}).', 'Tu pulso: suave {a}–{b} lpm · fuerte {c}–{d} lpm (máximo estimado {m}).'],
+  cg_hr: ['Your heart rate: easy {a}–\u2060{b}\u00a0bpm · hard {c}–\u2060{d}\u00a0bpm (estimated max {m}).', 'Seus batimentos: leve {a}–\u2060{b}\u00a0bpm · forte {c}–\u2060{d}\u00a0bpm (máximo estimado {m}).', 'Tu pulso: suave {a}–\u2060{b}\u00a0lpm · fuerte {c}–\u2060{d}\u00a0lpm (máximo estimado {m}).'],
   cg_hr_note: ['On short parts your heart rate takes a while to climb: follow the effort and the machine numbers.', 'Nas partes curtas os batimentos demoram para subir: siga o esforço e os números do aparelho.', 'En las partes cortas el pulso tarda en subir: sigue el esfuerzo y los números de la máquina.'],
   cg_hr_none: ['Add your age to your profile to see your heart rate zones.', 'Coloque sua idade no perfil para ver as suas faixas de batimentos.', 'Añade tu edad al perfil para ver tus zonas de pulso.'],
   cg_yours: ['Numbers that fit you', 'Números do seu jeito', 'Números a tu medida'],
