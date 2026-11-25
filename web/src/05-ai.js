@@ -54,6 +54,8 @@ function ctxPerfil(p) {
   l.push('Cardio: ' + [p.cardioVezes ? p.cardioVezes + ' sessions per week' : 'does not want cardio sessions', modos && 'prefers ' + modos, quando].filter(Boolean).join('; '));
   const z = zonasFC(p.idade);
   if (z) l.push(`Estimated heart rate: max ~${z.max} bpm; easy (zone 2) ${z.leve[0]}-${z.leve[1]} bpm; hard ${z.forte[0]}-${z.forte[1]} bpm`);
+  const ajs = Object.entries(p.cardioAjuste || {}).filter(([, v]) => v);
+  if (ajs.length) l.push('Cardio machine numbers moved from the standard for their level: ' + ajs.map(([m, v]) => `${exInfo(m).nomeEn} ${v > 0 ? '+' : ''}${v} step${Math.abs(v) > 1 ? 's' : ''}${(p.cardioEscala || {})[m] ? ' (machine levels go up to ' + p.cardioEscala[m] + ')' : ''}`).join('; '));
   const av = typeof ultimaAval === 'function' ? ultimaAval(p) : null;
   if (av) l.push(resumoAvalEn(av));
   return l.join('\n');
@@ -321,7 +323,7 @@ Rules:
 - The app calculates the exact weight for every set: set 1 of each exercise is a test, and from it the app gives the weight (plates per side, dumbbell or machine pin) and the exact reps of the other sets. Mention it when they ask about weights.
 - When you mention research, describe it in plain words; never invent authors, years, study names or numbers.
 - Personalize with the data below. Only suggest exercises and cardio that this gym allows (outdoor walking and running always work).
-- For cardio, explain intensity simply (talk test, effort 0-10 and the heart rate range from the data, if any). The app has a Cardio Studio with guided protocols (zone 2, tempo, HIIT 30/30 and 40/20, Tabata, Norwegian 4x4, pyramid, sprints, fartlek, incline walk) and Watch and Listen modes for training while watching a show or listening to music; recommend them when they fit.
+- For cardio, explain intensity simply (talk test, effort 0-10 and the heart rate range from the data, if any). The app has a Cardio Studio with guided protocols (zone 2, tempo, HIIT 30/30 and 40/20, Tabata, Norwegian 4x4, pyramid, sprints, fartlek, incline walk) and Watch and Listen modes for training while watching a show or listening to music; recommend them when they fit. In every guided session the app shows and speaks what to set on the machine for each part (treadmill speed and incline; bike, elliptical and stair level, plus cadence; rower pace per 500 m and strokes per minute; outdoor pace per km), starting from their level: they tap "Easier" or "Harder" before starting, and at the end they say whether the numbers felt too easy or too hard so the next session adapts. Point to this when they ask what speed, level or incline to use.
 - If the person wants to change the plan (swap exercises, change days, change focus), explain what you would do and tell them to tap "Adjust my plan" to apply it.
 - Strong or worsening pain, chest pain, dizziness, shortness of breath or a suspected injury: tell them to stop and see a doctor or physical therapist. Never diagnose.
 - Food and supplements: general, safe guidance; for an individual diet, refer to a dietitian.
