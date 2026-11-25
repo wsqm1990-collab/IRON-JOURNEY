@@ -73,8 +73,11 @@ a.svc:focus-visible{outline:3px solid var(--accent)}
 .mini-step button{width:42px;height:42px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-size:20px;font-weight:700;color:var(--ink)}
 .mini-step b{min-width:2.4ch;text-align:center;font-family:var(--f-display);font-size:21px}
 .alv p.small,.alv p.xs{margin:0;line-height:1.45}
+/* the setup sheet got longer: Start stays at hand */
+.su-go{position:sticky;bottom:calc(-16px - env(safe-area-inset-bottom,0px));z-index:1;background:var(--bg);margin:0 -2px;padding:10px 2px calc(12px + env(safe-area-inset-bottom,0px));box-shadow:0 -10px 14px -12px rgba(0,0,0,.35)}
+.alv-how{align-self:flex-start;padding:0 4px;margin:-4px 0 -6px}
+.alv-how svg,.cg-btn svg{width:18px;height:18px}
 .cg-btn{align-self:flex-start}
-.cg-btn svg{width:18px;height:18px}
 .cg h3{margin:6px 0 0}
 .cg p{margin:0;line-height:1.5}
 .cg-ex{display:flex;flex-direction:column;gap:4px;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--surface)}

@@ -239,13 +239,14 @@ function alvosHTML(segs, maq, volta) {
   }).join('');
   const aj = c.aj;
   return `<div class="alv">
-    <div class="row between"><p class="eyebrow">${t(tem ? 'al_title' : 'al_shape')}</p><button class="btn quiet small" data-a="cardioGuia"${volta ? ` data-volta="${volta}"` : ''}>${t('al_how')}</button></div>
+    <p class="eyebrow">${t(tem ? 'al_title' : 'al_shape')}</p>
     ${perfilSVG(ps)}
     <div class="alv-lista">${linhas}</div>
     ${tem ? `<div class="alv-aj"><button class="btn ghost small" data-a="alvoAj" data-m="${maq}" data-d="-1">${t('al_easier')}</button><span class="alv-aj-v"><small>${t('al_yours')}</small><b class="num">${aj === 0 ? t('al_std') : (aj > 0 ? '+' : '−') + Math.abs(aj)}</b></span><button class="btn ghost small" data-a="alvoAj" data-m="${maq}" data-d="1">${t('al_harder')}</button></div>
     ${MAQ_NIVEL.includes(maq) ? `<div class="alv-esc"><span class="small">${t('al_scale')}</span><span class="mini-step"><button data-a="alvoEsc" data-m="${maq}" data-d="-1" aria-label="−">−</button><b class="num">${c.esc}</b><button data-a="alvoEsc" data-m="${maq}" data-d="1" aria-label="+">+</button></span></div>` : ''}
     <p class="small muted">${t('al_tip_' + maq)}</p>
     <p class="xs muted">${t('al_note')}</p>` : ''}
+    <button class="btn quiet small alv-how" data-a="cardioGuia"${volta ? ` data-volta="${volta}"` : ''}>${I.info}${t('cg_btn')}</button>
   </div>`;
 }
 Object.assign(STR, { al_shape: ['The shape of the workout', 'Como é o treino', 'Cómo es el entrenamiento'] });

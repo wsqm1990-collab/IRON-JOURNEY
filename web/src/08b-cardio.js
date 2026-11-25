@@ -240,7 +240,7 @@ function setupHTML() {
     <div class="row between"><span class="small">${t('alerts')}</span><button class="chip" data-a="somToggle" aria-pressed="true">${nomeAlerta()}</button></div>
     <button class="btn ghost block" data-a="testarSom">${t('test_sound')}</button>
     ${p.nivel === 'max' || p.nivel === 'hard' ? `<p class="xs muted">${t('max_note')}</p>` : ''}
-    <button class="btn big block" data-a="suIniciar">${t('start')}</button>
+    <div class="su-go"><button class="btn big block" data-a="suIniciar">${t('start')} · ${t('min_total', { n: total })}</button></div>
   </div>`;
 }
 
