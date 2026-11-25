@@ -1,8 +1,10 @@
 # Swordbell
 
 Workouts that become an RPG (formerly Iron Journey). Strength and HIIT training app for Android and iPhone: a periodized plan for your gym, workout logging with
-double progression, a Cardio Studio with guided intervals you can do while watching a series
-(voice, beeps and vibration keep coming with Netflix or YouTube in full screen), an optional AI
+double progression (the voice calls each next set with its reps and weight), a Cardio Studio with
+guided intervals that tell you what to set on the machine in every part (speed and incline, level and
+cadence, rower pace) and adapt to you, which you can do while watching a series (voice, beeps and
+vibration keep coming with Netflix or YouTube in full screen), an optional AI
 coach with your own Anthropic key, and a hero's-journey layer with XP, levels, relics, bosses and an
 Arsenal of weapons, shields, armour and powers that only training earns.
 
