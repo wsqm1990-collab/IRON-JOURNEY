@@ -1,0 +1,14 @@
+✔ Adding native Xcode project in ios in 22.00ms
+✔ add in 22.66ms
+✔ Copying web assets from www to ios/App/App/public in 170.25ms
+✔ Creating capacitor.config.json in ios/App/App in 934.08μs
+✔ copy ios in 178.15ms
+✔ Updating iOS plugins in 497.79μs
+[info] All Capacitor plugins have a Package.swift file and will be included in Package.swift
+[info] Writing Package.swift
+[info] Found 1 Capacitor plugin for ios:
+       @capacitor/app@8.1.2
+✔ update ios in 14.77ms
+[success] ios platform added!
+Follow the Developer Workflow guide to get building:
+https://capacitorjs.com/docs/basics/workflow

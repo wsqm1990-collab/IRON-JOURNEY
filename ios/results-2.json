@@ -1,0 +1,39 @@
+{
+  "checks" : [
+    {
+      "detail" : [
+        "audio"
+      ],
+      "name" : "allowed to play audio in the background",
+      "pass" : true
+    },
+    {
+      "detail" : [
+        "UIInterfaceOrientationPortrait"
+      ],
+      "name" : "upright only",
+      "pass" : true
+    },
+    {
+      "detail" : "ok",
+      "name" : "page starts",
+      "pass" : true
+    },
+    {
+      "detail" : "\/Users\/runner\/Library\/Developer\/CoreSimulator\/Devices\/8EBAA496-5654-45BF-897F-3C4FD73935F1\/data\/Containers\/Data\/Application\/AC259CE3-2785-4485-9DAF-5DB71047D1DA\/Library\/NoCloud\/ionic_built_snapshots\/selftest43",
+      "name" : "the kept update opens at start",
+      "pass" : true
+    },
+    {
+      "detail" : "{\"a\":1}",
+      "name" : "data comes back from the copy",
+      "pass" : true
+    },
+    {
+      "detail" : "clean",
+      "name" : "forget the update again",
+      "pass" : true
+    }
+  ],
+  "phase" : "2"
+}

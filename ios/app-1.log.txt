@@ -1,0 +1,32 @@
+2026-11-27 00:58:06.274 App[10997:37710] DiskCookieStorage changing policy from 2 to 0, cookie file: file:///Users/runner/Library/Developer/CoreSimulator/Devices/8EBAA496-5654-45BF-897F-3C4FD73935F1/data/Containers/Data/Application/AC259CE3-2785-4485-9DAF-5DB71047D1DA/Library/Cookies/com.wsqm1990.ironjourney.binarycookies
+2026-11-27 00:58:07.853 App[10997:37710] IronTimer: self test phase 1
+2026-11-27 00:58:07.853 App[10997:37710] IronTimer: selftest PASS allowed to play audio in the background
+2026-11-27 00:58:07.856 App[10997:37710] IronTimer: selftest PASS upright only
+2026-11-27 00:58:18.647 App[10997:37710] IronTimer: selftest PASS page starts
+2026-11-27 00:58:18.658 App[10997:37710] IronTimer: selftest PASS native bridge on iPhone
+2026-11-27 00:58:18.691 App[10997:37710] IronTimer: selftest PASS app info
+2026-11-27 00:58:18.756 App[10997:37710] IronTimer: selftest PASS notification permission can be read
+2026-11-27 00:58:40.868 App[10997:37710] IronTimer: speak Teste de voz do Swordbell
+2026-11-27 00:58:41.150 App[10997:37710] IronTimer: selftest PASS beep, voice, vibration, screen kept on
+2026-11-27 00:58:41.207 App[10997:37710] IronTimer: start kind=hiit id=selftest segs=2 fresh=true mode=voz
+2026-11-27 00:58:45.476 App[10997:37710] IronTimer: speak Vamos
+2026-11-27 00:58:45.510 App[10997:37710] IronTimer: finish complete=true kind=hiit by=app
+2026-11-27 00:58:45.687 App[10997:37710] IronTimer: selftest PASS interval timer runs to the end
+2026-11-27 00:58:45.702 App[10997:37710] IronTimer: start kind=hiit id=selftest2 segs=1 fresh=false mode=mudo
+2026-11-27 00:58:46.230 App[10997:37710] IronTimer: speak Fim
+2026-11-27 00:58:46.406 App[10997:37710] IronTimer: update paused=true mode=mudo
+2026-11-27 00:58:46.423 App[10997:37710] IronTimer: finish complete=false kind=hiit by=app
+2026-11-27 00:58:46.932 App[10997:37710] IronTimer: selftest PASS timer pause and stop from the app
+2026-11-27 00:58:46.935 App[10997:37710] IronTimer: start kind=rest id=r-selftest segs=1 fresh=false mode=bipe
+2026-11-27 00:58:47.964 App[10997:37710] IronTimer: finish complete=true kind=rest by=app
+2026-11-27 00:58:48.211 App[10997:37710] IronTimer: selftest PASS rest timer
+2026-11-27 00:58:48.954 App[10997:37710] IronTimer: selftest PASS data copy outside the web view
+2026-11-27 00:58:49.026 App[10997:37710] IronTimer: selftest PASS update check
+2026-11-27 00:58:49.562 App[10997:41627] IronTimer: bundle ready selftest43
+2026-11-27 00:58:49.577 App[10997:37710] IronTimer: selftest PASS download and unpack the update
+2026-11-27 00:59:54.064 App[10997:37710] IronTimer: selftest PASS page restarts from the downloaded update
+2026-11-27 00:59:54.073 App[10997:37710] IronTimer: selftest PASS the page now comes from the update
+2026-11-27 00:59:54.080 App[10997:41627] IronTimer: keeping bundle selftest43
+2026-11-27 00:59:54.082 App[10997:37710] IronTimer: selftest PASS keep the update for the next start
+2026-11-27 00:59:54.106 App[10997:37710] IronTimer: selftest PASS ready for the restore test
+2026-11-27 00:59:57.251 App[10997:37710] IronTimer: self test phase 1 done

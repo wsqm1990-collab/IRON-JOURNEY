@@ -1,0 +1,23 @@
+PASS allowed to play audio in the background
+PASS upright only
+PASS page starts
+PASS native bridge on iPhone
+PASS app info
+PASS notification permission can be read
+PASS beep, voice, vibration, screen kept on
+PASS interval timer runs to the end
+PASS timer pause and stop from the app
+PASS rest timer
+PASS data copy outside the web view
+PASS update check
+PASS download and unpack the update
+PASS page restarts from the downloaded update
+PASS the page now comes from the update
+PASS keep the update for the next start
+PASS ready for the restore test
+PASS allowed to play audio in the background
+PASS upright only
+PASS page starts
+PASS the kept update opens at start
+PASS data comes back from the copy
+PASS forget the update again
