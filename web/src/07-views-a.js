@@ -393,7 +393,13 @@ function semana7HTML(pid, wk, mini) {
 function viewHoje() {
   const pid = S.me, pr = progresso(pid);
   if (!pr) return `<section class="screen">${semPlanoCard()}${cardioCard(pid)}${aliadosHoje()}</section>`;
-  if (pr.completo) return `<section class="screen"><div class="hero"><p class="eyebrow">${t('chapter_done', { n: pr.pl.ciclo })}</p><h1 class="h-display h1">${t('back_stronger')}</h1>${barbell(pr.pg.semanas, pr.nW, true)}<p class="muted">${t('chapter_done_text')}</p><button class="btn big block" data-a="gerar" data-modo="proximo">${t('next_chapter')}</button><button class="btn ghost block" data-a="avAbrir">${t('av_redo_chapter')}</button></div>${cardioCard(pid)}${xpMini(pid)}</section>`;
+  if (pr.completo) {
+    /* the end of a block is when a trainer tests: when something is due, test first, then the next chapter starts from the new numbers */
+    const ag = agendaReav(pid), rv = ag && ag.devidos.length ? ag : null;
+    return `<section class="screen"><div class="hero"><p class="eyebrow">${t('chapter_done', { n: pr.pl.ciclo })}</p><h1 class="h-display h1">${t('back_stronger')}</h1>${barbell(pr.pg.semanas, pr.nW, true)}<p class="muted">${t('chapter_done_text')}</p>
+      ${rv ? `<button class="btn big block" data-a="reavAbrir">${t('rv_before_next', { n: minTotal(rv.devidos, rv.leve) })}</button><p class="small muted">${t('rv_before_next_d')}</p><button class="btn ghost block" data-a="gerar" data-modo="proximo">${t('next_chapter')}</button>`
+        : `<button class="btn big block" data-a="gerar" data-modo="proximo">${t('next_chapter')}</button><button class="btn ghost block" data-a="reavAbrir">${t('av_redo_chapter')}</button>`}</div>${cardioCard(pid)}${xpMini(pid)}</section>`;
+  }
   const dia = pr.pg.dias[pr.proxDia], ultima = sessoesDe(pid)[0];
   /* already trained today: say so, and show the next workout as the next one, not as today's */
   const hoje = dayKey(Date.now()), feitoHoje = ultima && dayKey(ultima.inicio) === hoje && ultima.planoId === pr.pl.id ? ultima : null;
@@ -436,7 +442,7 @@ function viewHoje() {
   }
   /* a different workout today (at the gym or at home): it replaces today's workout on this screen, for today only */
   const casa = casaHoje(pid);
-  if (casa) return hojeCasaHTML(pid, pr, casa, topo, `${cardioCard(pid)}${xpMini(pid)}${aliadosHoje()}`);
+  if (casa) return hojeCasaHTML(pid, pr, casa, topo, `${reavLembreteHTML(pid)}${cardioCard(pid)}${xpMini(pid)}${aliadosHoje()}`);
   return `<section class="screen">
     <div class="hero">
       ${topo}
@@ -450,6 +456,7 @@ function viewHoje() {
       <button class="btn quiet small" data-a="escolherDia">${t('other_workout')}</button>
     </div>
     <div class="card pad"><div class="row between"><h2 class="h3">${t('coming_up')}</h2><span class="xs muted">${t('sugg_load')}</span></div><div class="exlist">${lista}</div></div>
+    ${reavLembreteHTML(pid)}
     ${cardioCard(pid)}
     ${xpMini(pid)}
     ${aliadosHoje()}

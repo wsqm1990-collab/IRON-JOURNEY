@@ -191,6 +191,10 @@ const TOURS = {
   cardioSug: () => [
     { antes: tourTopo, alvo: '#sgCard .sg-head', txt: () => t('tc_sug_novo', { b: t('sg_other') }) },
   ],
+  /* the first time a re-assessment is due, on Today */
+  reav: () => [
+    { alvo: '#reavCard', txt: () => t('tr_reav', { a: t('rv_do'), b: t('rv_later') }) },
+  ],
   coach: () => [
     { antes: tourTopo, alvo: AI.on ? '#chat' : '#view .note.warn', txt: () => t(AI.on ? 'tq_1' : 'tq_key') },
     { alvo: '[data-a="ajustar"]', opcional: true, txt: () => t('tq_ajuste', { b: t('adj_title') }) },
@@ -222,6 +226,7 @@ function tourAuto() {
   else if (S.tab === 'jornada' && !tourViu(pid, 'arsenal')) iniciarTour('arsenal');
   else if (S.tab === 'cardio' && !tourViu(pid, 'cardioAlvo')) iniciarTour('cardioAlvo');
   else if (S.tab === 'cardio' && !tourViu(pid, 'cardioSug') && $('#sgCard')) iniciarTour('cardioSug');
+  else if (S.tab === 'hoje' && !tourViu(pid, 'reav') && $('#reavCard')) iniciarTour('reav');
 }
 /* Settings: see it all again, starting from what fits the screen */
 function tourRever() {

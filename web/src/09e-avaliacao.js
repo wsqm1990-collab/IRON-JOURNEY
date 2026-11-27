@@ -151,7 +151,8 @@ const AV_FORCA = [['agachar', ['leg_press', 'hack', 'agachamento_smith', 'agacha
   ['puxar', ['puxada_frente', 'remada_baixa', 'remada_maquina', 'serrote']], ['quadril', ['hip_thrust_maq', 'hip_thrust', 'stiff', 'stiff_unilateral', 'cadeira_flexora']]];
 const nAv = v => { const x = parseNum(v); return x != null && x >= 0 ? x : null; };
 const temValor = v => v != null && String(v).trim() !== '';
-const ultimaAval = p => { const l = (p && p.avaliacoes) || []; return l[l.length - 1] || null; };
+/* the latest of each result: a short re-assessment only re-tests part of them */
+const ultimaAval = p => { const l = (p && p.avaliacoes) || []; return !l.length ? null : l.length === 1 && l[0].tipo !== 'reav' ? l[0] : avalCombinada(l); };
 
 /* ---------- results ---------- */
 function resultadoAval(a, p) {
@@ -183,7 +184,15 @@ function resultadoAval(a, p) {
   }
   if (a.costasD != null || a.costasE != null) r.costas = { d: a.costasD, e: a.costasE };
   if (a.agachObs) r.agachObs = a.agachObs.slice();
-  /* hero attributes, 1 to 5 */
+  r.atributos = atributosDe(r);
+  /* a re-assessment that did not ask the health questions again keeps the last answer */
+  r.parqAlerta = a.reav && !a.saudeMudou ? !!a.parqAnt : (a.parq || []).some(Boolean);
+  r.liberado = !!a.liberado;
+  r.semNorma = !(sx && idade);
+  return r;
+}
+/* hero attributes, 1 to 5 */
+function atributosDe(r) {
   const at = {};
   if (r.flexoes && r.flexoes.cat != null) at.forca = [5, 4, 3, 2, 1][r.flexoes.cat];
   if (r.vo2) at.folego = [5, 4, 3, 2, 1][r.vo2.cat];
@@ -196,11 +205,7 @@ function resultadoAval(a, p) {
     pts -= (r.agachObs || []).length;
     at.mobil = clamp(pts, 1, 5);
   }
-  r.atributos = at;
-  r.parqAlerta = (a.parq || []).some(Boolean);
-  r.liberado = !!a.liberado;
-  r.semNorma = !(sx && idade);
-  return r;
+  return at;
 }
 function atributosHTML(at) {
   const linha = (k, nome) => `<div class="av-attr"><span>${t(nome)}</span>${at[k] ? `<span class="av-bar" role="img" aria-label="${at[k]}/5">${[1, 2, 3, 4, 5].map(i => `<i class="${i <= at[k] ? 'on' : ''}"></i>`).join('')}</span>` : `<em class="xs muted">${t('av_not_tested')}</em>`}</div>`;
@@ -265,7 +270,18 @@ function fatorAval(ex, p) {
 
 /* ---------- the flow ---------- */
 const AV_PASSOS = ['inicio', 'saude', 'dores', 'gostos', 'medidas', 'repouso', 'cardio', 'forca', 'mobilidade', 'resultado'];
-const avPassos = a => AV_PASSOS.filter(x => !(a.leve && (x === 'cardio' || x === 'forca')));
+/* a re-assessment: only what is due, plus the health questions again if something changed */
+const avPassos = a => {
+  if (!a.reav) return AV_PASSOS.filter(x => !(a.leve && (x === 'cardio' || x === 'forca')));
+  const c = a.comps || [], l = ['reinicio'];
+  if (a.saudeMudou) l.push('saude', 'dores');
+  if (c.includes('corpo')) l.push('medidas');
+  if (c.includes('folego')) { l.push('repouso'); if (!a.leve) l.push('cardio'); }
+  if (!a.leve && (c.includes('forca') || c.includes('resist'))) l.push('forca');
+  if (c.includes('mobil')) l.push('mobilidade');
+  l.push('resultado');
+  return l;
+};
 function abrirAval() {
   const p = perfil();
   if (!p) return;
@@ -274,7 +290,7 @@ function abrirAval() {
     i: 0, onde: null, cardioTeste: null, parq: PARQ.map(() => null), leve: false, liberado: false,
     dores: (p.limites || []).map(id => ({ id, nivel: ((p.dores || []).find(d => d.id === id) || {}).nivel || 'leve' })), doresTxt: p.limitesTxt || '',
     gostos: (p.gostaTipos || []).slice(), evita: p.evita || '',
-    medidas: { sexo: p.sexo || '', idade: p.idade || '', altura: p.altura || '', peso: p.peso || '', cintura: p.cintura || '', pescoco: p.pescoco || '', quadril: p.quadril || '' },
+    medidas: { sexo: p.sexo || '', idade: p.idade || '', altura: p.altura || '', peso: p.peso || '', cintura: p.cintura || '', pescoco: p.pescoco || '', quadril: p.quadril || '', braco: p.braco || '', coxa: p.coxa || '' },
     fcRepouso: '', degrauFc: '', rpMin: '', rpSeg: '', rpFc: '', flexoes: '', agach: '', prancha: '', barra: '', alcanceLado: null, alcanceCm: '', costasD: null, costasE: null, agachObs: null,
     forca: AV_FORCA.map(([padrao, ids]) => { const lista = ids.filter(id => EX[id] && (!temGym || disponivel(EX[id], set))); return { padrao, ids: lista, id: lista[0] || ids[0], kg: '', reps: '', rir: 2 }; }),
     salvo: false,
@@ -284,13 +300,15 @@ function abrirAval() {
 const comoBtn = id => `<button class="btn quiet small" data-a="guia" data-id="${id}">${I.info}${t('how_to')}</button>`;
 function viewAval() {
   const a = S.aval, passos = avPassos(a), passo = passos[Math.min(a.i, passos.length - 1)], n = passos.indexOf(passo) + 1, p = perfil() || {};
-  const q = (titulo, corpo) => `<p class="eyebrow">${t('av_e')}</p><h1 class="h-display h2">${esc(titulo)}</h1>${corpo}`;
+  const q = (titulo, corpo) => `<p class="eyebrow">${t(a.reav ? 'rv_eyebrow' : 'av_e')}</p><h1 class="h-display h2">${esc(titulo)}</h1>${corpo}`;
+  const cs = a.comps || [], resist = !a.reav || cs.includes('resist'), forte = !a.reav || cs.includes('forca');
   const seg2 = (k, opcoes, valor) => `<div class="seg">${opcoes.map(([v, nome]) => `<button data-a="avSet" data-k="${k}" data-v="${v}" aria-pressed="${String(valor) === String(v)}">${esc(nome)}</button>`).join('')}</div>`;
   const campo = (k, rot, ph, modo = 'decimal') => `<label class="f" for="av-${k}">${esc(rot)}<input class="inp num" id="av-${k}" data-in="av" data-k="${k}" inputmode="${modo}" maxlength="6" value="${esc(a[k] == null ? '' : a[k])}" placeholder="${esc(ph || '')}"></label>`;
   const bloco = (titulo, corpo, guia) => `<div class="av-q"><div class="av-qh"><h2 class="h3">${esc(titulo)}</h2>${guia ? comoBtn(guia) : ''}</div>${corpo}</div>`;
   const seguranca = `<p class="note warn">${t('av_safety')}</p>`;
   let html = '';
   switch (passo) {
+    case 'reinicio': html = reavInicioHTML(a); break;
     case 'inicio': {
       let mentor = ''; try { mentor = mentorAnimHTML(''); } catch { mentor = ''; }
       html = `<div class="hero"><div class="row" style="gap:14px;align-items:center;flex-wrap:nowrap">${mentor}<div class="stack" style="gap:4px;min-width:0"><p class="eyebrow">${t('av_e')}</p><h1 class="h-display h2">${t('av_intro_h')}</h1></div></div>
@@ -320,6 +338,15 @@ function viewAval() {
     case 'medidas': {
       const d = { ...p, ...a.medidas };
       const num = (k, rot, ph, max) => `<label class="f" for="av-${k}">${t(rot)}<input class="inp num" id="av-${k}" data-in="avMedida" data-k="${k}" inputmode="decimal" maxlength="${max}" value="${esc(d[k] == null ? '' : d[k])}" placeholder="${esc(ph)}"></label>`;
+      /* a re-assessment measures again: the fields start empty, last time's numbers in grey */
+      if (a.reav) {
+        const ms = (p.medidas || []).slice().reverse(), ult = ms.find(m => m.cintura) || ms[0];
+        const ph = k => { const m = ms.find(x => x[k]); return m ? fmtKg(m[k]) : k === 'peso' ? 'kg' : 'cm'; };
+        html = q(t('av_body_h'), `${ult ? `<p class="small muted">${esc(t('rv_prev_m', { d: dataCurta(ult.data) }))}</p>` : ''}
+          <label class="f" for="bc-peso">${t('bc_weight')}<input class="inp num" id="bc-peso" data-in="avMedida" data-k="peso" inputmode="decimal" maxlength="5" value="${esc(a.medidas.peso)}" placeholder="${esc(ph('peso'))}"></label>
+          ${medidasCamposHTML(d, 'avMedida', { ph: Object.fromEntries(['cintura', 'pescoco', 'quadril', 'braco', 'coxa'].map(k => [k, ph(k)])) })}<div class="card pad" id="av-comp">${composicaoHTML(d)}</div>`);
+        break;
+      }
       html = q(t('av_body_h'), `<p class="small muted">${t('av_body_note')}</p>
         <div class="chips">${SEXOS.map(r => `<button class="chip" data-a="avSexo" data-v="${r[0]}" aria-pressed="${(d.sexo || '') === r[0]}">${esc(L3(r.slice(1)))}</button>`).join('')}</div>
         <div class="grid2">${num('idade', 'wz_age', t('ph_years'), 3)}${num('altura', 'wz_height', 'cm', 3)}</div>
@@ -327,26 +354,26 @@ function viewAval() {
         ${medidasCamposHTML(d, 'avMedida')}<div class="card pad" id="av-comp">${composicaoHTML(d)}</div>`);
       break;
     }
-    case 'repouso': html = q(t('av_rest_h'), `<p class="small muted">${t('av_rest_note')}</p>${cronoHTML('repouso', t('av_count30'))}${campo('fcRepouso', t('av_bpm'), 'bpm', 'numeric')}`); break;
+    case 'repouso': html = q(t('av_rest_h'), `<p class="small muted">${t('av_rest_note')}</p>${cronoHTML('repouso', t('av_count30'))}${campo('fcRepouso', t('av_bpm'), 'bpm', 'numeric')}${antesTxt(a, 'fcRepouso')}`); break;
     case 'cardio': {
       const teste = a.cardioTeste || (a.onde === 'casa' ? 'degrau' : 'rockport');
       html = q(t('av_cardio_h'), `${seg2('cardioTeste', [['degrau', t('av_test_step')], ['rockport', t('av_test_walk')]], teste)}${seguranca}${teste === 'degrau'
-        ? bloco(t('av_step_test'), `<p class="small muted">${t('av_step_note')}</p>${cronoHTML('degrau', t('av_step_go'))}${campo('degrauFc', t('av_beats_min'), 'bpm', 'numeric')}<p class="xs muted">${t('av_step_watch')}</p>`)
-        : bloco(t('av_rockport'), `<p class="small muted">${t('av_rockport_note')}</p><div class="grid2">${campo('rpMin', t('av_min'), 'min', 'numeric')}${campo('rpSeg', t('av_sec'), 's', 'numeric')}</div>${campo('rpFc', t('av_hr_end'), 'bpm', 'numeric')}`)}
+        ? bloco(t('av_step_test'), `<p class="small muted">${t('av_step_note')}</p>${cronoHTML('degrau', t('av_step_go'))}${campo('degrauFc', t('av_beats_min'), 'bpm', 'numeric')}${antesTxt(a, 'degrauFc')}<p class="xs muted">${t('av_step_watch')}</p>`)
+        : bloco(t('av_rockport'), `<p class="small muted">${t('av_rockport_note')}</p><div class="grid2">${campo('rpMin', t('av_min'), 'min', 'numeric')}${campo('rpSeg', t('av_sec'), 's', 'numeric')}</div>${antesTxt(a, 'rpMin')}${campo('rpFc', t('av_hr_end'), 'bpm', 'numeric')}`)}
         <p class="xs muted">${t('av_skip_hint')}</p>`);
       break;
     }
-    case 'forca': html = q(t('av_strength_h'), `${seguranca}
-      ${bloco(t('av_pushups'), `<p class="small muted">${t(a.medidas.sexo === 'f' ? 'av_pushups_f' : 'av_pushups_m')}</p>${campo('flexoes', t('av_count'), '0', 'numeric')}`, 'flexao')}
-      ${bloco(t('av_squats'), `<p class="small muted">${t('av_squats_note')}</p>${cronoHTML('agach', t('av_start_min'))}${campo('agach', t('av_count'), '0', 'numeric')}`, 'agach_livre')}
-      ${bloco(t('av_plank'), `<p class="small muted">${t('av_plank_note')}</p>${cronoHTML('prancha', t('av_start_watch'))}${campo('prancha', t('av_seconds'), 's', 'numeric')}`, 'prancha')}
-      ${a.onde === 'casa' ? bloco(t('av_pullups'), `<p class="small muted">${t('av_pullups_note')}</p>${campo('barra', t('av_count'), '', 'numeric')}`, 'barra_fixa')
+    case 'forca': html = q(a.reav && !(resist && forte) ? nomeComp(resist ? 'resist' : 'forca') : t('av_strength_h'), `${seguranca}
+      ${resist || a.onde === 'casa' ? bloco(t('av_pushups'), `<p class="small muted">${t(a.medidas.sexo === 'f' ? 'av_pushups_f' : 'av_pushups_m')}</p>${campo('flexoes', t('av_count'), '0', 'numeric')}${antesTxt(a, 'flexoes')}`, 'flexao') : ''}
+      ${resist ? bloco(t('av_squats'), `<p class="small muted">${t('av_squats_note')}</p>${cronoHTML('agach', t('av_start_min'))}${campo('agach', t('av_count'), '0', 'numeric')}${antesTxt(a, 'agach')}`, 'agach_livre') : ''}
+      ${resist ? bloco(t('av_plank'), `<p class="small muted">${t('av_plank_note')}</p>${cronoHTML('prancha', t('av_start_watch'))}${campo('prancha', t('av_seconds'), 's', 'numeric')}${antesTxt(a, 'prancha')}`, 'prancha') : ''}
+      ${!forte ? '' : a.onde === 'casa' ? bloco(t('av_pullups'), `<p class="small muted">${t('av_pullups_note')}</p>${campo('barra', t('av_count'), '', 'numeric')}${antesTxt(a, 'barra')}`, 'barra_fixa')
         : `<div class="av-q"><h2 class="h3">${t('av_lifts')}</h2><p class="small muted">${t('av_lifts_note')}</p>${a.forca.map((f, k) => liftHTML(f, k)).join('')}</div>`}
       <p class="xs muted">${t('av_skip_hint')}</p>`); break;
     case 'mobilidade': html = q(t('av_mob_h'), `
       ${bloco(t('av_reach'), `<p class="small muted">${t('av_reach_note')}</p>
         <div class="chips">${[['antes', 'av_reach_before'], ['toca', 'av_reach_touch'], ['passa', 'av_reach_past']].map(([v, s]) => `<button class="chip" data-a="avSet" data-k="alcanceLado" data-v="${v}" aria-pressed="${a.alcanceLado === v}">${t(s)}</button>`).join('')}</div>
-        ${a.alcanceLado && a.alcanceLado !== 'toca' ? campo('alcanceCm', t('av_reach_cm'), 'cm') : ''}`)}
+        ${a.alcanceLado && a.alcanceLado !== 'toca' ? campo('alcanceCm', t('av_reach_cm'), 'cm') : ''}${antesTxt(a, 'alcance')}`)}
       ${bloco(t('av_shoulder'), `<p class="small muted">${t('av_shoulder_note')}</p>
         <p class="eyebrow">${t('av_right_up')}</p><div class="chips">${COSTAS_OPC.map(o => `<button class="chip" data-a="avCostas" data-k="costasD" data-v="${o[0]}" aria-pressed="${a.costasD === o[0]}">${esc(L3(o.slice(1)))}</button>`).join('')}</div>
         <p class="eyebrow">${t('av_left_up')}</p><div class="chips">${COSTAS_OPC.map(o => `<button class="chip" data-a="avCostas" data-k="costasE" data-v="${o[0]}" aria-pressed="${a.costasE === o[0]}">${esc(L3(o.slice(1)))}</button>`).join('')}</div>`)}
@@ -366,7 +393,7 @@ function liftHTML(f, k) {
   const ex = exInfo(f.id), tipo = tipoCarga(ex), e1 = nAv(f.kg) > 0 && nAv(f.reps) > 0 ? e1rmRIR(nAv(f.kg), Math.round(nAv(f.reps)), f.rir) : null;
   const rotKg = tipo === 'halter' ? t('av_kg_db') : tipo === 'halter1' ? t('av_kg_db1') : tipo === 'barra' ? t('av_kg_bar') : 'kg';
   return `<div class="av-lift">
-    <div class="av-qh"><b>${esc(ex.nome)}</b>${comoBtn(f.id)}</div>${f.ids.length > 1 ? `<button class="btn quiet small" data-a="avLiftTroca" data-k="${k}" style="align-self:flex-start">${I.troca}${t('av_change_ex')}</button>` : ''}
+    <div class="av-qh"><b>${esc(ex.nome)}</b>${comoBtn(f.id)}</div>${antesLift(S.aval, f)}${f.ids.length > 1 ? `<button class="btn quiet small" data-a="avLiftTroca" data-k="${k}" style="align-self:flex-start">${I.troca}${t('av_change_ex')}</button>` : ''}
     <div class="grid2"><label class="f">${esc(rotKg)}<input class="inp num" data-in="avLift" data-k="${k}" data-c="kg" inputmode="decimal" maxlength="6" value="${esc(f.kg)}" placeholder="kg"></label><label class="f">${t('u_reps')}<input class="inp num" data-in="avLift" data-k="${k}" data-c="reps" inputmode="numeric" maxlength="2" value="${esc(f.reps)}" placeholder="6–10"></label></div>
     <div class="row" style="gap:10px;align-items:center;flex-wrap:nowrap"><span class="xs muted">${t('av_left')}</span><div class="seg" style="flex:1">${[1, 2, 3].map(v => `<button data-a="avLiftRir" data-k="${k}" data-v="${v}" aria-pressed="${f.rir === v}">${v}</button>`).join('')}</div></div>
     <p class="xs muted num" id="av-e1-${k}">${e1 ? esc(t('av_e1rm', { n: fmtKg(Math.round(e1)) })) : ''}</p>
@@ -376,16 +403,33 @@ function resultadoHTML() {
   const a = S.aval, p = perfil() || {}, r = a.registro ? a.registro.r : resultadoAval(a, p), d = { ...p, ...a.medidas };
   let heroi = ''; try { heroi = heroiAnimHTML(heroiDe(S.me), 'parado'); } catch { heroi = ''; }
   const pr = progresso(S.me), detalhes = detalhesHTML(r);
+  const ia = `<div class="card pad stack"><h2 class="h3">${t('av_ai_h')}</h2><div id="avIA">${a.analise ? `<div class="md">${md(a.analise)}</div>` : AI.on ? `<p class="msg think">${t('av_ai_writing')}</p>` : `<p class="note">${t('av_ai_off')}</p>`}</div></div>`;
+  const fim = `${pr && !pr.completo ? '' : `<button class="btn big block" data-a="avPlano">${pr && pr.completo ? t('next_chapter') : t('av_build')}</button>`}
+    <button class="btn ${pr && !pr.completo ? '' : 'quiet '}block" data-a="avConcluir">${t('av_finish')}</button>`;
+  /* a re-assessment: before × now first, then today's numbers, then when the next tests are */
+  if (a.reav) {
+    const lista = p.avaliacoes || [], novo = a.registro || { data: Date.now(), tipo: 'reav', saude: !!a.saudeMudou, r };
+    const hist = a.registro ? lista.slice(0, -1) : lista, comb = a.registro ? (ultimaAval(p) || {}).r || r : avalCombinada([...lista, novo]).r;
+    return `<div class="hero"><p class="eyebrow">${t('rv_eyebrow')}</p><h1 class="h-display h2">${t('rv_result_h')}</h1>
+        <div class="av-ficha">${heroi}${atributosHTML(comb.atributos || {})}</div>
+        ${a.leve ? `<p class="note warn">${t('av_light_mode')}</p>` : ''}</div>
+      ${comparacaoHTML(comparacaoReav({ ...p, _pid: S.me }, novo, hist, p.medidas || []), p.objetivo)}
+      ${detalhes ? `<div class="card pad stack"><h2 class="h3">${t('av_details')}</h2>${detalhes}${r.semNorma ? `<p class="xs muted">${t('av_no_norm')}</p>` : ''}</div>` : ''}
+      ${(a.comps || []).includes('corpo') && composicao(d).imc ? `<div class="card pad stack"><h2 class="h3">${t('bc_title')}</h2>${composicaoHTML(d)}</div>` : ''}
+      ${a.registro ? `<div class="card pad stack">${agendaHTML(S.me, true)}</div>` : ''}
+      ${ia}
+      <p class="xs muted">${t('av_sources')}</p>
+      ${fim}`;
+  }
   return `<div class="hero"><p class="eyebrow">${t('av_e')}</p><h1 class="h-display h2">${t('av_result_h')}</h1>
       <div class="av-ficha">${heroi}${atributosHTML(r.atributos)}</div>
       <p class="small">${t(r.parqAlerta ? (r.liberado ? 'av_health_cleared' : 'av_health_warn') : 'av_health_ok')}</p>
       ${a.leve ? `<p class="note warn">${t('av_light_mode')}</p>` : ''}</div>
     ${detalhes ? `<div class="card pad stack"><h2 class="h3">${t('av_details')}</h2>${detalhes}${r.semNorma ? `<p class="xs muted">${t('av_no_norm')}</p>` : ''}</div>` : ''}
     ${composicao(d).imc ? `<div class="card pad stack"><h2 class="h3">${t('bc_title')}</h2>${composicaoHTML(d)}</div>` : ''}
-    <div class="card pad stack"><h2 class="h3">${t('av_ai_h')}</h2><div id="avIA">${a.analise ? `<div class="md">${md(a.analise)}</div>` : AI.on ? `<p class="msg think">${t('av_ai_writing')}</p>` : `<p class="note">${t('av_ai_off')}</p>`}</div></div>
+    ${ia}
     <p class="xs muted">${t('av_sources')}</p>
-    ${pr && !pr.completo ? `<p class="small muted">${t('av_plan_uses')}</p>` : `<button class="btn big block" data-a="avPlano">${pr && pr.completo ? t('next_chapter') : t('av_build')}</button>`}
-    <button class="btn ${pr && !pr.completo ? '' : 'quiet '}block" data-a="avConcluir">${t('av_finish')}</button>`;
+    ${pr && !pr.completo ? `<p class="small muted">${t('av_plan_uses')}</p>` : ''}${fim}`;
 }
 
 /* ---------- timers: the step-test beat, a minute of squats, the plank, 30 s of pulse ---------- */
@@ -456,16 +500,21 @@ async function salvarAval() {
   if (!a || !p || a.salvo) return;
   a.salvo = true;
   const r = resultadoAval(a, p), data = Date.now();
-  const av = { data, onde: a.onde, leve: a.leve, liberado: a.liberado, parq: a.parq, r };
+  const av = { data, onde: a.onde, leve: a.leve, liberado: a.liberado, parq: a.parq, r, tipo: a.reav ? 'reav' : 'completa' };
+  if (a.reav) { av.comps = (a.comps || []).slice(); av.saude = !!a.saudeMudou; }
   const body = { ...p, atualizadoEm: data, gostaTipos: a.gostos.slice(), evita: (a.evita || '').slice(0, 200) };
   /* pains become the plan's care points (what the assessment shows is the current state) */
   body.limites = a.dores.map(d => d.id);
   body.dores = a.dores.map(d => ({ id: d.id, nivel: d.nivel }));
   body.limitesTxt = (a.doresTxt || '').slice(0, 300);
   body.sexo = a.medidas.sexo || '';
-  for (const k of ['idade', 'altura', 'peso', 'cintura', 'pescoco', 'quadril']) if (temValor(a.medidas[k])) body[k] = String(a.medidas[k]).trim();
-  body.medidas = novaMedida(p, body);
-  body.avaliacoes = [...(p.avaliacoes || []), av].slice(-12);
+  for (const k of ['idade', 'altura', 'peso', 'cintura', 'pescoco', 'quadril', 'braco', 'coxa']) if (temValor(a.medidas[k])) body[k] = String(a.medidas[k]).trim();
+  /* a re-assessment records only what was measured today (and only if the body was on the list) */
+  if (!a.reav) body.medidas = novaMedida(p, body);
+  else if ((a.comps || []).includes('corpo')) body.medidas = novaMedida(p, Object.fromEntries(['peso', 'cintura', 'pescoco', 'quadril', 'braco', 'coxa'].map(k => [k, temValor(a.medidas[k]) ? a.medidas[k] : ''])));
+  /* the first one stays as the starting point; then the latest */
+  const avs = [...(p.avaliacoes || []), av];
+  body.avaliacoes = avs.length > 12 ? [avs[0], ...avs.slice(-11)] : avs;
   try { await save('perfis/' + pid, body, t('av_saved')); } catch { a.salvo = false; return; }
   S.perfis[pid] = body;
   a.registro = av;
@@ -490,7 +539,20 @@ function lerAvaliacao() {
   const a = S.aval, p = perfil();
   if (!a || !a.registro || !p) return;
   const el0 = $('#avIA'); if (el0) el0.innerHTML = `<p class="msg think">${t('av_ai_writing')}</p>`;
-  const prompt = `You are ${p.nome}'s personal trainer. ${p.nome} just did a physical assessment. Read the results like a good trainer would and explain them simply.
+  const lista = p.avaliacoes || [], itens = a.reav ? comparacaoReav({ ...p, _pid: S.me }, a.registro, lista.slice(0, -1), p.medidas || []) : [];
+  const prompt = a.reav ? `You are ${p.nome}'s personal trainer. ${p.nome} just did a short re-assessment (${(a.comps || []).join(', ')}) after following the plan. Compare before and now like a good trainer would and explain it simply.
+
+PERSON
+${ctxPerfil({ ...p, avaliacoes: [] })}
+
+TODAY'S RESULTS
+${resumoAvalEn(a.registro)}
+
+BEFORE -> NOW (the expected ranges are for this experience level and the weeks between the two tests)
+${itens.length ? itens.map(i => `- ${i.nome}${i.sub ? ' (' + i.sub + ')' : ''}: ${i.antes} -> ${i.depois}${i.delta ? ' (' + i.delta + ')' : ''}${i.esp ? '; ' + i.esp : ''}${i.v ? '; verdict: ' + STR[VERED[i.v][1]][0].toLowerCase() : ''}`).join('\n') : '- first time for these tests, nothing to compare yet'}
+
+Write short sections with markdown headings: "What improved", "What moved less" (likely reasons: sleep, food, effort, consistency, or just the day; a change inside the margin of error is not a failure), "Care points" (only if there is one: weight changing too fast, pain, the health screening; say when to see a doctor or physiotherapist) and "What changes in your plan" (concrete: loads, volume, cardio, food). Use the numbers above, be encouraging and honest, and make no diagnosis. About 180 to 250 words.
+${idioma()}` : `You are ${p.nome}'s personal trainer. ${p.nome} just did a physical assessment. Read the results like a good trainer would and explain them simply.
 
 PERSON
 ${ctxPerfil({ ...p, avaliacoes: [] })}
@@ -516,6 +578,13 @@ ${idioma()}`;
 function avAvancar() {
   const a = S.aval, passo = avPassos(a)[a.i];
   if (passo === 'inicio' && !a.onde) { toast(t('av_need_where')); return; }
+  if (passo === 'reinicio') {
+    if (!(a.comps || []).length) { toast(t('rv_need_comp')); return; }
+    if (!a.onde) { toast(t('av_need_where')); return; }
+    if (a.saudeMudou == null) { toast(t('rv_need_health')); return; }
+    if (!a.cardioTeste) a.cardioTeste = a.onde === 'casa' ? 'degrau' : 'rockport';
+  }
+  if (passo === 'medidas' && a.reav && !nCorpo(a.medidas.peso)) { toast(t('bc_need_weight')); return; }
   if (passo === 'saude') {
     if (a.parq.some(v => v == null)) { toast(t('av_need_health')); return; }
     if (a.parq.some(Boolean) && !a.leve && !a.liberado) { toast(t('av_need_choice')); return; }
@@ -531,7 +600,7 @@ function avAvancar() {
 function avalCardHTML(p) {
   const lista = (p && p.avaliacoes) || [], av = lista[lista.length - 1];
   if (!av) return '';
-  const r0 = (lista[0] && lista[0].r) || {}, r1 = av.r || {}, itens = [];
+  const r0 = (lista[0] && lista[0].r) || {}, r1 = (ultimaAval(p) || av).r || {}, itens = [], meu = p === perfil(S.me);
   const dif = (nome, va, vb, un, menorMelhor) => {
     if (va == null || vb == null || lista.length < 2) return;
     const dl = Math.round((vb - va) * 10) / 10;
@@ -547,5 +616,6 @@ function avalCardHTML(p) {
   return `<div class="card pad stack" id="aval"><div class="row between"><h2 class="h3">${t('av_btn')}</h2><span class="xs muted">${esc(t('av_last', { d: fmtDia(new Date(av.data)) }))}</span></div>
     ${atributosHTML(r1.atributos || {})}
     ${itens.length ? `<p class="xs muted">${t('av_since')}</p><div class="casa-tags">${itens.join('')}</div>` : ''}
-    <button class="btn ghost block" data-a="avAbrir">${t('av_redo')}</button></div>`;
+    ${meu ? agendaHTML(S.me) : ''}
+    <button class="btn ${meu ? 'quiet' : 'ghost'} block" data-a="avAbrir">${t(meu ? 'rv_full' : 'av_redo')}</button></div>`;
 }

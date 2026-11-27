@@ -48,6 +48,11 @@ CARDIO COM O NÚMERO CERTO
 • HIIT, Tabata, 4×4 norueguês, zona 2 e mais, com avisos por voz e bipe
 • Funciona em segundo plano, com o celular na sua série ou na sua música
 
+AVALIAÇÃO FÍSICA E REAVALIAÇÕES
+• Avaliação inicial como a de um personal: saúde, medidas, fôlego, força e mobilidade
+• Reavaliações curtas na hora certa para o seu nível e o seu objetivo, de preferência na semana leve do plano
+• Antes × agora, com o que era esperado para você e o que ajustar
+
 UMA JORNADA DE RPG
 • Crie o seu herói em pixel art
 • Cada dia de treino vence uma fase do mapa, e o chefão espera no fim do capítulo
@@ -94,6 +99,11 @@ CARDIO WITH THE RIGHT NUMBERS
 • HIIT, Tabata, Norwegian 4×4, zone 2 and more, with voice and beep cues
 • Runs in the background while your phone plays your show or your music
 
+PHYSICAL ASSESSMENT AND RE-TESTS
+• A first assessment like a personal trainer's: health, measurements, cardio, strength and mobility
+• Short re-tests at the right time for your level and your goal, ideally in the plan's light week
+• Before × now, with what was expected for you and what to adjust
+
 AN RPG JOURNEY
 • Create your pixel-art hero
 • Every training day clears a stage of the map, and the boss waits at the end of the chapter
@@ -139,6 +149,11 @@ CARDIO CON EL NÚMERO JUSTO
 • Los números se ajustan a ti, como el peso en las pesas
 • HIIT, Tabata, 4×4 noruego, zona 2 y más, con avisos por voz y pitidos
 • Funciona en segundo plano mientras el móvil reproduce tu serie o tu música
+
+EVALUACIÓN FÍSICA Y REEVALUACIONES
+• Una evaluación inicial como la de un entrenador personal: salud, medidas, aliento, fuerza y movilidad
+• Reevaluaciones cortas en el momento justo para tu nivel y tu objetivo, de preferencia en la semana ligera del plan
+• Antes × ahora, con lo esperado para ti y qué ajustar
 
 UNA JORNADA RPG
 • Crea tu héroe en pixel art

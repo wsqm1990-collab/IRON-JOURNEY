@@ -60,18 +60,20 @@ function composicaoHTML(d) {
   if (c.metodo) linhas.push(`<p class="xs muted">${t(c.metodo === 'dois' ? 'bc_method' : c.metodo === 'um' ? 'bc_method_one' : 'bc_method_bmi')}</p>`);
   return `<div class="bc stack">${linhas.join('')}</div>`;
 }
-const comoMedirHTML = () => `<details class="bc-how"><summary>${t('bc_how')}</summary><p class="small">${esc(t('bc_how_text'))}</p></details>`;
-/* the tape-measure fields (wizard and the measurements sheet share them) */
-function medidasCamposHTML(d, dataIn) {
-  const campo = (k, rot, ph) => `<label class="f" for="bc-${k}">${t(rot)}<input class="inp num" id="bc-${k}" data-in="${dataIn}" data-k="${k}" inputmode="decimal" maxlength="5" value="${esc(d[k] == null ? '' : d[k])}" placeholder="${ph}"></label>`;
-  return `<p class="small muted">${t('bc_tape')}</p>${comoMedirHTML()}
-    <div class="grid2">${campo('cintura', 'bc_waist', 'cm')}${campo('pescoco', 'bc_neck', 'cm')}${d.sexo === 'f' ? campo('quadril', 'bc_hip', 'cm') : ''}</div>`;
+const comoMedirHTML = extra => `<details class="bc-how"><summary>${t('bc_how')}</summary><p class="small">${esc(t('bc_how_text'))}</p>${extra ? `<p class="small">${esc(t('bc_how_more'))}</p>` : ''}</details>`;
+/* the tape-measure fields (wizard, the measurements sheet and the assessment share them);
+   outside the wizard also arm and thigh, which show muscle growing; o.ph: hints, such as last time's numbers */
+function medidasCamposHTML(d, dataIn, o = {}) {
+  const extra = o.extra != null ? o.extra : dataIn !== 'wz', ph = k => esc((o.ph && o.ph[k]) || 'cm');
+  const campo = (k, rot) => `<label class="f" for="bc-${k}">${t(rot)}<input class="inp num" id="bc-${k}" data-in="${dataIn}" data-k="${k}" inputmode="decimal" maxlength="5" value="${esc(d[k] == null ? '' : d[k])}" placeholder="${ph(k)}"></label>`;
+  return `<p class="small muted">${t('bc_tape')}</p>${comoMedirHTML(extra)}
+    <div class="grid2">${campo('cintura', 'bc_waist')}${campo('pescoco', 'bc_neck')}${d.sexo === 'f' ? campo('quadril', 'bc_hip') : ''}${extra ? campo('braco', 'bc_arm') + campo('coxa', 'bc_thigh') : ''}</div>`;
 }
 
 /* ---------- measurements over time ---------- */
 const MEDIDAS_MAX = 120;
 function novaMedida(p, d) {
-  const m = { data: Date.now(), peso: nCorpo(d.peso), cintura: nCorpo(d.cintura), pescoco: nCorpo(d.pescoco), quadril: nCorpo(d.quadril) };
+  const m = { data: Date.now(), peso: nCorpo(d.peso), cintura: nCorpo(d.cintura), pescoco: nCorpo(d.pescoco), quadril: nCorpo(d.quadril), braco: nCorpo(d.braco), coxa: nCorpo(d.coxa) };
   if (!m.peso && !m.cintura) return p.medidas || [];
   const lista = (p.medidas || []).slice();
   const ult = lista[lista.length - 1];
@@ -100,7 +102,7 @@ function corpoCard(pid) {
 }
 function abrirMedidas() {
   const p = perfil() || {};
-  S.medidas = { peso: p.peso || '', cintura: p.cintura || '', pescoco: p.pescoco || '', quadril: p.quadril || '' };
+  S.medidas = { peso: p.peso || '', cintura: p.cintura || '', pescoco: p.pescoco || '', quadril: p.quadril || '', braco: p.braco || '', coxa: p.coxa || '' };
   openSheet(t('bc_title'), medidasHTML(), () => { S.medidas = null; });
 }
 function medidasHTML() {
@@ -116,7 +118,7 @@ async function salvarMedidas() {
   const p = perfil(), pid = S.me, m = S.medidas;
   if (!p || !m) return;
   if (!nCorpo(m.peso)) { toast(t('bc_need_weight')); return; }
-  const body = { ...p, peso: String(m.peso).trim(), cintura: String(m.cintura || '').trim(), pescoco: String(m.pescoco || '').trim(), quadril: String(m.quadril || '').trim(), atualizadoEm: Date.now() };
+  const body = { ...p, peso: String(m.peso).trim(), cintura: String(m.cintura || '').trim(), pescoco: String(m.pescoco || '').trim(), quadril: String(m.quadril || '').trim(), braco: String(m.braco || '').trim(), coxa: String(m.coxa || '').trim(), atualizadoEm: Date.now() };
   body.medidas = novaMedida(p, body);
   try { await save('perfis/' + pid, body, t('bc_saved')); } catch { return; }
   S.perfis[pid] = body;

@@ -303,4 +303,22 @@ img.px.ico{width:22px;height:auto;vertical-align:-5px;margin-right:4px}
 .aceite[aria-checked="true"] i{background:var(--ok);border-color:var(--ok)}
 .aceite i svg{width:16px;height:16px}
 .md.legal h4{margin-top:16px}
+/* re-assessments: the reminder, the calendar and before × now */
+.rv-list{display:flex;flex-direction:column}
+.rv-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
+.rv-row:first-child{border-top:0;padding-top:2px}
+.rv-n{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.rv-n b{font-size:var(--t-sm);display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.rv-n .pill{font-size:var(--t-xs);padding:1px 8px}
+.rv-q{flex:none;font-size:var(--t-sm);font-weight:700;color:var(--muted);text-align:right;max-width:46%}
+.rv-q.due{color:var(--accent)}
+.rv-cs{display:flex;flex-direction:column}
+.rv-c{display:flex;flex-direction:column;gap:6px;padding:12px 0;border-top:1px solid var(--line);min-width:0}
+.rv-c:first-child{border-top:0;padding-top:2px}
+.rv-c-n{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;font-size:var(--t-sm)}
+.rv-c-v{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;font-size:16px}
+.rv-c-v b{font-family:var(--f-cond);font-size:22px;line-height:1}
+.rv-d{font-size:var(--t-sm);font-weight:700;color:var(--muted)}
+.rv-c-x{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+.opt[disabled]{opacity:.5;cursor:not-allowed}
 </style>

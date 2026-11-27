@@ -58,6 +58,9 @@ function ctxPerfil(p) {
   if (ajs.length) l.push('Cardio machine numbers moved from the standard for their level: ' + ajs.map(([m, v]) => `${exInfo(m).nomeEn} ${v > 0 ? '+' : ''}${v} step${Math.abs(v) > 1 ? 's' : ''}${(p.cardioEscala || {})[m] ? ' (machine levels go up to ' + p.cardioEscala[m] + ')' : ''}`).join('; '));
   const av = typeof ultimaAval === 'function' ? ultimaAval(p) : null;
   if (av) l.push(resumoAvalEn(av));
+  /* the re-assessment calendar and the latest before × now, so the coach's advice matches the Plan */
+  const pidP = (p.avaliacoes || []).length && typeof ctxReavEn === 'function' ? Object.keys(S.perfis).find(k => S.perfis[k] === p) : null;
+  if (pidP) { let rv = ''; try { rv = ctxReavEn(p, pidP); } catch { rv = ''; } if (rv) l.push(rv); }
   return l.join('\n');
 }
 function ctxAcademia() {

@@ -198,6 +198,18 @@ const ACT = {
   casaGerar: () => gerarCasa(),
   /* physical assessment */
   avAbrir: () => abrirAval(),
+  /* re-assessments: what is due, or what the person picks */
+  reavAbrir: () => abrirReaval(),
+  reavDepois: () => { adiarReav(S.me); render(); toast(t('rv_later_ok')); },
+  avComp: el => { const a = S.aval; if (!a || el.disabled) return; const v = el.dataset.v, k = a.comps.indexOf(v); if (k >= 0) a.comps.splice(k, 1); else a.comps.push(v); render(); },
+  avSaude: el => {
+    const a = S.aval; if (!a) return;
+    a.saudeMudou = el.dataset.v === '1';
+    /* something changed: the health questions again, from scratch; nothing changed: back to how it was */
+    if (a.saudeMudou) { a.parq = PARQ.map(() => null); a.leve = false; a.liberado = false; }
+    else { a.leve = a.leveAnt; a.liberado = a.liberadoAnt; if (a.leve) a.comps = a.comps.filter(k => k !== 'forca' && k !== 'resist'); }
+    render();
+  },
   avSet: el => {
     const a = S.aval; if (!a) return;
     const k = el.dataset.k, v = el.dataset.v;
