@@ -284,6 +284,7 @@ const ACT = {
   guiaDeNovo: () => { const el = $('#guiaIA'); if (el) el.innerHTML = `<p class="msg think">${t('guide_writing')}</p>`; carregarAula(); },
   explicarPlano: () => pedirExplicacao(),
   trocarLive: el => abrirTroca({ scope: 'live', i: +el.dataset.i }),
+  travaTrocar: el => travaTrocar(+el.dataset.i),
   trocarPlano: el => abrirTroca({ scope: 'plano', dia: +el.dataset.dia, i: +el.dataset.i }),
   swapMotivo: el => { const w = S.swap; w.motivo = w.motivo === el.dataset.v ? '' : el.dataset.v; if (w.ctx.scope === 'live' && w.motivo) w.escopo = w.motivo === 'ocupado' ? 'hoje' : 'plano'; sheetBody(swapHTML()); },
   swapEscopo: el => { S.swap.escopo = el.dataset.v; sheetBody(swapHTML()); },

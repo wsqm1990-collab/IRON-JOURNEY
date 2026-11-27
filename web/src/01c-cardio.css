@@ -321,4 +321,8 @@ img.px.ico{width:22px;height:auto;vertical-align:-5px;margin-right:4px}
 .rv-d{font-size:var(--t-sm);font-weight:700;color:var(--muted)}
 .rv-c-x{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
 .opt[disabled]{opacity:.5;cursor:not-allowed}
+/* an exercise that stalled: what changes today */
+.trava{display:flex;flex-direction:column;align-items:flex-start;gap:6px;background:var(--warn-soft);border-radius:var(--r);padding:12px 14px;min-width:0}
+.trava p{margin:0}
+.trava .bc-how{align-self:stretch}
 </style>

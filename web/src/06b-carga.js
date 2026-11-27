@@ -236,7 +236,12 @@ function recalibrar(x, j) {
   }
   let novo = z.kg, motivo = 'cal_keep';
   const prevista = repsPara(e1, z.kg, pc.rir) - 1;
-  if (z.reps > a.rmax || prevista > a.rmax) { novo = arredondar(ex, kgPara(e1, Math.max(a.rmin, a.rmax - 1), pc.rir), -1); motivo = novo > z.kg ? 'cal_up' : 'cal_keep'; }
+  if (z.reps > a.rmax || prevista > a.rmax) {
+    novo = arredondar(ex, kgPara(e1, Math.max(a.rmin, a.rmax - 1), pc.rir), -1);
+    /* a lighter restart after a stall: never back above the old weight in the same workout */
+    if (x.trava === 'reset' && x.travaDe && novo > x.travaDe) novo = x.travaDe;
+    motivo = novo > z.kg ? 'cal_up' : 'cal_keep';
+  }
   else if (z.reps < a.rmin) { novo = arredondar(ex, kgPara(e1, Math.min(a.rmax, a.rmin + 1), pc.rir) * 0.97, -1); motivo = novo < z.kg ? 'cal_down' : 'cal_keep'; }
   let k = 0;
   for (let i = j + 1; i < x.sets.length; i++) {

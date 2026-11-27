@@ -403,9 +403,11 @@ function viewHoje() {
   const dia = pr.pg.dias[pr.proxDia], ultima = sessoesDe(pid)[0];
   /* already trained today: say so, and show the next workout as the next one, not as today's */
   const hoje = dayKey(Date.now()), feitoHoje = ultima && dayKey(ultima.inicio) === hoje && ultima.planoId === pr.pl.id ? ultima : null;
+  let travas = 0;
   const lista = dia.exercicios.map(item => {
     const alv = alvo(item, pr.sem), ex = exInfo(item.id, item.nome), sg = sugestao(pid, item, alv);
-    return `<div class="exitem"><span class="nm">${esc(ex.nome)}</span><span class="sg num">${sg.kg != null ? fmtKg(sg.kg) + ' kg' : ''}</span><span class="mt num">${alv.series} × ${alv.rmin}${alv.rmax !== alv.rmin ? '–' + alv.rmax : ''} ${unidade(ex)}</span></div>`;
+    if (sg.trava) travas++;
+    return `<div class="exitem"><span class="nm">${esc(ex.nome)}${sg.trava ? ` <span class="pill warn">${t('tv_tag')}</span>` : ''}</span><span class="sg num">${sg.kg != null ? fmtKg(sg.kg) + ' kg' : ''}</span><span class="mt num">${alv.series} × ${alv.rmin}${alv.rmax !== alv.rmin ? '–' + alv.rmax : ''} ${unidade(ex)}</span></div>`;
   }).join('');
   const topo = `<div class="row between"><p class="eyebrow">${t('week_of', { c: pr.pl.ciclo, a: pr.semana, b: pr.nW })}</p><span class="pill${pr.sem.deload ? '' : ' acc'}">${esc(nomeFase(pr.fase))}</span></div>
       ${barbell(pr.pg.semanas, pr.semanaIdx, false)}
@@ -432,6 +434,7 @@ function viewHoje() {
       <div><p class="eyebrow">${esc(dia.nome)}</p>${dia.foco ? `<p class="small muted" style="margin:2px 0 0">${esc(dia.foco)}</p>` : ''}</div>
       <div class="row between"><span class="xs muted">${t('effort_week', { n: pr.sem.rir, d: pr.sem.deload ? t('effort_half') : '' }).replace(/<[^>]+>/g, '')}</span></div>
       <div class="exlist">${lista}</div>
+      ${travas ? `<p class="tip">${t('tv_today')}</p>` : ''}
       <button class="btn ghost block" data-a="iniciar" data-dia="${pr.proxDia}">${t('do_it_today')}</button>
       <button class="btn quiet small" data-a="escolherDia">${t('other_workout')}</button>
     </div>
@@ -455,7 +458,7 @@ function viewHoje() {
       <button class="btn ghost block" data-a="casaAbrir">${I.troca}<span>${t('dif_btn')}</span></button>
       <button class="btn quiet small" data-a="escolherDia">${t('other_workout')}</button>
     </div>
-    <div class="card pad"><div class="row between"><h2 class="h3">${t('coming_up')}</h2><span class="xs muted">${t('sugg_load')}</span></div><div class="exlist">${lista}</div></div>
+    <div class="card pad"><div class="row between"><h2 class="h3">${t('coming_up')}</h2><span class="xs muted">${t('sugg_load')}</span></div><div class="exlist">${lista}</div>${travas ? `<p class="tip" style="margin:10px 0 0">${t('tv_today')}</p>` : ''}</div>
     ${reavLembreteHTML(pid)}
     ${cardioCard(pid)}
     ${xpMini(pid)}
@@ -514,7 +517,8 @@ function viewPlano() {
   }).join('');
   const dias = pg.dias.map((d, di) => `<details class="box"${di === pr.proxDia ? ' open' : ''}><summary><span class="h3">${esc(d.nome)}</span><span class="small muted" style="font-weight:500">${esc(d.foco)}</span></summary><div class="in"><div class="exlist">${d.exercicios.map((item, xi) => {
     const ex = exInfo(item.id, item.nome), alv = alvo(item, pr.sem);
-    return `<div class="exitem"><span class="nm">${esc(ex.nome)}</span><span class="mt num">${alv.series} × ${item.reps[0]}${item.reps[1] !== item.reps[0] ? '–' + item.reps[1] : ''} ${unidade(ex)} · ${t('rest_x', { x: fmtDesc(item.descanso) })}</span>${item.porque ? `<span class="why">${esc(item.porque)}</span>` : ''}${item.dica ? `<span class="cue"><b>${t('cue_label')}:</b> ${esc(item.dica)}</span>` : ''}<span class="acts"><button class="btn quiet small" data-a="guia" data-id="${esc(item.id)}" data-nome="${esc(item.nome || '')}">${I.info}${t('how_to')}</button><button class="btn quiet small" data-a="trocarPlano" data-dia="${di}" data-i="${xi}" aria-label="${esc(t('swap_x', { x: ex.nome }))}">${I.troca}${t('swap')}</button></span></div>`;
+    let tv = null; try { tv = travaDe(S.me, item, false); } catch { tv = null; }
+    return `<div class="exitem"><span class="nm">${esc(ex.nome)}${tv ? ` <span class="pill warn">${t('tv_tag')}</span>` : ''}</span><span class="mt num">${alv.series} × ${item.reps[0]}${item.reps[1] !== item.reps[0] ? '–' + item.reps[1] : ''} ${unidade(ex)} · ${t('rest_x', { x: fmtDesc(item.descanso) })}</span>${item.porque ? `<span class="why">${esc(item.porque)}</span>` : ''}${item.dica ? `<span class="cue"><b>${t('cue_label')}:</b> ${esc(item.dica)}</span>` : ''}<span class="acts"><button class="btn quiet small" data-a="guia" data-id="${esc(item.id)}" data-nome="${esc(item.nome || '')}">${I.info}${t('how_to')}</button><button class="btn quiet small" data-a="trocarPlano" data-dia="${di}" data-i="${xi}" aria-label="${esc(t('swap_x', { x: ex.nome }))}">${I.troca}${t('swap')}</button></span></div>`;
   }).join('')}</div></div></details>`).join('');
   const outraLingua = pg.lang && pg.lang !== LANG() ? `<p class="xs muted">${t('plan_other_lang', { x: LANGS[LI][1] })}</p>` : '';
   return `<section class="screen">

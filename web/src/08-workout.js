@@ -56,7 +56,7 @@ function exCard(x, i) {
     <div class="ex-top">${miniFigura(x.id) ? `<button class="fig mini" data-a="guia" data-id="${esc(x.id)}" data-nome="${esc(x.nome || '')}" aria-label="${esc(t('how_to') + ': ' + ex.nome)}">${miniFigura(x.id)}</button>` : ''}<div class="nm"><h2 class="h3">${esc(ex.nome)}</h2>${x.trocadoDe ? `<p class="xs muted">${esc(t('replaced_x', { x: exInfo(x.trocadoDe, x.trocadoDe).nome }))}</p>` : ''}</div>${done ? `<span class="pill ok">${t('done_pill')}</span>` : ''}</div>
     <div class="target">${x.bloco ? `<span class="pill acc">${esc(rotuloGrupo(x))}</span>` : ''}<span class="pill num">${a.series} × ${faixa(a)} ${un}</span><span class="pill">RIR ${a.rir}</span><span class="pill">${x.bloco && S.live && !(posGrupo(S.live.exs, i) || {}).ultimo ? esc(t('dif_no_rest')) : t('rest_x', { x: fmtDesc(a.desc) })}</span></div>
     ${x.bloco ? comoGrupoHTML(x) : ''}
-    ${sugHTML(x)}
+    ${x.sug && x.sug.trava ? travaHTML(x, i) : sugHTML(x)}
     ${ult ? `<p class="xs muted num">${esc(t('last_time', { x: ult }))}</p>` : ''}
     ${x.dica ? `<p class="tip">${esc(x.dica)}</p>` : ''}
     ${x.pulado ? '' : regraHTML(x, okN)}
@@ -156,7 +156,7 @@ function serieInfo(x) {
   const quanto = livre ? t(ex.carga === 's' ? 'vs_test_s' : 'vs_test') : ex.carga === 's' ? t('vs_secs', { r: r != null ? r : a.rmax })
     : ex.carga === 'n' ? t('vs_mins', { r: r != null ? r : a.rmax }) : r != null ? t('vs_reps', { r }) : t('vs_reps_range', { a: a.rmin, b: a.rmax });
   const k = kg == null ? '' : ex.carga === 'c' ? t('vs_extra', { k: fmtKg(kg) }) : tipo === 'halter' ? t('vs_db', { k: fmtKg(kg) }) : tipo === 'halter1' ? t('vs_db1', { k: fmtKg(kg) }) : usaCarga(ex) ? t('vs_kg', { k: fmtKg(kg) }) : '';
-  return { nome: ex.nome, n: j + 1, tot: x.sets.length, curto, oque: quanto + (k ? ' ' + k : '') + (livre && rir != null ? ', ' + t('vs_rir', { rir }) : '') };
+  return { nome: ex.nome, n: j + 1, tot: x.sets.length, curto, oque: quanto + (k ? ' ' + k : '') + (livre && rir != null ? ', ' + t('vs_rir', { rir }) : '') + (j === 0 && x.trava === 'reset' ? t('vs_reset') : '') };
 }
 const falaSerie = (s, nome) => t('vs_set', { x: nome || s.nome, n: s.n, t: s.tot, o: s.oque });
 function startRest(sec, label, fala) {
@@ -208,20 +208,21 @@ document.addEventListener('visibilitychange', () => {
 });
 
 /* ---------- swaps ---------- */
-function candidatosTroca(exId, excluir) {
-  const ex = exInfo(exId), grupos = [ex.grupo, ...(RELACIONADOS[ex.grupo] || [])];
+/* familia: a stalled exercise looks first for a variation of the same movement (another row for a row) */
+function candidatosTroca(exId, excluir, familia) {
+  const ex = exInfo(exId), grupos = [ex.grupo, ...(RELACIONADOS[ex.grupo] || [])], fam = id => String(id).split('_')[0], f0 = fam(exId);
   /* at home: only what can be done with what the person has there */
   const casa = S.live && S.live.casa, set = casa ? null : equipSet(S.gym), deCasa = casa ? new Set(opcoesCasa(casa.equip)) : null;
   return Object.values(EX)
     .filter(c => c.id !== exId && !excluir.has(c.id) && grupos.includes(c.grupo) && (casa ? deCasa.has(c.id) : !CASA_IDS.has(c.id) && disponivel(c, set)))
-    .sort((a, b) => (grupos.indexOf(a.grupo) - grupos.indexOf(b.grupo)) || ((a.tipo === ex.tipo ? 0 : 1) - (b.tipo === ex.tipo ? 0 : 1)))
+    .sort((a, b) => (familia ? (fam(a.id) === f0 ? 0 : 1) - (fam(b.id) === f0 ? 0 : 1) : 0) || (grupos.indexOf(a.grupo) - grupos.indexOf(b.grupo)) || ((a.tipo === ex.tipo ? 0 : 1) - (b.tipo === ex.tipo ? 0 : 1)))
     .slice(0, 14);
 }
 function abrirTroca(ctx) {
   let exId, excluir;
   if (ctx.scope === 'live') { exId = S.live.exs[ctx.i].id; excluir = new Set(S.live.exs.map(x => x.id)); }
   else { const d = plano(S.me).programa.dias[ctx.dia]; exId = d.exercicios[ctx.i].id; excluir = new Set(d.exercicios.map(x => x.id)); }
-  S.swap = { ctx, exId, motivo: '', escopo: ctx.scope === 'live' ? 'hoje' : 'plano', cands: candidatosTroca(exId, excluir), ia: null, ctl: null };
+  S.swap = { ctx, exId, motivo: '', escopo: ctx.scope === 'live' ? 'hoje' : 'plano', cands: candidatosTroca(exId, excluir, ctx.familia), ia: null, ctl: null };
   openSheet(t('swap_x', { x: exInfo(exId).nome }), swapHTML(), () => { if (S.swap && S.swap.ctl) S.swap.ctl.abort(); S.swap = null; });
 }
 function swapHTML() {
@@ -260,7 +261,7 @@ async function aplicarTroca(novoId) {
     const restantes = x.sets.filter(z => !z.ok).length || x.sets.length;
     const item = { id: novoId, reps: [x.alvo.rmin, x.alvo.rmax] }, alv = { ...x.alvo, series: restantes }, casa = !!L.casa;
     const sug = sugestao(S.me, item, alv, casa), pc = planoCarga(S.me, item, alv, sug, casa);
-    const novoX = { id: novoId, nome: novo.nome, grupo: novo.grupo, alvo: x.alvo, sug, dica: '', trocadoDe: x.id, ...(x.bloco ? { bloco: x.bloco } : {}),
+    const novoX = { id: novoId, nome: novo.nome, grupo: novo.grupo, alvo: x.alvo, sug, dica: '', trocadoDe: x.id, ...travaCampos(sug), ...(x.bloco ? { bloco: x.bloco } : {}),
       carga: { tipo: pc.tipo, rir: pc.rir, teste: pc.teste, primeira: !!pc.primeira, e1: pc.e1, ...(casa && pc.tipo ? { fixo: true } : {}) },
       sets: pc.sets.map(z => ({ kg: z.kg, alvo: z.alvo, reps: null, ok: false })) };
     if (x.aquec && !casa && !x.sets.some(z => z.ok)) { const aq = aquecimento(exInfo(novoId), novoX.sets[0] && novoX.sets[0].kg); if (aq.length) novoX.aquec = aq; }
@@ -298,7 +299,7 @@ async function salvarTreino() {
   const sess = {
     pid: L.pid, planoId: L.planoId, ciclo: L.ciclo, dia: L.dia, diaNome: L.diaNome, foco: L.foco || '', semana: L.semana, fase: L.fase,
     deload: !!L.deload, nDias: L.nDias, total: L.total, inicio: L.inicio, fim: Date.now(), sensacao: S.finSens || '', nota, rir: L.rir != null ? L.rir : null, ...(L.casa ? { casa: L.casa } : {}), ...(L.ajuste ? { ajuste: L.ajuste } : {}),
-    exs: L.exs.map(x => ({ id: x.id, nome: x.nome, grupo: x.grupo, alvo: x.alvo, pulado: !!x.pulado, trocadoDe: x.trocadoDe || '', sets: x.sets.filter(z => z.ok).map(z => ({ kg: z.kg ?? null, reps: z.reps, ok: true })) }))
+    exs: L.exs.map(x => ({ id: x.id, nome: x.nome, grupo: x.grupo, alvo: x.alvo, pulado: !!x.pulado, trocadoDe: x.trocadoDe || '', ...(x.trava === 'reset' ? { trava: 'reset' } : {}), sets: x.sets.filter(z => z.ok).map(z => ({ kg: z.kg ?? null, reps: z.reps, ok: true })) }))
       .filter(x => x.sets.length || x.pulado),
   };
   const antes = jornadaDados(L.pid), depois = jornadaDados(L.pid, sess);

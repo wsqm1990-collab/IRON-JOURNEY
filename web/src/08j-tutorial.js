@@ -191,6 +191,10 @@ const TOURS = {
   cardioSug: () => [
     { antes: tourTopo, alvo: '#sgCard .sg-head', txt: () => t('tc_sug_novo', { b: t('sg_other') }) },
   ],
+  /* the first time an exercise stalls, in the workout */
+  trava: () => [
+    { alvo: '.trava', txt: () => t('tt_trava') },
+  ],
   /* the first time a re-assessment is due, on Today */
   reav: () => [
     { alvo: '#reavCard', txt: () => t('tr_reav', { a: t('rv_do'), b: t('rv_later') }) },
@@ -220,7 +224,7 @@ function tourAuto() {
   tourMigrar();
   const pid = S.me;
   if (!pid || !S.perfis[pid]) { if (!tourViu('_', 'boas')) iniciarTour('boas'); return; }
-  if (S.live) { if (S.tab === 'hoje' && !tourViu(pid, 'treino')) iniciarTour('treino'); return; }
+  if (S.live) { if (S.tab === 'hoje' && !tourViu(pid, 'treino')) iniciarTour('treino'); else if (S.tab === 'hoje' && !tourViu(pid, 'trava') && $('.trava')) iniciarTour('trava'); return; }
   if (!tourViu(pid, 'app')) { if (progresso(pid) && (S.tab === 'hoje' || S.tab === 'plano')) iniciarTour('app'); return; }
   if (['cardio', 'coach', 'jornada'].includes(S.tab) && !tourViu(pid, S.tab)) iniciarTour(S.tab);
   else if (S.tab === 'jornada' && !tourViu(pid, 'arsenal')) iniciarTour('arsenal');

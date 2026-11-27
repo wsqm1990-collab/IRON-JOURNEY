@@ -79,6 +79,9 @@ function ctxPlano(pid) {
   let sgs = [];
   try { sgs = typeof sugestoesCardio === 'function' ? sugestoesCardio(pid) : []; } catch { sgs = []; }
   if (sgs.length) cardio += '\nThe app\'s cardio picks for today, best first (shown in the Cardio tab, from what they trained today and their cardio this week): ' + sgs.map((o, k) => `${k + 1}) ${o.p.nome[0]} on ${exInfo(o.maq).nomeEn}, ${Math.round(totalSeg(o.segs) / 60)} min`).join('; ') + '.';
+  let travas = '';
+  try { travas = typeof travasPlanoEn === 'function' ? travasPlanoEn(pid) : ''; } catch { travas = ''; }
+  if (travas) cardio += '\n' + travas;
   return `Current plan: ${pr.pg.nome}, chapter ${pr.pl.ciclo}, week ${pr.semana} of ${pr.nW} (${en3(FASES[pr.fase] || FASES.accum)}, RIR ${pr.sem.rir}). Plan weeks follow the calendar (Monday to Sunday): every week with at least one workout is one plan week; this week they trained on ${pr.naSemana} of the ${pr.nD} planned days.\n${dias}${cardio}`;
 }
 /* a one-day change of the plan's workout (the plan itself stayed the same) */
@@ -121,9 +124,11 @@ function resumoCiclo(pid) {
   }
   const notas = ss.filter(s => s.nota).map(s => s.nota).slice(-5);
   const cs = cardioDe(pid).filter(c => c.planoId === pl.id);
+  let travas = '';
+  try { travas = typeof travasPlanoEn === 'function' ? travasPlanoEn(pid) : ''; } catch { travas = ''; }
   return `Strength sessions done: ${ss.length} of ${pl.programa.dias.length * pl.programa.semanas.length}\nProgress (best set, start -> end):\n` +
     Object.entries(porEx).map(([n, v]) => `- ${n}: ${v.ini} -> ${v.fim}`).join('\n') +
-    (notas.length ? '\nPerson\'s notes: ' + notas.join(' | ') : '') +
+    (notas.length ? '\nPerson\'s notes: ' + notas.join(' | ') : '') + (travas ? '\n' + travas : '') +
     `\nCardio this cycle: ${cs.length} sessions, ${cs.reduce((n, c) => n + (c.minutos || 0), 0)} minutes`;
 }
 

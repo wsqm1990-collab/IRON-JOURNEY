@@ -40,6 +40,7 @@ O PESO CERTO EM CADA SÉRIE
 • Mostra as anilhas de cada lado, o halter ou o pino da máquina
 • Aquecimento, descanso com aviso e recordes pessoais
 • No fim do descanso, a voz fala a próxima série: repetições e peso
+• Travou num exercício? O app muda a estratégia como um personal: alivia o peso para subir de novo ou sugere uma variação
 
 CARDIO COM O NÚMERO CERTO
 • Todo dia o treinador sugere o melhor cardio para você, pelo que você treinou e pelo cardio da semana, com mais duas opções
@@ -91,6 +92,7 @@ THE RIGHT WEIGHT EVERY SET
 • Shows the plates on each side, the dumbbell or the machine pin
 • Warm-ups, rest alerts and personal records
 • When the rest ends, the voice calls your next set: reps and weight
+• Stuck on an exercise? The app changes the plan like a personal trainer: a lighter weight to climb back up, or a variation
 
 CARDIO WITH THE RIGHT NUMBERS
 • Every day the coach suggests the best cardio for you, from what you trained and your cardio week, with two more options
@@ -142,6 +144,7 @@ EL PESO JUSTO EN CADA SERIE
 • Muestra los discos de cada lado, la mancuerna o el pasador de la máquina
 • Calentamiento, aviso de descanso y récords personales
 • Al terminar el descanso, la voz te dice la siguiente serie: repeticiones y peso
+• ¿Estancado en un ejercicio? La app cambia la estrategia como un entrenador personal: menos peso para volver a subir, o una variante
 
 CARDIO CON EL NÚMERO JUSTO
 • Cada día el entrenador te sugiere el mejor cardio, según lo que entrenaste y tu cardio de la semana, con dos opciones más

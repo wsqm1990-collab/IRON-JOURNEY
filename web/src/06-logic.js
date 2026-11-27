@@ -79,6 +79,9 @@ function sugestao(pid, item, alv, casa = false) {
   if (u.s.avaliacao) return { kg: null, k: usaCarga(ex) ? 'sug_from_test' : 'sug_from_test_bw', v: {}, ult };
   if (!usaCarga(ex)) {
     const best = Math.max(...ok.map(z => z.reps));
+    /* stuck on the same number: make it harder (the light week next week may unlock it first) */
+    const tv = alv.deload ? null : travaDe(pid, item, casa);
+    if (tv) return { kg: null, k: tv.tipo === 'espera' ? 'sug_stall_wait' : 'sug_stall_bw', v: {}, ult, trava: tv };
     return { kg: null, k: best >= alv.rmax ? (ex.carga === 'c' ? 'sug_top_bw' : 'sug_top') : 'sug_beat', v: { n: best >= alv.rmax ? best + 1 : best, u: ex.carga }, ult };
   }
   const w = Math.max(...ok.map(z => z.kg || 0));
@@ -87,6 +90,10 @@ function sugestao(pid, item, alv, casa = false) {
   const step = passo(ex, w);
   if (alv.deload) return { kg: w, k: 'sug_deload', v: {}, ult };
   if (pesadas.every(z => z.reps >= alv.rmax)) return { kg: w + step, k: 'sug_up', v: { step, r: alv.rmax }, ult };
+  /* no progress for 3 workouts (or dropping): change the plan for this exercise, like a trainer would */
+  const tv = travaDe(pid, item, casa);
+  if (tv && tv.tipo === 'reset') return { kg: tv.kg, k: 'sug_reset', v: { kg: fmtKg(tv.kg) }, ult, trava: tv };
+  if (tv) return { kg: w, k: tv.tipo === 'espera' ? 'sug_stall_wait' : 'sug_stall_swap', v: {}, ult, trava: tv };
   if (pesadas[0].reps < alv.rmin) return { kg: Math.max(0, w - step), k: 'sug_down', v: { step, r: alv.rmin }, ult };
   return { kg: w, k: 'sug_same', v: {}, ult };
 }
@@ -98,13 +105,15 @@ function textoSug(sug) {
   return t(sug.k, v);
 }
 const textoUltima = sug => ((sug && sug.ult) || []).map(([kg, r]) => (kg ? fmtKg(kg) + ' kg × ' : '') + r).join(' · ');
+/* what the workout item keeps of a stall: the kind, and the weight before a lighter restart */
+const travaCampos = sug => (sug && sug.trava ? { trava: sug.trava.tipo, ...(sug.trava.de ? { travaDe: sug.trava.de } : {}) } : {});
 function itemDoTreino(pid, item, sem, casa = false) {
   const ex = exInfo(item.id, item.nome);
   const alv = alvo(item, sem);
   const sug = sugestao(pid, item, alv, casa);
   const pc = planoCarga(pid, item, alv, sug, casa);
   return {
-    id: item.id, nome: ex.nome, grupo: ex.grupo, alvo: alv, sug, dica: item.dica || '',
+    id: item.id, nome: ex.nome, grupo: ex.grupo, alvo: alv, sug, dica: item.dica || '', ...travaCampos(sug),
     carga: { tipo: pc.tipo, rir: pc.rir, teste: pc.teste, primeira: !!pc.primeira, e1: pc.e1, ...(casa && pc.tipo ? { fixo: true } : {}) },
     sets: pc.sets.map(s => ({ kg: s.kg, alvo: s.alvo, reps: null, ok: false })),
   };
